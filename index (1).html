@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karissa — UX Researcher & Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --orange:       #FF7A35;
+      --orange-dim:   rgba(255,122,53,0.18);
+      --orange-border:rgba(255,122,53,0.32);
+      --lilac:        #C8AAFF;
+      --lilac-dim:    rgba(190,160,255,0.15);
+      --lilac-border: rgba(190,160,255,0.32);
+      --blue:         #7DCEFF;
+      --blue-dim:     rgba(120,205,255,0.12);
+      --blue-border:  rgba(120,205,255,0.28);
+      --pink:         #FF96C3;
+      --pink-dim:     rgba(255,150,195,0.12);
+      --pink-border:  rgba(255,150,195,0.28);
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans:  'Syne', system-ui, sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="dark"] {
+      --bg:             #0d0c0b;
+      --bg-card:        #131210;
+      --bg-subtle:      rgba(240,237,232,0.04);
+      --text:           #f0ede8;
+      --text-muted:     rgba(240,237,232,0.45);
+      --text-faint:     rgba(240,237,232,0.22);
+      --border:         rgba(240,237,232,0.08);
+      --border-mid:     rgba(240,237,232,0.14);
+      --card-orange-bg: #261408;
+      --card-lilac-bg:  #170f26;
+      --card-blue-bg:   #071c28;
+      --card-pink-bg:   #240e1a;
+    }
+    [data-theme="light"] {
+      --bg:             #faf7f2;
+      --bg-card:        #f2ede4;
+      --bg-subtle:      rgba(26,25,22,0.04);
+      --text:           #1a1916;
+      --text-muted:     rgba(26,25,22,0.5);
+      --text-faint:     rgba(26,25,22,0.25);
+      --border:         rgba(26,25,22,0.09);
+      --border-mid:     rgba(26,25,22,0.15);
+      --card-orange-bg: #FFE8D5;
+      --card-lilac-bg:  #EBE0FF;
+      --card-blue-bg:   #CCF0FF;
+      --card-pink-bg:   #FFE0EC;
+      --orange:  #E8540A;
+      --lilac:   #5B35B0;
+      --blue:    #1762A0;
+      --pink:    #A8305A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); font-weight: 400; line-height: 1.6;
+      min-height: 100vh;
+      transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--sans); }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
+      transition: background 0.35s var(--ease-out);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 32px; max-width: 1080px; margin: 0 auto;
+    }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--text-muted); text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .mode-toggle {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg-subtle); border: 0.5px solid var(--border-mid);
+      border-radius: 20px; padding: 6px 12px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--text-muted); transition: color 0.2s, background 0.2s;
+    }
+    .mode-toggle:hover { color: var(--text); background: var(--bg-card); }
+    .mode-toggle svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+
+    /* HERO */
+    .hero {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; align-items: center;
+      padding: 80px 32px 64px;
+      max-width: 1080px; margin: 0 auto;
+      min-height: 520px;
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-graph { display: flex; align-items: center; justify-content: center; }
+
+    #graphCanvas {
+      width: 100%; max-width: 460px; height: 420px; display: block;
+      opacity: 0; animation: fadeIn 1.4s var(--ease-out) 0.7s forwards;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 22px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.1s forwards;
+    }
+    .hero-headline {
+      font-family: var(--serif); font-size: clamp(36px, 4.5vw, 58px);
+      line-height: 1.06; font-weight: 400; color: var(--text); margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
+    }
+    .hero-headline em { font-style: italic; color: var(--orange); }
+    .hero-sub {
+      font-size: 14px; line-height: 1.85; color: var(--text-muted);
+      max-width: 400px; margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.3s forwards;
+    }
+    .hero-cta {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.4s forwards;
+    }
+    .btn-primary {
+      background: var(--orange); color: #fff; border: none;
+      padding: 11px 22px; border-radius: 5px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; border: 0.5px solid var(--border-mid);
+      color: var(--text-muted); padding: 11px 22px; border-radius: 5px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase;
+      transition: color 0.2s, transform 0.15s;
+    }
+    .btn-ghost:hover { color: var(--text); transform: translateY(-1px); }
+    .hero-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.5s forwards;
+    }
+    .tag {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.05em;
+      padding: 5px 13px; border-radius: 20px; border: 1px solid; transition: transform 0.15s;
+    }
+    .tag:hover { transform: translateY(-1px); }
+    .tag-orange { background: var(--orange-dim); color: var(--orange); border-color: var(--orange-border); }
+    .tag-lilac  { background: var(--lilac-dim);  color: var(--lilac);  border-color: var(--lilac-border); }
+    .tag-blue   { background: var(--blue-dim);   color: var(--blue);   border-color: var(--blue-border); }
+    .tag-muted  { background: var(--bg-subtle);  color: var(--text-faint); border-color: var(--border); }
+
+    /* DIVIDER */
+    .section-divider { height: 0.5px; background: var(--border); margin: 0 32px; }
+
+    /* WORK */
+    .work { padding: 52px 32px 48px; max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 24px;
+    }
+    .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .project-card {
+      border-radius: 10px; overflow: hidden; cursor: pointer; position: relative;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .project-card:hover { transform: translateY(-3px); }
+    .project-card:hover .card-arrow { opacity: 1; transform: translate(0,0); }
+    .card-inner {
+      padding: 24px; min-height: 148px;
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+    }
+    .card-tall .card-inner { min-height: 310px; }
+    .card-span { grid-row: span 2; }
+    .card-orange { background: var(--card-orange-bg); }
+    .card-lilac  { background: var(--card-lilac-bg); }
+    .card-blue   { background: var(--card-blue-bg); }
+    .card-pink   { background: var(--card-pink-bg); }
+    .card-num {
+      font-family: var(--serif); font-size: 48px; line-height: 1;
+      color: var(--text); opacity: 0.07;
+      position: absolute; top: 20px; right: 22px; pointer-events: none; transition: opacity 0.2s;
+    }
+    .project-card:hover .card-num { opacity: 0.13; }
+    .card-stat {
+      display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      padding: 3px 9px; border-radius: 3px; margin-bottom: 8px;
+    }
+    .card-orange .card-stat { background: var(--orange-dim); color: var(--orange); }
+    .card-lilac  .card-stat { background: var(--lilac-dim);  color: var(--lilac); }
+    .card-blue   .card-stat { background: var(--blue-dim);   color: var(--blue); }
+    .card-pink   .card-stat { background: var(--pink-dim);   color: var(--pink); }
+    .card-type {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px;
+    }
+    .card-title { font-family: var(--serif); font-size: 18px; line-height: 1.25; color: var(--text); }
+    .card-tall .card-title { font-size: 22px; }
+    .card-arrow {
+      position: absolute; bottom: 22px; right: 22px; font-size: 18px;
+      color: var(--text-faint); opacity: 0; transform: translate(-4px,4px);
+      transition: opacity 0.2s, transform 0.2s var(--ease-out);
+    }
+
+    /* META STRIP */
+    .meta-strip {
+      max-width: calc(1080px - 64px); margin: 12px auto 0;
+      border-radius: 10px; padding: 16px 22px;
+      display: flex; align-items: center; gap: 18px;
+      background: var(--orange-dim); border: 1px solid var(--orange-border);
+      transition: background 0.2s; cursor: pointer;
+    }
+    .meta-strip:hover { background: rgba(255,122,53,0.24); }
+    .meta-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--orange); white-space: nowrap; flex-shrink: 0;
+    }
+    .meta-pipe { width: 0.5px; height: 28px; background: var(--orange-border); flex-shrink: 0; }
+    .meta-text { font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+    .meta-text a {
+      color: var(--orange); font-weight: 500;
+      border-bottom: 0.5px solid var(--orange-border); padding-bottom: 1px; transition: opacity 0.2s;
+    }
+    .meta-text a:hover { opacity: 0.8; }
+
+    /* ABOUT */
+    .about-strip {
+      padding: 44px 32px 52px; max-width: 1080px; margin: 48px auto 0;
+      display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+      border-top: 0.5px solid var(--border);
+    }
+    .about-quote {
+      font-family: var(--serif); font-size: clamp(18px,2.5vw,24px);
+      font-style: italic; line-height: 1.5; color: var(--text-muted); max-width: 560px;
+    }
+    .about-quote strong { font-style: normal; color: var(--text); font-weight: 400; }
+    .about-meta { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+    .about-item { font-size: 12px; letter-spacing: 0.04em; color: var(--text-faint); white-space: nowrap; }
+    .about-item span { color: var(--orange); font-weight: 500; }
+
+    /* FOOTER */
+    footer {
+      border-top: 0.5px solid var(--border); padding: 22px 32px;
+      max-width: 1080px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-name { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text-faint); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-faint); transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--orange); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 780px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-bottom: 0; }
+      .hero-graph { margin-top: 8px; }
+      #graphCanvas { height: 260px; }
+    }
+    @media (max-width: 680px) {
+      .nav-inner, .work, .about-strip, footer { padding-left: 20px; padding-right: 20px; }
+      .hero { padding: 48px 20px 32px; }
+      .section-divider { margin: 0 20px; }
+      .meta-strip { margin-left: 20px; margin-right: 20px; max-width: none; }
+      .work-grid { grid-template-columns: 1fr; }
+      .card-span { grid-row: span 1; }
+      .card-tall .card-inner { min-height: 180px; }
+      .about-strip { grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
+      .about-meta { align-items: flex-start; }
+      .nav-links a { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">k.</a>
+      <div class="nav-links">
+        <a href="#work">work</a>
+        <a href="#about">about</a>
+        <a href="mailto:hello@karissa.xyz">contact</a>
+        <button class="mode-toggle" id="modeToggle" onclick="toggleTheme()" aria-label="Toggle colour mode">
+          <svg id="modeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="modeLabel">light mode</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-eyebrow">UX Researcher &amp; Product Designer</div>
+      <h1 class="hero-headline">
+        Turning messy<br>
+        signals into<br>
+        <em>clear decisions.</em>
+      </h1>
+      <p class="hero-sub">
+        AI-native design, scroll-driven storytelling, and visual craft —
+        for teams who need research that actually moves product.
+      </p>
+      <div class="hero-cta">
+        <a href="#work" class="btn-primary">See my work</a>
+        <a href="#about" class="btn-ghost">About me</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag tag-orange">AI-native</span>
+        <span class="tag tag-lilac">Immersive storytelling</span>
+        <span class="tag tag-blue">Data visualisation</span>
+        <span class="tag tag-muted">Research ops</span>
+        <span class="tag tag-muted">Product strategy</span>
+      </div>
+    </div>
+
+    <div class="hero-graph">
+      <canvas id="graphCanvas"></canvas>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <section class="work" id="work">
+    <div class="section-label">Selected work</div>
+    <div class="work-grid">
+
+      <div class="project-card card-orange card-span">
+        <div class="card-inner card-tall">
+          <div class="card-num">01</div>
+          <div>
+            <div class="card-stat">28% retention</div>
+            <div class="card-type">UX Research + Strategy</div>
+            <div class="card-title">Redesigning Onboarding</div>
+          </div>
+          <div class="card-arrow">↗</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="project-card card-lilac">
+          <div class="card-inner">
+            <div class="card-num" style="font-size:32px;">02</div>
+            <div>
+              <div class="card-stat">400+ respondents</div>
+              <div class="card-type">Research Ops</div>
+              <div class="card-title">Consumer Insights Program</div>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <div class="project-card card-blue">
+          <div class="card-inner">
+            <div class="card-num" style="font-size:32px;">03</div>
+            <div>
+              <div class="card-stat">40% faster</div>
+              <div class="card-type">Product Management</div>
+              <div class="card-title">Feature Prioritization</div>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card card-pink" style="grid-column:span 2;">
+        <div class="card-inner">
+          <div class="card-num" style="font-size:32px;">04</div>
+          <div>
+            <div class="card-stat">WCAG 2.1 AA</div>
+            <div class="card-type">UX Research</div>
+            <div class="card-title">Accessibility Audit</div>
+          </div>
+          <div class="card-arrow">↗</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="meta-strip">
+    <div class="meta-label">Meta case study</div>
+    <div class="meta-pipe"></div>
+    <div class="meta-text">
+      This portfolio was built using AI — Lovable, Claude, and vibe-coding.
+      <a href="#">Read about what I learned building it as a product designer →</a>
+    </div>
+  </div>
+
+  <section class="about-strip" id="about">
+    <div class="about-quote">
+      "researcher by trade, human by nature —<br>
+      <strong>and increasingly, a product builder too.</strong>"
+    </div>
+    <div class="about-meta">
+      <div class="about-item">Based in <span>London</span></div>
+      <div class="about-item">Open to <span>full-time roles</span></div>
+      <div class="about-item" style="margin-top:4px;">Mid rock climber.</div>
+      <div class="about-item">Pole dancer.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-name">karissa.</div>
+    <div class="footer-links">
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:hello@karissa.xyz">Email</a>
+      <a href="#">CV</a>
+    </div>
+  </footer>
+
+  <script>
+  // THEME TOGGLE
+  const sunIcon  = `<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>`;
+  const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('modeIcon').innerHTML = isDark ? sunIcon : moonIcon;
+    document.getElementById('modeLabel').textContent = isDark ? 'dark mode' : 'light mode';
+  }
+
+  // SCROLL REVEAL
+  const revealEls = document.querySelectorAll('.project-card, .meta-strip');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${i*0.08}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${i*0.08}s`;
+    revealObs.observe(el);
+  });
+
+  // FORCE-DIRECTED GRAPH
+  const canvas = document.getElementById('graphCanvas');
+  const ctx = canvas.getContext('2d');
+  let cssW, cssH, dpr;
+
+  function setSize() {
+    dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    cssW = rect.width;
+    cssH = rect.height;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // Node definitions — Karissa's world as a network
+  const nodeData = [
+    { id: 'k',            label: 'karissa',          r: 11, group: 'core' },
+    { id: 'ux',           label: 'ux research',      r: 7,  group: 'orange' },
+    { id: 'ai',           label: 'ai-native',        r: 7,  group: 'orange' },
+    { id: 'dataviz',      label: 'data viz',         r: 6,  group: 'blue' },
+    { id: 'story',        label: 'storytelling',     r: 6,  group: 'blue' },
+    { id: 'strategy',     label: 'prod strategy',    r: 6,  group: 'lilac' },
+    { id: 'resops',       label: 'research ops',     r: 5,  group: 'lilac' },
+    { id: 'onboarding',   label: 'onboarding',       r: 5,  group: 'orange' },
+    { id: 'insights',     label: 'insights',         r: 5,  group: 'lilac' },
+    { id: 'a11y',         label: 'accessibility',    r: 4,  group: 'blue' },
+    { id: 'scroll',       label: 'scrollytelling',   r: 4,  group: 'blue' },
+    { id: 'claude',       label: 'claude',           r: 4,  group: 'pink' },
+    { id: 'lovable',      label: 'lovable',          r: 4,  group: 'pink' },
+    { id: 'figma',        label: 'figma',            r: 3,  group: 'pink' },
+    { id: 'climbing',     label: 'climbing',         r: 3,  group: 'muted' },
+    { id: 'pole',         label: 'pole dance',       r: 3,  group: 'muted' },
+  ];
+
+  const edgeData = [
+    ['k','ux'],['k','ai'],['k','dataviz'],['k','story'],['k','strategy'],
+    ['k','climbing'],['k','pole'],
+    ['ux','onboarding'],['ux','insights'],['ux','a11y'],['ux','resops'],
+    ['ai','claude'],['ai','lovable'],['ai','strategy'],
+    ['dataviz','scroll'],['dataviz','story'],['story','scroll'],
+    ['strategy','resops'],['strategy','insights'],
+    ['claude','lovable'],['figma','ux'],['figma','ai'],
+    ['onboarding','insights'],
+  ];
+
+  // Palette per theme
+  const PAL = {
+    dark: {
+      core:'#f0ede8', orange:'#FF7A35', lilac:'#C8AAFF',
+      blue:'#7DCEFF', pink:'#FF96C3', muted:'rgba(240,237,232,0.3)',
+      edge:'rgba(240,237,232,0.06)', stroke:'rgba(240,237,232,0.15)',
+      label:'rgba(240,237,232,0.55)', corering:'rgba(255,122,53,0.1)',
+    },
+    light: {
+      core:'#1a1916', orange:'#E8540A', lilac:'#5B35B0',
+      blue:'#1762A0', pink:'#A8305A', muted:'rgba(26,25,22,0.28)',
+      edge:'rgba(26,25,22,0.07)', stroke:'rgba(26,25,22,0.12)',
+      label:'rgba(26,25,22,0.5)', corering:'rgba(232,84,10,0.08)',
+    }
+  };
+  const pal = () => PAL[document.documentElement.getAttribute('data-theme')] || PAL.dark;
+
+  // Build nodes with random initial positions (set after we know canvas size)
+  let nodes, edges, nodeMap;
+  function initGraph() {
+    nodes = nodeData.map(n => ({
+      ...n,
+      x: cssW/2 + (Math.random()-0.5)*cssW*0.6,
+      y: cssH/2 + (Math.random()-0.5)*cssH*0.6,
+      vx: 0, vy: 0,
+    }));
+    nodeMap = {};
+    nodes.forEach(n => nodeMap[n.id] = n);
+    edges = edgeData.map(([a,b]) => ({ s: nodeMap[a], t: nodeMap[b] }));
+  }
+
+  // Simulation constants
+  const REPEL  = 1600;
+  const LDIST  = 78;
+  const LSTR   = 0.11;
+  const GRAV   = 0.016;
+  const DAMP   = 0.80;
+
+  function tick() {
+    // Repulsion between all pairs
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i+1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = b.x-a.x, dy = b.y-a.y;
+        const d2 = dx*dx+dy*dy || 1;
+        const d  = Math.sqrt(d2);
+        const f  = REPEL/d2;
+        const fx = dx/d*f, fy = dy/d*f;
+        a.vx -= fx; a.vy -= fy;
+        b.vx += fx; b.vy += fy;
+      }
+    }
+    // Link spring
+    edges.forEach(({ s, t }) => {
+      const dx=t.x-s.x, dy=t.y-s.y;
+      const d=Math.sqrt(dx*dx+dy*dy)||1;
+      const f=(d-LDIST)*LSTR;
+      const fx=dx/d*f, fy=dy/d*f;
+      s.vx+=fx; s.vy+=fy;
+      t.vx-=fx; t.vy-=fy;
+    });
+    // Gravity toward centre
+    nodes.forEach(n => {
+      n.vx += (cssW/2 - n.x)*GRAV;
+      n.vy += (cssH/2 - n.y)*GRAV;
+    });
+    // Integrate + damp + soft wall
+    const pad = 30;
+    nodes.forEach(n => {
+      n.vx *= DAMP; n.vy *= DAMP;
+      n.x  += n.vx; n.y  += n.vy;
+      if (n.x < pad)      { n.x=pad;      n.vx*=-0.3; }
+      if (n.x > cssW-pad) { n.x=cssW-pad; n.vx*=-0.3; }
+      if (n.y < pad)      { n.y=pad;      n.vy*=-0.3; }
+      if (n.y > cssH-pad) { n.y=cssH-pad; n.vy*=-0.3; }
+    });
+  }
+
+  function draw() {
+    const p = pal();
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    // Edges
+    ctx.lineWidth = 0.7;
+    ctx.strokeStyle = p.edge;
+    edges.forEach(({ s, t }) => {
+      ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(t.x,t.y); ctx.stroke();
+    });
+
+    // Nodes
+    nodes.forEach(n => {
+      const fill = p[n.group] || p.muted;
+      // Halo for centre node
+      if (n.group === 'core') {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r+6, 0, Math.PI*2);
+        ctx.fillStyle = p.corering;
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+      ctx.fillStyle = fill;
+      ctx.strokeStyle = p.stroke;
+      ctx.lineWidth = 0.7;
+      ctx.fill(); ctx.stroke();
+
+      // Labels for larger nodes
+      if (n.r >= 5) {
+        const fs = n.r >= 7 ? 10 : 9;
+        ctx.font = `${n.group==='core' ? 600 : 400} ${fs}px 'Syne', sans-serif`;
+        ctx.fillStyle = p.label;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(n.label, n.x, n.y + n.r + 5);
+      }
+    });
+  }
+
+  let frame = 0;
+  function loop() {
+    // Run extra sim steps early for faster initial settling
+    const steps = frame < 150 ? 5 : 1;
+    for (let i=0; i<steps; i++) tick();
+    frame++;
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  // Start everything once canvas is in view
+  window.addEventListener('resize', () => { setSize(); });
+
+  const startObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      setSize();
+      initGraph();
+      loop();
+      startObs.disconnect();
+    }
+  }, { threshold: 0.1 });
+  startObs.observe(canvas);
+  </script>
+</body>
+</html>
