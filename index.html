@@ -597,9 +597,11 @@
   function initGraph() {
     nodes = nodeData.map(n => ({
       ...n,
-      x: n.cx * cssW + (Math.random() - 0.5) * 60,
-      y: n.cy * cssH + (Math.random() - 0.5) * 60,
-      vx: 0, vy: 0,
+      // Start fully scattered — random positions across canvas
+      x: cssW * 0.1 + Math.random() * cssW * 0.8,
+      y: cssH * 0.1 + Math.random() * cssH * 0.8,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
     }));
     nodeMap = {};
     nodes.forEach(n => nodeMap[n.id] = n);
@@ -612,8 +614,8 @@
   const REPEL   = 1800;  // node-node repulsion — stronger to push nodes apart
   const LDIST   = 60;    // preferred edge length — shorter so edges don't pull far
   const LSTR    = 0.04;  // spring strength — much weaker so cx/cy targets dominate
-  const CGRAV   = 0.08;  // cluster gravity — much stronger so nodes stay in region
-  const CGRAV_K = 0.04;  // gravity for core nodes
+  const CGRAV   = 0.03;  // weaker gravity — nodes stay scattered longer, tighten with scroll
+  const CGRAV_K = 0.015; // gravity for core nodes
   const DAMP    = 0.75;
 
   function tick() {
@@ -762,27 +764,50 @@
   let hoveredNode = null;
   let tooltipAlpha = 0;
 
-  // Scroll-driven simulation — graph warms up as user scrolls through hero
+  // Scroll-driven simulation using CSS animation-timeline
+  // A hidden element tracks scroll progress via CSS, JS reads it each frame
   let scrollProgress = 0;
+
+  // Inject a scroll-tracking style
+  const scrollStyle = document.createElement('style');
+  scrollStyle.textContent = `
+    @keyframes track-scroll {
+      from { --scroll-val: 0; }
+      to   { --scroll-val: 100; }
+    }
+    #home {
+      animation: track-scroll linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  `;
+  document.head.appendChild(scrollStyle);
+
   function updateScrollProgress() {
+    // Fallback: use getBoundingClientRect if CSS animation-timeline not supported
     const hero = document.getElementById('home');
     if (!hero) return;
     const rect = hero.getBoundingClientRect();
-    const windowH = window.innerHeight;
-    // Progress from 0 (hero top at viewport bottom) to 1 (hero bottom at viewport top)
-    const heroVisible = windowH - rect.top;
-    const heroTotal = rect.height + windowH;
-    scrollProgress = Math.max(0, Math.min(1, heroVisible / heroTotal));
+    const wh = window.innerHeight;
+    // 0 when hero enters viewport bottom, 1 when hero exits viewport top
+    scrollProgress = Math.max(0, Math.min(1,
+      (wh - rect.top) / (wh + rect.height)
+    ));
   }
+
   window.addEventListener('scroll', updateScrollProgress, { passive: true });
   window.addEventListener('load', updateScrollProgress);
   updateScrollProgress();
 
   function loop() {
-    // Start scattered (low steps), tighten as user scrolls through hero
-    // frame < 60: fast initial settle so graph isn't a blob on load
-    const scrollSteps = 1 + Math.round(scrollProgress * 7);
-    const steps = frame < 60 ? 8 : scrollSteps;
+    updateScrollProgress();
+    // At scrollProgress=0 (graph just appeared): few steps, scattered look
+    // At scrollProgress=1 (hero scrolled past): many steps, tight clusters
+    const minSteps = 1;
+    const maxSteps = 10;
+    const scrollSteps = Math.round(minSteps + scrollProgress * (maxSteps - minSteps));
+    // Fast settle on first load
+    const steps = frame < 80 ? 10 : scrollSteps;
     for (let i = 0; i < steps; i++) tick();
     frame++;
     draw();
