@@ -99,12 +99,36 @@
     .mode-toggle svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
 
     /* HERO */
+    /* SCROLLYTELLING HERO */
+    .scroll-scene {
+      position: relative;
+    }
+    .scroll-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .scroll-steps {
+      position: relative;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .scroll-step {
+      height: 80vh;
+      display: flex;
+      align-items: center;
+    }
+    .scroll-step:first-child { margin-top: -100vh; } /* overlap with sticky */
     .hero {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 40px; align-items: center;
-      padding: 80px 32px 64px;
+      padding: 0 32px;
       max-width: 1080px; margin: 0 auto;
-      min-height: 520px;
+      width: 100%;
     }
     .hero-content { position: relative; z-index: 2; }
     .hero-graph { display: flex; align-items: center; justify-content: center; }
@@ -332,37 +356,54 @@
     </div>
   </nav>
 
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="hero-eyebrow">Cultural researcher turned product builder.</div>
-      <h1 class="hero-headline">
-        Turning messy<br>
-        signals into<br>
-        <em>clear decisions.</em>
-      </h1>
-      <p class="hero-sub">
-        Before most teams had a prompt engineer, I was using AI to map
-        cultural behaviour across 10+ markets. Now I'm pursuing an MSc
-        in UX Engineering at City, St George's, where I'm building the
-        design and technical fluency to match.
-      </p>
-      <div class="hero-cta">
-        <a href="#work" class="btn-primary">See my work</a>
-        <a href="#about" class="btn-ghost">About me</a>
-      </div>
-      <div class="hero-tags">
-        <span class="tag tag-orange">Consumer Research</span>
-        <span class="tag tag-lilac">AI Methods</span>
-        <span class="tag tag-lilac">Product Management</span>
-        <span class="tag tag-blue">UX Design</span>
-        <span class="tag tag-blue">Data Visualisation</span>
-      </div>
+  <div class="scroll-scene">
+    <!-- Sticky graphic — stays fixed while steps scroll past -->
+    <div class="scroll-sticky">
+      <section class="hero" id="home">
+        <div class="hero-content">
+          <div class="hero-eyebrow">Cultural researcher turned product builder.</div>
+          <h1 class="hero-headline">
+            Turning messy<br>
+            signals into<br>
+            <em>clear decisions.</em>
+          </h1>
+          <p class="hero-sub">
+            Before most teams had a prompt engineer, I was using AI to map
+            cultural behaviour across 10+ markets. Now I'm pursuing an MSc
+            in UX Engineering at City, St George's, where I'm building the
+            design and technical fluency to match.
+          </p>
+          <div class="hero-cta">
+            <a href="#work" class="btn-primary">See my work</a>
+            <a href="#about" class="btn-ghost">About me</a>
+          </div>
+          <div class="hero-tags">
+            <span class="tag tag-orange">Consumer Research</span>
+            <span class="tag tag-lilac">AI Methods</span>
+            <span class="tag tag-lilac">Product Management</span>
+            <span class="tag tag-blue">UX Design</span>
+            <span class="tag tag-blue">Data Visualisation</span>
+          </div>
+        </div>
+        <div class="hero-graph">
+          <canvas id="graphCanvas"></canvas>
+        </div>
+      </section>
     </div>
 
-    <div class="hero-graph">
-      <canvas id="graphCanvas"></canvas>
+    <!-- Scrollama steps — scroll past these to trigger graph states -->
+    <div class="scroll-steps">
+      <div class="scroll-step" data-step="0">
+        <!-- scattered -->
+      </div>
+      <div class="scroll-step" data-step="1">
+        <!-- clustering -->
+      </div>
+      <div class="scroll-step" data-step="2">
+        <!-- settled -->
+      </div>
     </div>
-  </section>
+  </div>
 
   <div class="section-divider"></div>
 
@@ -597,11 +638,11 @@
   function initGraph() {
     nodes = nodeData.map(n => ({
       ...n,
-      // Start fully scattered — random positions across canvas
-      x: cssW * 0.1 + Math.random() * cssW * 0.8,
-      y: cssH * 0.1 + Math.random() * cssH * 0.8,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
+      // Start fully scattered across canvas
+      x: cssW * 0.05 + Math.random() * cssW * 0.9,
+      y: cssH * 0.05 + Math.random() * cssH * 0.9,
+      vx: (Math.random() - 0.5) * 4,
+      vy: (Math.random() - 0.5) * 4,
     }));
     nodeMap = {};
     nodes.forEach(n => nodeMap[n.id] = n);
@@ -764,50 +805,43 @@
   let hoveredNode = null;
   let tooltipAlpha = 0;
 
-  // Scroll-driven simulation using CSS animation-timeline
-  // A hidden element tracks scroll progress via CSS, JS reads it each frame
-  let scrollProgress = 0;
+  // SCROLLYTELLING — Scrollama.js drives discrete graph states
+  // Step 0 = scattered, Step 1 = clustering, Step 2 = fully settled
+  let graphStep = 0;
+  let targetIterations = 20; // how many sim steps to run total per state
 
-  // Inject a scroll-tracking style
-  const scrollStyle = document.createElement('style');
-  scrollStyle.textContent = `
-    @keyframes track-scroll {
-      from { --scroll-val: 0; }
-      to   { --scroll-val: 100; }
-    }
-    #home {
-      animation: track-scroll linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 100%;
-    }
-  `;
-  document.head.appendChild(scrollStyle);
-
-  function updateScrollProgress() {
-    // Fallback: use getBoundingClientRect if CSS animation-timeline not supported
-    const hero = document.getElementById('home');
-    if (!hero) return;
-    const rect = hero.getBoundingClientRect();
-    const wh = window.innerHeight;
-    // 0 when hero enters viewport bottom, 1 when hero exits viewport top
-    scrollProgress = Math.max(0, Math.min(1,
-      (wh - rect.top) / (wh + rect.height)
-    ));
-  }
-
-  window.addEventListener('scroll', updateScrollProgress, { passive: true });
-  window.addEventListener('load', updateScrollProgress);
-  updateScrollProgress();
+  // Load Scrollama from CDN
+  const scrollamaScript = document.createElement('script');
+  scrollamaScript.src = 'https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js';
+  scrollamaScript.onload = function() {
+    const scroller = scrollama();
+    scroller
+      .setup({
+        step: '.scroll-step',
+        offset: 0.5,
+        debug: false,
+      })
+      .onStepEnter(({ index, direction }) => {
+        graphStep = index;
+        if (index === 0) targetIterations = 20;
+        if (index === 1) targetIterations = 120;
+        if (index === 2) targetIterations = 400;
+      })
+      .onStepExit(({ index, direction }) => {
+        if (direction === 'up' && index === 0) {
+          // Scrolled back to top — reset graph
+          initGraph();
+          frame = 0;
+          targetIterations = 20;
+        }
+      });
+    window.addEventListener('resize', scroller.resize);
+  };
+  document.head.appendChild(scrollamaScript);
 
   function loop() {
-    updateScrollProgress();
-    // At scrollProgress=0 (graph just appeared): few steps, scattered look
-    // At scrollProgress=1 (hero scrolled past): many steps, tight clusters
-    const minSteps = 1;
-    const maxSteps = 10;
-    const scrollSteps = Math.round(minSteps + scrollProgress * (maxSteps - minSteps));
-    // Fast settle on first load
-    const steps = frame < 80 ? 10 : scrollSteps;
+    // Run sim steps up to targetIterations, then coast at 1 step/frame
+    const steps = frame < targetIterations ? 4 : 1;
     for (let i = 0; i < steps; i++) tick();
     frame++;
     draw();
