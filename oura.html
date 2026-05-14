@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Body Was Keeping Score — Karissa Ly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --orange:  #FF7A35;
+      --lilac:   #C8AAFF;
+      --blue:    #7DCEFF;
+      --pink:    #FF96C3;
+      --serif:   'DM Serif Display', Georgia, serif;
+      --sans:    'Syne', system-ui, sans-serif;
+      --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="dark"] {
+      --bg:         #0d0c0b;
+      --bg-card:    #131210;
+      --bg-subtle:  rgba(240,237,232,0.04);
+      --text:       #f0ede8;
+      --text-muted: rgba(240,237,232,0.5);
+      --text-faint: rgba(240,237,232,0.25);
+      --border:     rgba(240,237,232,0.08);
+      --border-mid: rgba(240,237,232,0.14);
+    }
+    [data-theme="light"] {
+      --bg:         #faf7f2;
+      --bg-card:    #f2ede4;
+      --bg-subtle:  rgba(26,25,22,0.04);
+      --text:       #1a1916;
+      --text-muted: rgba(26,25,22,0.5);
+      --text-faint: rgba(26,25,22,0.25);
+      --border:     rgba(26,25,22,0.09);
+      --border-mid: rgba(26,25,22,0.15);
+      --blue:    #1762A0;
+      --orange:  #E8540A;
+      --lilac:   #5B35B0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); line-height: 1.7;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--sans); }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
+      transition: background 0.3s;
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-back { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); transition: color 0.2s; }
+    .nav-back:hover { color: var(--text); }
+    .mode-toggle {
+      background: var(--bg-subtle); border: 0.5px solid var(--border-mid);
+      border-radius: 20px; padding: 6px 12px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--text-muted); transition: color 0.2s, background 0.2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .mode-toggle svg { width: 13px; height: 13px; fill: currentColor; }
+    .mode-toggle:hover { color: var(--text); }
+
+    /* HERO */
+    .case-hero {
+      max-width: 1080px; margin: 0 auto;
+      padding: 72px 32px 56px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .case-type {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.1s forwards;
+    }
+    .case-title {
+      font-family: var(--serif); font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.05; font-weight: 400; margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.2s forwards;
+    }
+    .case-title em { font-style: italic; color: var(--blue); }
+    .case-intro {
+      font-size: 16px; line-height: 1.85; color: var(--text-muted);
+      max-width: 640px; margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.3s forwards;
+    }
+    .case-meta {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.4s forwards;
+    }
+    .meta-block {}
+    .meta-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px;
+    }
+    .meta-value { font-size: 13px; font-weight: 500; color: var(--text); }
+    .meta-value.blue { color: var(--blue); }
+
+    /* CONTENT */
+    .case-body { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    /* SECTION */
+    .case-section {
+      padding: 64px 0;
+      border-bottom: 0.5px solid var(--border);
+      display: grid; grid-template-columns: 200px 1fr; gap: 48px;
+      align-items: start;
+    }
+    .case-section.full { grid-template-columns: 1fr; }
+    .section-num {
+      font-family: var(--serif); font-size: 11px; font-style: italic;
+      color: var(--text-faint); padding-top: 4px; letter-spacing: 0.06em;
+    }
+    .section-content {}
+    .section-heading {
+      font-family: var(--serif); font-size: 28px; font-weight: 400;
+      line-height: 1.2; margin-bottom: 20px; color: var(--text);
+    }
+    .section-heading em { font-style: italic; color: var(--blue); }
+    .section-body { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
+    .section-body p + p { margin-top: 16px; }
+    .section-body strong { color: var(--text); font-weight: 500; }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      margin: 36px 0;
+      padding: 28px 32px;
+      border-left: 2px solid var(--blue);
+      background: rgba(125,206,255,0.05);
+      border-radius: 0 8px 8px 0;
+    }
+    .pull-quote p {
+      font-family: var(--serif); font-size: 20px; font-style: italic;
+      line-height: 1.5; color: var(--text);
+    }
+
+    /* RESEARCH QUESTIONS */
+    .rq-grid { display: flex; flex-direction: column; gap: 12px; margin: 24px 0; }
+    .rq-item {
+      padding: 18px 22px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .rq-num {
+      font-family: var(--serif); font-size: 18px; font-style: italic;
+      color: var(--blue); flex-shrink: 0; line-height: 1.4;
+    }
+    .rq-text { font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+    .rq-text strong { color: var(--text); font-weight: 500; }
+
+    /* METHOD STEPS */
+    .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+    .method-card {
+      padding: 22px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+    }
+    .method-step {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 8px;
+    }
+    .method-title { font-family: var(--serif); font-size: 17px; margin-bottom: 10px; color: var(--text); }
+    .method-desc { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
+
+    /* FINDINGS */
+    .finding-grid { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
+    .finding-item {
+      padding: 24px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+      display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start;
+    }
+    .finding-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(125,206,255,0.12); border: 1px solid rgba(125,206,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .finding-text {}
+    .finding-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .finding-desc { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
+
+    /* REFLECTION CARDS */
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 24px 0; }
+    .reflection-card {
+      padding: 22px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+    }
+    .reflection-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .reflection-label.kept { color: var(--blue); }
+    .reflection-label.changed { color: var(--orange); }
+    .reflection-label.learned { color: var(--lilac); }
+    .reflection-text { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
+
+    /* TAGS */
+    .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 32px; }
+    .cs-tag {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.05em;
+      padding: 5px 13px; border-radius: 20px; border: 1px solid;
+    }
+    .cs-tag.blue { background: rgba(125,206,255,0.1); color: var(--blue); border-color: rgba(125,206,255,0.25); }
+    .cs-tag.orange { background: rgba(255,122,53,0.1); color: var(--orange); border-color: rgba(255,122,53,0.25); }
+    .cs-tag.lilac { background: rgba(200,170,255,0.1); color: var(--lilac); border-color: rgba(200,170,255,0.25); }
+    .cs-tag.muted { background: var(--bg-subtle); color: var(--text-faint); border-color: var(--border); }
+
+    /* VIZ BLOCKS */
+    .viz-block {
+      margin-bottom: 48px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 32px;
+      align-items: start;
+    }
+    .viz-block:last-of-type { margin-bottom: 0; }
+    .viz-img-wrap {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 0.5px solid var(--border);
+      background: var(--bg-card);
+    }
+    .viz-img-wrap img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s var(--ease);
+    }
+    .viz-img-wrap:hover img { transform: scale(1.02); }
+    .viz-caption {}
+    .viz-caption-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 10px;
+    }
+    .viz-caption-text {
+      font-size: 13px; line-height: 1.75; color: var(--text-muted);
+    }
+    .viz-cta {
+      margin-top: 40px; padding: 24px 28px;
+      border-radius: 8px;
+      background: rgba(125,206,255,0.06);
+      border: 1px solid rgba(125,206,255,0.2);
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 24px;
+    }
+    .viz-cta p { font-size: 14px; color: var(--text-muted); }
+    .btn-viz {
+      background: var(--blue); color: #0d0c0b;
+      padding: 10px 20px; border-radius: 5px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; white-space: nowrap;
+      transition: opacity 0.2s, transform 0.15s; display: inline-block;
+    }
+    [data-theme="light"] .btn-viz { color: #faf7f2; }
+    .btn-viz:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    @media (max-width: 720px) {
+      .viz-block { grid-template-columns: 1fr; }
+      .viz-cta { flex-direction: column; align-items: flex-start; }
+    }
+    .next-project {
+      max-width: 1080px; margin: 0 auto; padding: 64px 32px;
+      display: flex; justify-content: space-between; align-items: center; gap: 32px;
+    }
+    .next-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+    .next-title { font-family: var(--serif); font-size: 28px; color: var(--text); }
+    .next-title em { font-style: italic; color: var(--orange); }
+    .btn-next {
+      background: var(--orange); color: #fff; border: none;
+      padding: 12px 24px; border-radius: 5px; font-size: 12px;
+      font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+      white-space: nowrap; transition: opacity 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-next:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer {
+      border-top: 0.5px solid var(--border); padding: 22px 32px;
+      max-width: 1080px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-name { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text-faint); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--blue); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      .case-hero, .case-body, .next-project, footer { padding-left: 20px; padding-right: 20px; }
+      .case-section { grid-template-columns: 1fr; gap: 16px; }
+      .method-grid { grid-template-columns: 1fr; }
+      .reflection-grid { grid-template-columns: 1fr; }
+      .next-project { flex-direction: column; align-items: flex-start; }
+      .nav-links a:not(.nav-back) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">k.</a>
+      <div class="nav-links">
+        <a href="index.html#work" class="nav-back">← All work</a>
+        <button class="mode-toggle" id="modeToggle" onclick="toggleTheme()">
+          <svg id="modeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="modeLabel">light mode</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="case-hero">
+    <div class="case-type">Data Visualisation · MSc UX Engineering · INM402</div>
+    <h1 class="case-title">My Body Was<br><em>Keeping Score</em></h1>
+    <p class="case-intro">
+      I bought an Oura ring after months of sleeping badly and not knowing why.
+      Fifteen months later, I had 450+ nights of physiological data and a question
+      worth asking: does this data actually tell me anything I couldn't have
+      figured out through trial and error on my own?
+    </p>
+    <div class="case-meta">
+      <div class="meta-block">
+        <div class="meta-label">Type</div>
+        <div class="meta-value">Personal data visualisation</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Tools</div>
+        <div class="meta-value">Observable Plot · JavaScript · Oura API · Apple Health</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Year</div>
+        <div class="meta-value">2025–26</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Data span</div>
+        <div class="meta-value blue">15 months</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="case-body">
+
+    <!-- CONTEXT -->
+    <section class="case-section reveal">
+      <div class="section-num">01 — Context</div>
+      <div class="section-content">
+        <h2 class="section-heading">A ring on my finger,<br><em>a year of my life</em></h2>
+        <div class="section-body">
+          <p>The data covers a stretch of time that included leaving a job I'd been in for four years, a working holiday in Australia living out of a van, a trip to my parents' homeland in Vietnam, some bad news, and starting a master's programme in the UK.</p>
+          <p>The visualisations that follow aren't just data plots — they're over a year of my life, quantified. I chose to work with raw physiological signals rather than Oura's composite readiness scores, which I've always been sceptical of. <strong>HRV (heart rate variability)</strong> is used throughout as the primary proxy for recovery — a raw signal, not a derived metric, and one of the most sensitive indicators of both physical and psychological stress load.</p>
+        </div>
+
+        <div class="pull-quote">
+          <p>"My body was keeping score before I was. The question this project is really asking is whether making that score visible actually tells me anything I couldn't have figured out on my own."</p>
+        </div>
+
+        <div class="tag-row">
+          <span class="cs-tag blue">Observable Plot</span>
+          <span class="cs-tag blue">JavaScript</span>
+          <span class="cs-tag muted">Oura API</span>
+          <span class="cs-tag muted">Apple Health</span>
+          <span class="cs-tag muted">Self-tracking</span>
+          <span class="cs-tag blue">Data visualisation</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH QUESTIONS -->
+    <section class="case-section reveal">
+      <div class="section-num">02 — Research questions</div>
+      <div class="section-content">
+        <h2 class="section-heading">What I was<br><em>trying to find out</em></h2>
+        <div class="section-body">
+          <p>Three questions shaped the analysis — each progressively more personal and harder to answer with data alone.</p>
+        </div>
+        <div class="rq-grid">
+          <div class="rq-item">
+            <div class="rq-num">01</div>
+            <div class="rq-text"><strong>Do physiological signals shift before I consciously feel overwhelmed or stressed?</strong> If they do, how much of a window have I actually had to address and combat these feelings — and have I been using it?</div>
+          </div>
+          <div class="rq-item">
+            <div class="rq-num">02</div>
+            <div class="rq-text"><strong>Is daily training load a sufficient predictor of next-day recovery,</strong> or do other factors dominate?</div>
+          </div>
+          <div class="rq-item">
+            <div class="rq-num">03</div>
+            <div class="rq-text"><strong>Does training at specific points in my menstrual cycle affect my readiness or recovery?</strong> Can I use these findings to sketch out what a personalised activity model might look like for me specifically?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="case-section reveal">
+      <div class="section-num">03 — Approach</div>
+      <div class="section-content">
+        <h2 class="section-heading">How I built<br><em>the analysis</em></h2>
+        <div class="section-body">
+          <p>Raw data was exported directly from the Oura API and layered with self-reported tags logged throughout the period and workout data pulled from Apple Health. Rather than relying on Oura's composite scores, I worked with the underlying physiological signals to build my own picture.</p>
+        </div>
+        <div class="method-grid">
+          <div class="method-card">
+            <div class="method-step">Step 01</div>
+            <div class="method-title">Data extraction</div>
+            <div class="method-desc">Pulled raw HRV, resting heart rate, body temperature deviation, and sleep data via the Oura API. Layered with Apple Health workout logs and manually coded life phase tags.</div>
+          </div>
+          <div class="method-card">
+            <div class="method-step">Step 02</div>
+            <div class="method-title">Personalised load metric</div>
+            <div class="method-desc">Built a custom training load metric rather than relying on generic step count — reflecting the real distinction between movement that creates recovery demand and movement that's just part of living.</div>
+          </div>
+          <div class="method-card">
+            <div class="method-step">Step 03</div>
+            <div class="method-title">Signal analysis</div>
+            <div class="method-desc">Used HRV as the primary recovery proxy. Analysed whether physiological signals shifted 3–5 days before consciously felt stress events, and whether single-day vs cumulative load better predicted recovery.</div>
+          </div>
+          <div class="method-card">
+            <div class="method-step">Step 04</div>
+            <div class="method-title">Visualisation in Observable</div>
+            <div class="method-desc">Built interactive visualisations in Observable Plot and JavaScript, allowing navigation through life phases to surface patterns across the full 15-month arc.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISUALISATIONS -->
+    <section class="case-section full reveal">
+      <div class="section-content">
+        <div class="section-num" style="margin-bottom:16px;">03.5 — The visualisations</div>
+        <h2 class="section-heading">What it<br><em>looks like</em></h2>
+        <div class="section-body" style="margin-bottom:32px;">
+          <p>Three interactive visualisations make up the core of the project. Each answers a different research question and uses a different chart form — chosen because the shape of the question demanded it.</p>
+        </div>
+
+        <div class="viz-block reveal">
+          <div class="viz-img-wrap">
+            <img src="viz-ridgeplot.png" alt="Ridge plot showing HRV distributions across life phases, with the Lapping Tasmania phase highlighted in blue" />
+          </div>
+          <div class="viz-caption">
+            <div class="viz-caption-label">Visualisation 01 — Life phases ridge plot</div>
+            <div class="viz-caption-text">HRV distributions across eight life phases, stacked chronologically. The highlighted phase (blue) is selectable via an interactive slider. Each curve represents the full distribution of nightly HRV readings within that period — showing not just average recovery but how consistent or variable it was. The Tasmania phase is notably tighter and higher than surrounding phases.</div>
+          </div>
+        </div>
+
+        <div class="viz-block reveal">
+          <div class="viz-img-wrap">
+            <img src="viz-stresshrv.png" alt="Line chart showing HRV trajectories before and after stress events, split by whether HRV was falling or rising before the event" />
+          </div>
+          <div class="viz-caption">
+            <div class="viz-caption-label">Visualisation 02 — HRV around stress events</div>
+            <div class="viz-caption-text">Each line traces HRV from three days before to two days after a logged stress event. Orange lines show cases where HRV was already falling before the event; lilac shows cases where it was rising. The bold lines are smoothed averages. A "show crying" toggle overlays additional emotional tags — a design choice that felt important to include honestly.</div>
+          </div>
+        </div>
+
+        <div class="viz-block reveal">
+          <div class="viz-img-wrap">
+            <img src="viz-cycleheatmap.png" alt="Heatmap showing HRV deviation from cycle average across 14 months of menstrual cycle data, with a crayon-texture aesthetic" />
+          </div>
+          <div class="viz-caption">
+            <div class="viz-caption-label">Visualisation 03 — HRV vs cycle average heatmap</div>
+            <div class="viz-caption-text">Each cell represents one day of a menstrual cycle, coloured by how much that day's HRV deviated from the individual cycle's average. Purple = above average recovery; orange = below. Red outlines mark the first 7 days (menstruation). The handwritten aesthetic and crayon texture were deliberate — this is personal data about a personal experience, and clinical polish felt wrong.</div>
+          </div>
+        </div>
+
+        <div class="viz-block reveal">
+          <div class="viz-img-wrap">
+            <img src="viz-beeswarm.png" alt="Beeswarm plot comparing HRV during period vs rest of cycle, split by active and rest days" />
+          </div>
+          <div class="viz-caption">
+            <div class="viz-caption-label">Visualisation 04 — Period vs rest of cycle beeswarm</div>
+            <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting that day. The narrower, higher distribution during the period phase versus the wider spread across the rest of cycle was one of the more surprising findings — suggesting recovery is more consistent, if lower, during menstruation.</div>
+          </div>
+        </div>
+
+        <div class="viz-block reveal">
+          <div class="viz-img-wrap">
+            <img src="viz-scatterplot.png" alt="Scatterplot of daily training load vs next-day HRV, split by exercise intensity, with quadrant labels" />
+          </div>
+          <div class="viz-caption">
+            <div class="viz-caption-label">Visualisation 05 — Training load vs next-day HRV</div>
+            <div class="viz-caption-text">The scatter is the finding: there's no clear relationship between how much I trained on a given day and how recovered I felt the next morning. The quadrant labels ("Low Load, High Recovery" etc.) were added to make the null result legible rather than just confusing. A null result honestly visualised is still a result.</div>
+          </div>
+        </div>
+
+        <div class="viz-cta reveal">
+          <p>The notebook was submitted as a private Observable project. I'm happy to fork a copy to share — just get in touch.</p>
+          <a href="mailto:karissatly@gmail.com?subject=Oura%20dataviz%20project" class="btn-viz">Request a copy →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FINDINGS -->
+    <section class="case-section reveal">
+      <div class="section-num">04 — Findings</div>
+      <div class="section-content">
+        <h2 class="section-heading">What the data<br><em>actually showed</em></h2>
+        <div class="section-body">
+          <p>The findings were genuinely surprising in places — and honestly disappointing in others. That tension felt worth being honest about.</p>
+        </div>
+        <div class="finding-grid">
+          <div class="finding-item">
+            <div class="finding-icon">📉</div>
+            <div class="finding-text">
+              <div class="finding-title">There is a pre-stress physiological window — and it's narrow</div>
+              <div class="finding-desc">HRV does dip 3–5 days before consciously felt overwhelm in several instances. The window is inconsistent enough, though, that it cannot be reliably used as an early warning system. The visualisation can show a window exists — it cannot show how wide it actually is.</div>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-icon">🏋️</div>
+            <div class="finding-text">
+              <div class="finding-title">Single-day training load is a poor predictor of recovery</div>
+              <div class="finding-desc">The scatterplot showed almost no relationship between one day's training duration and the next day's HRV. Cumulative load over 5–7 days is the more relevant variable — a limitation I'd fix with a rolling load metric in a future iteration.</div>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-icon">🔄</div>
+            <div class="finding-text">
+              <div class="finding-title">Cycle phase patterns are suggestive, not conclusive</div>
+              <div class="finding-desc">There are visible patterns in HRV and recovery scores across menstrual cycle phases, pointing toward a personalised activity model. The dataset is too small and the confounding variables too numerous to draw firm conclusions, though — this is a question worth returning to with more data.</div>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-icon">🌏</div>
+            <div class="finding-text">
+              <div class="finding-title">Life phase matters more than any single variable</div>
+              <div class="finding-desc">The most visible patterns in the data weren't training-related — they tracked life events. The Australia phase produced consistently better recovery scores than the US phases on either side of it, and the return to the UK to start the MSc brought its own distinct physiological signature. That's either the van life, the sunshine, or the absence of deadlines. Probably all three.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFLECTION -->
+    <section class="case-section reveal">
+      <div class="section-num">05 — Reflection</div>
+      <div class="section-content">
+        <h2 class="section-heading">What I'd do<br><em>differently</em></h2>
+        <div class="section-body">
+          <p>The most useful part of building this wasn't the findings — it was the process of deciding what to measure, why, and what I was willing to claim. Honest data visualisation is harder than it looks.</p>
+        </div>
+        <div class="reflection-grid">
+          <div class="reflection-card">
+            <div class="reflection-label kept">What worked</div>
+            <div class="reflection-text">Using raw HRV over composite scores was the right call — it kept the analysis honest and prevented me from laundering Oura's assumptions into my own. The life phase slider gave the data narrative structure it would otherwise lack.</div>
+          </div>
+          <div class="reflection-card">
+            <div class="reflection-label changed">What I'd change</div>
+            <div class="reflection-text">Road cycling and mountain biking were both logged as "cycling" in Apple Health despite very different recovery costs. A rolling 7-day load average would be a stronger variable than single-day duration. And I'd log stress events more rigorously from day one. A planned v2 will introduce multivariate regression across cumulative load, cycle phase, and life context — and revisit whether the pre-stress window holds up under more rigorous analysis.</div>
+          </div>
+          <div class="reflection-card">
+            <div class="reflection-label learned">What I learned</div>
+            <div class="reflection-text">Building a personalised metric is an act of interpretation, not just calculation. Every design decision in a visualisation encodes assumptions — and being transparent about those assumptions is the most important thing a researcher can do.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <div class="next-project reveal">
+    <div>
+      <div class="next-label">Next case study</div>
+      <div class="next-title">Consumer Tribes<br><em>at Scale</em></div>
+    </div>
+    <a href="tribes.html" class="btn-next">Read case study →</a>
+  </div>
+
+  <footer>
+    <div class="footer-name">karissa.</div>
+    <div class="footer-links">
+      <a href="https://linkedin.com/in/karissaly" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:karissatly@gmail.com">Email</a>
+    </div>
+  </footer>
+
+  <script>
+    const sunIcon  = `<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>`;
+    const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('modeIcon').innerHTML = isDark ? sunIcon : moonIcon;
+      document.getElementById('modeLabel').textContent = isDark ? 'dark mode' : 'light mode';
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
