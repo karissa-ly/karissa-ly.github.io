@@ -118,11 +118,11 @@
       pointer-events: none;
     }
     .scroll-step {
-      height: 80vh;
+      height: 60vh;
       display: flex;
       align-items: center;
     }
-    .scroll-step:first-child { margin-top: -100vh; } /* overlap with sticky */
+    .scroll-step:first-child { margin-top: -100vh; }
     .hero {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 40px; align-items: center;
@@ -391,17 +391,13 @@
       </section>
     </div>
 
-    <!-- Scrollama steps — scroll past these to trigger graph states -->
+    <!-- Scrollama steps — each triggers a cluster reveal -->
     <div class="scroll-steps">
-      <div class="scroll-step" data-step="0">
-        <!-- scattered -->
-      </div>
-      <div class="scroll-step" data-step="1">
-        <!-- clustering -->
-      </div>
-      <div class="scroll-step" data-step="2">
-        <!-- settled -->
-      </div>
+      <div class="scroll-step" data-step="0"></div>
+      <div class="scroll-step" data-step="1"></div>
+      <div class="scroll-step" data-step="2"></div>
+      <div class="scroll-step" data-step="3"></div>
+      <div class="scroll-step" data-step="4"></div>
     </div>
   </div>
 
@@ -638,11 +634,7 @@
   function initGraph() {
     nodes = nodeData.map(n => ({
       ...n,
-      // Start fully scattered across canvas
-      x: cssW * 0.05 + Math.random() * cssW * 0.9,
-      y: cssH * 0.05 + Math.random() * cssH * 0.9,
-      vx: (Math.random() - 0.5) * 4,
-      vy: (Math.random() - 0.5) * 4,
+      x: cssW / 2, y: cssH / 2, vx: 0, vy: 0,
     }));
     nodeMap = {};
     nodes.forEach(n => nodeMap[n.id] = n);
@@ -652,11 +644,11 @@
   }
 
   // Simulation constants
-  const REPEL   = 1800;  // node-node repulsion — stronger to push nodes apart
-  const LDIST   = 60;    // preferred edge length — shorter so edges don't pull far
-  const LSTR    = 0.04;  // spring strength — much weaker so cx/cy targets dominate
-  const CGRAV   = 0.03;  // weaker gravity — nodes stay scattered longer, tighten with scroll
-  const CGRAV_K = 0.015; // gravity for core nodes
+  const REPEL   = 1800;
+  const LDIST   = 60;
+  const LSTR    = 0.04;
+  const CGRAV   = 0.08;
+  const CGRAV_K = 0.04;
   const DAMP    = 0.75;
 
   function tick() {
@@ -682,7 +674,7 @@
       s.vx += fx; s.vy += fy;
       t.vx -= fx; t.vy -= fy;
     });
-    // Cluster gravity — each node pulled toward its designated cx/cy region
+    // Cluster gravity — strength controlled by scroll step
     nodes.forEach(n => {
       const tx = n.cx * cssW;
       const ty = n.cy * cssH;
@@ -805,34 +797,41 @@
   let hoveredNode = null;
   let tooltipAlpha = 0;
 
-  // SCROLLYTELLING — Scrollama.js drives discrete graph states
-  // Step 0 = scattered, Step 1 = clustering, Step 2 = fully settled
-  let graphStep = 0;
-  let targetIterations = 20; // how many sim steps to run total per state
+  // SCROLLYTELLING — re-run simulation from scratch with more iterations per step
+  // Matches the Observable "numIterations" slider pattern exactly
+  const ITER_STEPS = [5, 40, 120, 280, 500];
+  let currentIterations = ITER_STEPS[0];
+  let needsRedraw = true;
 
-  // Load Scrollama from CDN
+  function runSimulation(iterations) {
+    // Reset positions to scattered
+    const rand = () => Math.random;
+    nodes.forEach(n => {
+      n.x = n.cx * cssW + (Math.random() - 0.5) * cssW * 0.6;
+      n.y = n.cy * cssH + (Math.random() - 0.5) * cssH * 0.6;
+      n.vx = 0; n.vy = 0;
+    });
+    // Run exactly N iterations of physics
+    for (let i = 0; i < iterations; i++) tick();
+    needsRedraw = true;
+  }
+
+  // Scrollama — each step re-runs with more iterations
   const scrollamaScript = document.createElement('script');
   scrollamaScript.src = 'https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js';
   scrollamaScript.onload = function() {
     const scroller = scrollama();
     scroller
-      .setup({
-        step: '.scroll-step',
-        offset: 0.5,
-        debug: false,
-      })
-      .onStepEnter(({ index, direction }) => {
-        graphStep = index;
-        if (index === 0) targetIterations = 20;
-        if (index === 1) targetIterations = 120;
-        if (index === 2) targetIterations = 400;
+      .setup({ step: '.scroll-step', offset: 0.5 })
+      .onStepEnter(({ index }) => {
+        currentIterations = ITER_STEPS[Math.min(index, ITER_STEPS.length - 1)];
+        runSimulation(currentIterations);
       })
       .onStepExit(({ index, direction }) => {
-        if (direction === 'up' && index === 0) {
-          // Scrolled back to top — reset graph
-          initGraph();
-          frame = 0;
-          targetIterations = 20;
+        if (direction === 'up') {
+          const prevIdx = Math.max(0, index - 1);
+          currentIterations = ITER_STEPS[prevIdx];
+          runSimulation(currentIterations);
         }
       });
     window.addEventListener('resize', scroller.resize);
@@ -840,11 +839,10 @@
   document.head.appendChild(scrollamaScript);
 
   function loop() {
-    // Run sim steps up to targetIterations, then coast at 1 step/frame
-    const steps = frame < targetIterations ? 4 : 1;
-    for (let i = 0; i < steps; i++) tick();
-    frame++;
-    draw();
+    if (needsRedraw) {
+      draw();
+      needsRedraw = false;
+    }
     requestAnimationFrame(loop);
   }
 
@@ -860,12 +858,11 @@
 
   function hitNode(mx, my) {
     if (!nodes) return null;
-    // Check in reverse so top-drawn nodes are hit first
     for (let i = nodes.length - 1; i >= 0; i--) {
       const n = nodes[i];
+      if ((nodeAlpha[n.id] || 0) < 0.5) continue; // can't click invisible nodes
       const dx = mx - n.x, dy = my - n.y;
-      const hitR = n.r * 1.4; // slightly generous hit area
-      if (dx * dx + dy * dy <= hitR * hitR) return n;
+      if (dx * dx + dy * dy <= n.r * n.r * 1.4 * 1.4) return n;
     }
     return null;
   }
@@ -889,13 +886,11 @@
     if (hit.href.startsWith('http')) {
       window.open(hit.href, '_blank', 'noopener');
     } else {
-      window.location.hash = hit.href.replace('#', '');
       const target = document.querySelector(hit.href);
       if (target) target.scrollIntoView({ behavior: 'smooth' });
     }
   });
 
-  // Touch support
   canvas.addEventListener('touchend', e => {
     e.preventDefault();
     const touch = e.changedTouches[0];
@@ -922,6 +917,7 @@
     setSize();
     if (cssW < 10) { setTimeout(startGraph, 100); return; }
     initGraph();
+    runSimulation(currentIterations);
     loop();
   }
 
@@ -929,7 +925,6 @@
     startGraph();
   } else {
     window.addEventListener('load', startGraph);
-  }
-  </script>
+  }</script>
 </body>
 </html>
