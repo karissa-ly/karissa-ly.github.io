@@ -107,8 +107,6 @@
       position: sticky;
       top: 0;
       height: 100vh;
-      display: flex;
-      align-items: center;
       overflow: hidden;
       z-index: 1;
     }
@@ -119,23 +117,37 @@
     }
     .scroll-step {
       height: 60vh;
-      display: flex;
-      align-items: center;
     }
     .scroll-step:first-child { margin-top: -100vh; }
+
+    /* Hero: copy floats left, canvas fills full background */
     .hero {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 40px; align-items: center;
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
       padding: 0 32px;
-      max-width: 1080px; margin: 0 auto;
+      max-width: 1080px;
+      margin: 0 auto;
       width: 100%;
     }
-    .hero-content { position: relative; z-index: 2; }
-    .hero-graph { display: flex; align-items: center; justify-content: center; }
-
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 480px;
+      flex-shrink: 0;
+    }
+    .hero-graph {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
     #graphCanvas {
-      width: 100%; max-width: 560px; height: 380px; display: block;
-      opacity: 0; animation: fadeIn 1.4s var(--ease-out) 0.7s forwards;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0;
+      animation: fadeIn 1s var(--ease-out) 0.5s forwards;
     }
 
     .hero-eyebrow {
@@ -797,26 +809,13 @@
   let hoveredNode = null;
   let tooltipAlpha = 0;
 
-  // SCROLLYTELLING — re-run simulation from scratch with more iterations per step
-  // Matches the Observable "numIterations" slider pattern exactly
-  const ITER_STEPS = [5, 40, 120, 280, 500];
-  let currentIterations = ITER_STEPS[0];
-  let needsRedraw = true;
+  // Each node has a startX/Y (scattered) and endX/Y (settled by physics)
+  // lerpProgress 0 = scattered, 1 = settled
+  let lerpProgress = 0;
+  let lerpTarget = 0;
+  const LERP_SPEED = 0.04; // how fast nodes move toward target each frame
 
-  function runSimulation(iterations) {
-    // Reset positions to scattered
-    const rand = () => Math.random;
-    nodes.forEach(n => {
-      n.x = n.cx * cssW + (Math.random() - 0.5) * cssW * 0.6;
-      n.y = n.cy * cssH + (Math.random() - 0.5) * cssH * 0.6;
-      n.vx = 0; n.vy = 0;
-    });
-    // Run exactly N iterations of physics
-    for (let i = 0; i < iterations; i++) tick();
-    needsRedraw = true;
-  }
-
-  // Scrollama — each step re-runs with more iterations
+  // Scrollama drives lerpTarget
   const scrollamaScript = document.createElement('script');
   scrollamaScript.src = 'https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js';
   scrollamaScript.onload = function() {
@@ -824,14 +823,12 @@
     scroller
       .setup({ step: '.scroll-step', offset: 0.5 })
       .onStepEnter(({ index }) => {
-        currentIterations = ITER_STEPS[Math.min(index, ITER_STEPS.length - 1)];
-        runSimulation(currentIterations);
+        // 5 steps: 0=scattered, 4=fully settled
+        lerpTarget = index / 4;
       })
       .onStepExit(({ index, direction }) => {
         if (direction === 'up') {
-          const prevIdx = Math.max(0, index - 1);
-          currentIterations = ITER_STEPS[prevIdx];
-          runSimulation(currentIterations);
+          lerpTarget = Math.max(0, (index - 1) / 4);
         }
       });
     window.addEventListener('resize', scroller.resize);
@@ -839,11 +836,87 @@
   document.head.appendChild(scrollamaScript);
 
   function loop() {
-    if (needsRedraw) {
-      draw();
-      needsRedraw = false;
+    // Smoothly ease lerpProgress toward lerpTarget
+    lerpProgress += (lerpTarget - lerpProgress) * LERP_SPEED;
+
+    // Update each node's current position as lerp between start and end
+    if (nodes) {
+      nodes.forEach(n => {
+        n.x = n.startX + (n.endX - n.startX) * lerpProgress;
+        n.y = n.startY + (n.endY - n.startY) * lerpProgress;
+      });
     }
+
+    frame++;
+    draw();
     requestAnimationFrame(loop);
+  }
+
+  function initGraph() {
+    // First: run physics to find settled positions (endX/Y)
+    const tempNodes = nodeData.map(n => ({
+      ...n,
+      x: n.cx * cssW + (Math.random() - 0.5) * 30,
+      y: n.cy * cssH + (Math.random() - 0.5) * 30,
+      vx: 0, vy: 0,
+    }));
+    const tempMap = {};
+    tempNodes.forEach(n => tempMap[n.id] = n);
+    const tempEdges = edgeData
+      .filter(([a, b]) => tempMap[a] && tempMap[b])
+      .map(([a, b]) => ({ s: tempMap[a], t: tempMap[b] }));
+
+    // Run physics until settled
+    for (let i = 0; i < 500; i++) {
+      // Repulsion
+      for (let a = 0; a < tempNodes.length; a++) {
+        for (let b = a + 1; b < tempNodes.length; b++) {
+          const na = tempNodes[a], nb = tempNodes[b];
+          const dx = nb.x - na.x, dy = nb.y - na.y;
+          const d2 = dx*dx + dy*dy || 1;
+          const d = Math.sqrt(d2);
+          const f = REPEL / d2;
+          na.vx -= dx/d*f; na.vy -= dy/d*f;
+          nb.vx += dx/d*f; nb.vy += dy/d*f;
+        }
+      }
+      // Springs
+      tempEdges.forEach(({ s, t }) => {
+        const dx = t.x-s.x, dy = t.y-s.y;
+        const d = Math.sqrt(dx*dx+dy*dy) || 1;
+        const f = (d-LDIST)*LSTR;
+        s.vx += dx/d*f; s.vy += dy/d*f;
+        t.vx -= dx/d*f; t.vy -= dy/d*f;
+      });
+      // Gravity
+      tempNodes.forEach(n => {
+        n.vx += (n.cx*cssW - n.x) * CGRAV;
+        n.vy += (n.cy*cssH - n.y) * CGRAV;
+        n.vx *= DAMP; n.vy *= DAMP;
+        n.x += n.vx; n.y += n.vy;
+      });
+    }
+
+    // Now build actual nodes with startX/Y (scattered) and endX/Y (settled)
+    nodes = nodeData.map((n, i) => {
+      const settled = tempNodes[i];
+      return {
+        ...n,
+        // Scatter across full canvas
+        startX: cssW * 0.05 + Math.random() * cssW * 0.9,
+        startY: cssH * 0.05 + Math.random() * cssH * 0.9,
+        endX: settled.x,
+        endY: settled.y,
+        x: cssW * 0.05 + Math.random() * cssW * 0.9,
+        y: cssH * 0.05 + Math.random() * cssH * 0.9,
+        vx: 0, vy: 0,
+      };
+    });
+    nodeMap = {};
+    nodes.forEach(n => nodeMap[n.id] = n);
+    edges = edgeData
+      .filter(([a, b]) => nodeMap[a] && nodeMap[b])
+      .map(([a, b]) => ({ s: nodeMap[a], t: nodeMap[b] }));
   }
 
   function getCanvasPos(e) {
@@ -907,17 +980,13 @@
 
   window.addEventListener('resize', () => {
     setSize();
-    if (nodes) nodes.forEach(n => {
-      n.x = Math.min(Math.max(n.x, 30), cssW - 30);
-      n.y = Math.min(Math.max(n.y, 30), cssH - 30);
-    });
+    if (nodes) startGraph(); // reinit with new canvas size
   });
 
   function startGraph() {
     setSize();
     if (cssW < 10) { setTimeout(startGraph, 100); return; }
     initGraph();
-    runSimulation(currentIterations);
     loop();
   }
 
