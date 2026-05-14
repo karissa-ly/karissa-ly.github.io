@@ -416,7 +416,7 @@
       </section>
     </div>
 
-    <!-- Scrollama steps: 0=scattered, 1=25%, 2=50%, 3=75%, 4-7=fully settled (hold) -->
+    <!-- Scrollama steps: 0-4 animate in, 5-9 hold at settled -->
     <div class="scroll-steps">
       <div class="scroll-step" data-step="0"></div>
       <div class="scroll-step" data-step="1"></div>
@@ -426,6 +426,8 @@
       <div class="scroll-step" data-step="5"></div>
       <div class="scroll-step" data-step="6"></div>
       <div class="scroll-step" data-step="7"></div>
+      <div class="scroll-step" data-step="8"></div>
+      <div class="scroll-step" data-step="9"></div>
     </div>
   </div>
 
@@ -596,11 +598,11 @@
     { id: 'discourse',  label: 'discourse',        r: 7,  group: 'orange', cx: 0.49, cy: 0.70, href: '#project-02',         tooltip: 'case study →' },
     // AI / strategy — upper right
     { id: 'ai',         label: 'applied ai',       r: 10, group: 'lilac',  cx: 0.82, cy: 0.30, href: '#work',               tooltip: 'see work' },
-    { id: 'strategy',   label: 'product mgmt',     r: 7,  group: 'lilac',  cx: 0.86, cy: 0.14, href: '#work',               tooltip: 'see work' },
+    { id: 'strategy',   label: 'product mgmt',     r: 8,  group: 'lilac',  cx: 0.76, cy: 0.18, href: '#work',               tooltip: 'see work' },
     { id: 'ml',         label: 'ml workflows',     r: 6,  group: 'lilac',  cx: 0.87, cy: 0.44, href: '#work',               tooltip: 'see work' },
     // Data viz / engineering — lower right
-    { id: 'dataviz',    label: 'data viz',         r: 8,  group: 'blue',   cx: 0.80, cy: 0.70, href: '#project-03',         tooltip: 'case study →' },
-    { id: 'observable', label: 'observable/js',    r: 5,  group: 'blue',   cx: 0.85, cy: 0.84, href: '#project-03',         tooltip: 'case study →' },
+    { id: 'dataviz',    label: 'data viz',         r: 8,  group: 'blue',   cx: 0.82, cy: 0.65, href: '#project-03',         tooltip: 'case study →' },
+    { id: 'observable', label: 'observable/js',    r: 5,  group: 'blue',   cx: 0.87, cy: 0.80, href: '#project-03',         tooltip: 'case study →' },
     { id: 'hf',         label: 'human factors',    r: 6,  group: 'blue',   cx: 0.73, cy: 0.82, href: '#project-04',         tooltip: 'case study →' },
     // Tools — far right
     { id: 'figma',      label: 'figma',            r: 4,  group: 'lilac',  cx: 0.93, cy: 0.22, href: 'https://figma.com',         tooltip: 'figma.com ↗' },
@@ -609,9 +611,9 @@
     { id: 'lovable',    label: 'lovable',          r: 4,  group: 'lilac',  cx: 0.94, cy: 0.68, href: 'https://lovable.dev',       tooltip: 'lovable.dev ↗' },
     { id: 'notebooklm', label: 'notebooklm',       r: 4,  group: 'lilac',  cx: 0.93, cy: 0.80, href: 'https://notebooklm.google', tooltip: 'notebooklm ↗' },
     // Design — centre-right
-    { id: 'design',     label: 'ux design',        r: 6,  group: 'pink',   cx: 0.74, cy: 0.64, href: '#work',               tooltip: 'see work' },
-    { id: 'proddesign', label: 'product design',   r: 7,  group: 'pink',   cx: 0.79, cy: 0.56, href: '#work',               tooltip: 'see work' },
-    { id: 'usability',  label: 'usability testing', r: 6, group: 'pink',   cx: 0.70, cy: 0.74, href: '#work',               tooltip: 'see work' },
+    { id: 'design',     label: 'ux design',        r: 7,  group: 'pink',   cx: 0.72, cy: 0.60, href: '#work',               tooltip: 'see work' },
+    { id: 'proddesign', label: 'product design',   r: 7,  group: 'pink',   cx: 0.80, cy: 0.52, href: '#work',               tooltip: 'see work' },
+    { id: 'usability',  label: 'usability testing', r: 6, group: 'pink',   cx: 0.66, cy: 0.70, href: '#work',               tooltip: 'see work' },
     // Personal — bottom centre-right
     { id: 'mtb',        label: 'mountain biking',  r: 5,  group: 'muted',  cx: 0.51, cy: 0.84, href: '#about',              tooltip: 'about me' },
     { id: 'climbing',   label: 'climbing',         r: 5,  group: 'muted',  cx: 0.58, cy: 0.88, href: '#about',              tooltip: 'about me' },
@@ -619,25 +621,25 @@
   ];
 
   const edgeData = [
-    // Core connects to cluster anchors
-    ['k','ux'], ['k','ai'], ['k','dataviz'], ['k','segm'], ['k','climbing'],
-    // Research cluster — all connected internally
+    // Core connects to main cluster anchors only
+    ['k','ux'], ['k','ai'], ['k','proddesign'], ['k','dataviz'],
+    // Research cluster — internal connections
     ['ux','segm'], ['ux','discourse'], ['ux','mixed'], ['ux','cultural'],
-    ['segm','cultural'], ['segm','mixed'], ['discourse','mixed'],
-    // AI / strategy cluster (tight)
-    ['ai','strategy'], ['ai','ml'],
-    // Design cluster
-    ['k','proddesign'], ['proddesign','design'], ['design','usability'],
-    ['design','hf'], ['proddesign','ai'], ['usability','ux'],
-    // Tools hang off AI
-    ['ai','claude'], ['ai','lovable'], ['figma','ux'], ['figma','ai'], ['claude','lovable'],
-    ['ai','quiltai'], ['ml','quiltai'], ['notebooklm','claude'],
-    // Data viz cluster — all connected internally
-    ['dataviz','observable'], ['dataviz','hf'], ['observable','hf'],
+    ['segm','mixed'], ['cultural','mixed'],
+    // AI / strategy cluster
+    ['ai','strategy'], ['ai','ml'], ['strategy','proddesign'],
+    // Design cluster — connected to both AI and research
+    ['proddesign','design'], ['design','usability'], ['design','hf'],
+    ['usability','ux'], ['proddesign','dataviz'],
+    // Tools hang off AI and quiltai off research (used there)
+    ['ai','claude'], ['figma','ai'], ['claude','lovable'],
+    ['ai','quiltai'], ['ml','quiltai'], ['notebooklm','ai'],
+    // Data viz cluster
+    ['dataviz','observable'], ['dataviz','hf'],
     // Cross-cluster bridges
-    ['ux','ai'], ['ai','dataviz'], ['discourse','dataviz'], ['segm','ai'],
-    // Personal cluster — all connected, bridge to research
-    ['climbing','pole'], ['climbing','mtb'], ['pole','ux'], ['mtb','climbing'],
+    ['ux','ai'], ['ai','dataviz'], ['segm','ai'],
+    // Personal — connected to each other only, climbing bridges to karissa
+    ['k','climbing'], ['climbing','pole'], ['climbing','mtb'],
   ];
 
   // Palette per theme
@@ -829,7 +831,7 @@
   // lerpProgress 0 = scattered, 1 = settled
   let lerpProgress = 0;
   let lerpTarget = 0;
-  const LERP_SPEED = 0.04; // how fast nodes move toward target each frame
+  const LERP_SPEED = 0.025; // slower = smoother scroll feel
 
   // Scrollama drives lerpTarget
   const scrollamaScript = document.createElement('script');
@@ -839,14 +841,12 @@
     scroller
       .setup({ step: '.scroll-step', offset: 0.5 })
       .onStepEnter(({ index }) => {
-        // Steps 0-3: lerp from 0 to 1
-        // Steps 4-7: hold at 1 (fully settled)
-        lerpTarget = index <= 3 ? index / 3 : 1;
+        lerpTarget = index <= 4 ? index / 4 : 1;
       })
       .onStepExit(({ index, direction }) => {
         if (direction === 'up') {
           const prev = Math.max(0, index - 1);
-          lerpTarget = prev <= 3 ? prev / 3 : 1;
+          lerpTarget = prev <= 4 ? prev / 4 : 1;
         }
       });
     window.addEventListener('resize', scroller.resize);
