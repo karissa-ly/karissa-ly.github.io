@@ -485,7 +485,7 @@
   }
 
   // SCROLL REVEAL
-  const revealEls = document.querySelectorAll('.project-card, .meta-strip');
+  const revealEls = document.querySelectorAll('.project-card, .card-meta-inline');
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -494,11 +494,11 @@
         revealObs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
-  revealEls.forEach((el, i) => {
+  }, { threshold: 0.05 });
+  revealEls.forEach((el) => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${i*0.08}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${i*0.08}s`;
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = `opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1)`;
     revealObs.observe(el);
   });
 
@@ -762,23 +762,27 @@
   let hoveredNode = null;
   let tooltipAlpha = 0;
 
-  // Scroll-driven simulation — graph warms up as user scrolls into hero
+  // Scroll-driven simulation — graph warms up as user scrolls through hero
   let scrollProgress = 0;
   function updateScrollProgress() {
     const hero = document.getElementById('home');
     if (!hero) return;
     const rect = hero.getBoundingClientRect();
     const windowH = window.innerHeight;
-    const raw = 1 - (rect.bottom / (windowH + rect.height));
-    scrollProgress = Math.max(0, Math.min(1, raw));
+    // Progress from 0 (hero top at viewport bottom) to 1 (hero bottom at viewport top)
+    const heroVisible = windowH - rect.top;
+    const heroTotal = rect.height + windowH;
+    scrollProgress = Math.max(0, Math.min(1, heroVisible / heroTotal));
   }
   window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  window.addEventListener('load', updateScrollProgress);
   updateScrollProgress();
 
   function loop() {
-    // Base: 1 step at rest, up to 6 steps as user scrolls — clusters tighten
-    const scrollSteps = Math.round(1 + scrollProgress * 5);
-    const steps = frame < 200 ? Math.max(scrollSteps, 5) : scrollSteps;
+    // Start scattered (low steps), tighten as user scrolls through hero
+    // frame < 60: fast initial settle so graph isn't a blob on load
+    const scrollSteps = 1 + Math.round(scrollProgress * 7);
+    const steps = frame < 60 ? 8 : scrollSteps;
     for (let i = 0; i < steps; i++) tick();
     frame++;
     draw();
