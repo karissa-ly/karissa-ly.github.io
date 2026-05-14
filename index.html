@@ -137,6 +137,19 @@
       width: 480px;
       flex-shrink: 0;
     }
+    /* Gradient mask — protects copy from graph nodes */
+    .hero-content::before {
+      content: '';
+      position: absolute;
+      inset: -40px -80px -40px -40px;
+      background: linear-gradient(to right,
+        var(--bg) 0%,
+        var(--bg) 60%,
+        transparent 100%
+      );
+      z-index: -1;
+      pointer-events: none;
+    }
     .hero-graph {
       position: absolute;
       inset: 0;
@@ -403,13 +416,16 @@
       </section>
     </div>
 
-    <!-- Scrollama steps — each triggers a cluster reveal -->
+    <!-- Scrollama steps: 0=scattered, 1=25%, 2=50%, 3=75%, 4-7=fully settled (hold) -->
     <div class="scroll-steps">
       <div class="scroll-step" data-step="0"></div>
       <div class="scroll-step" data-step="1"></div>
       <div class="scroll-step" data-step="2"></div>
       <div class="scroll-step" data-step="3"></div>
       <div class="scroll-step" data-step="4"></div>
+      <div class="scroll-step" data-step="5"></div>
+      <div class="scroll-step" data-step="6"></div>
+      <div class="scroll-step" data-step="7"></div>
     </div>
   </div>
 
@@ -823,12 +839,14 @@
     scroller
       .setup({ step: '.scroll-step', offset: 0.5 })
       .onStepEnter(({ index }) => {
-        // 5 steps: 0=scattered, 4=fully settled
-        lerpTarget = index / 4;
+        // Steps 0-3: lerp from 0 to 1
+        // Steps 4-7: hold at 1 (fully settled)
+        lerpTarget = index <= 3 ? index / 3 : 1;
       })
       .onStepExit(({ index, direction }) => {
         if (direction === 'up') {
-          lerpTarget = Math.max(0, (index - 1) / 4);
+          const prev = Math.max(0, index - 1);
+          lerpTarget = prev <= 3 ? prev / 3 : 1;
         }
       });
     window.addEventListener('resize', scroller.resize);
