@@ -182,12 +182,13 @@
       padding: 24px; min-height: 148px;
       display: flex; flex-direction: column; justify-content: space-between; position: relative;
     }
-    .card-tall .card-inner { min-height: 310px; }
+    .card-tall .card-inner { min-height: 240px; }
     .card-span { grid-row: span 2; }
     .card-orange { background: var(--card-orange-bg); }
     .card-lilac  { background: var(--card-lilac-bg); }
     .card-blue   { background: var(--card-blue-bg); }
     .card-pink   { background: var(--card-pink-bg); }
+    .card-muted  { background: var(--bg-subtle); border: 0.5px solid var(--border); }
     .card-num {
       font-family: var(--serif); font-size: 48px; line-height: 1;
       color: var(--text); opacity: 0.07;
@@ -214,7 +215,28 @@
       transition: opacity 0.2s, transform 0.2s var(--ease-out);
     }
 
-    /* META STRIP */
+    /* META INLINE CARD */
+    .card-meta-inline {
+      border-radius: 10px; padding: 18px 22px;
+      display: flex; align-items: center; gap: 18px;
+      background: var(--orange-dim); border: 1px solid var(--orange-border);
+      cursor: pointer; transition: background 0.2s;
+    }
+    .card-meta-inline:hover { background: rgba(255,122,53,0.24); }
+    .card-meta-inline .meta-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--orange); white-space: nowrap; flex-shrink: 0;
+    }
+    .card-meta-inline .meta-pipe {
+      width: 0.5px; height: 28px; background: var(--orange-border); flex-shrink: 0;
+    }
+    .card-meta-inline .meta-text {
+      font-size: 13px; line-height: 1.6; color: var(--text-muted);
+    }
+    .card-meta-inline .meta-link {
+      color: var(--orange); font-weight: 500;
+      border-bottom: 0.5px solid var(--orange-border); padding-bottom: 1px;
+    }
     .meta-strip {
       max-width: calc(1080px - 64px); margin: 12px auto 0;
       border-radius: 10px; padding: 16px 22px;
@@ -312,7 +334,7 @@
 
   <section class="hero" id="home">
     <div class="hero-content">
-      <div class="hero-eyebrow">Research · Product · Engineering</div>
+      <div class="hero-eyebrow">Cultural researcher turned product builder.</div>
       <h1 class="hero-headline">
         Turning messy<br>
         signals into<br>
@@ -320,20 +342,20 @@
       </h1>
       <p class="hero-sub">
         Before most teams had a prompt engineer, I was using AI to map
-        consumer behaviour across 10+ markets. Then Australia. Now, I'm
-        pursuing an MSc in UX Engineering, where I'm building the design
-        and technical fluency to match.
+        cultural behaviour across 10+ markets. Now I'm pursuing an MSc
+        in UX Engineering at City, St George's, where I'm building the
+        design and technical fluency to match.
       </p>
       <div class="hero-cta">
         <a href="#work" class="btn-primary">See my work</a>
         <a href="#about" class="btn-ghost">About me</a>
       </div>
       <div class="hero-tags">
-        <span class="tag tag-orange">Research</span>
-        <span class="tag tag-lilac">AI-native</span>
-        <span class="tag tag-lilac">Product management</span>
-        <span class="tag tag-blue">Data viz</span>
-        <span class="tag tag-blue">Human factors</span>
+        <span class="tag tag-orange">Consumer Research</span>
+        <span class="tag tag-lilac">AI Methods</span>
+        <span class="tag tag-lilac">Product Management</span>
+        <span class="tag tag-blue">UX Design</span>
+        <span class="tag tag-blue">Data Visualisation</span>
       </div>
     </div>
 
@@ -348,66 +370,82 @@
     <div class="section-label">Selected work</div>
     <div class="work-grid">
 
-      <div class="project-card card-orange card-span">
-        <div class="card-inner card-tall">
+      <!-- Row 1: Tribes + Energy -->
+      <div class="project-card card-orange" onclick="window.location='tribes.html'">
+        <div class="card-inner">
           <div class="card-num">01</div>
           <div>
             <div class="card-stat">50+ projects</div>
-            <div class="card-type">AI Research · Segmentation · Global</div>
+            <div class="card-type">AI Research · Consumer Insights</div>
             <div class="card-title">Consumer Tribes at Scale</div>
           </div>
           <div class="card-arrow">↗</div>
         </div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div class="project-card card-lilac">
-          <div class="card-inner">
-            <div class="card-num" style="font-size:32px;">02</div>
-            <div>
-              <div class="card-stat">63k+ tweets analysed</div>
-              <div class="card-type">Discourse Analysis · Climate · Policy</div>
-              <div class="card-title">Energy Discourse in India</div>
-            </div>
-            <div class="card-arrow">↗</div>
+      <div class="project-card card-lilac" onclick="window.location='energy.html'">
+        <div class="card-inner">
+          <div class="card-num">02</div>
+          <div>
+            <div class="card-stat">63k+ tweets</div>
+            <div class="card-type">Discourse Analysis · Climate Policy</div>
+            <div class="card-title">Energy Discourse in India</div>
           </div>
-        </div>
-        <div class="project-card card-blue" onclick="window.location='oura.html'">
-          <div class="card-inner">
-            <div class="card-num" style="font-size:32px;">03</div>
-            <div>
-              <div class="card-stat">15 months of data</div>
-              <div class="card-type">Data Visualisation · Observable · JS</div>
-              <div class="card-title">My Body Was Keeping Score</div>
-            </div>
-            <div class="card-arrow">↗</div>
-          </div>
+          <div class="card-arrow">↗</div>
         </div>
       </div>
 
-      <div class="project-card card-pink" style="grid-column:span 2;">
+      <!-- Row 2: Oura + TrailForks -->
+      <div class="project-card card-blue" onclick="window.location='oura.html'">
         <div class="card-inner">
-          <div class="card-num" style="font-size:32px;">04</div>
+          <div class="card-num">03</div>
           <div>
-            <div class="card-stat">Human Factors · Individual</div>
-            <div class="card-type">UX Engineering · Safety-Critical Systems</div>
+            <div class="card-stat">15 months of data</div>
+            <div class="card-type">Data Visualisation · Observable JS</div>
+            <div class="card-title">My Body Was Keeping Score</div>
+          </div>
+          <div class="card-arrow">↗</div>
+        </div>
+      </div>
+
+      <div class="project-card card-pink" onclick="window.location='trailforks.html'">
+        <div class="card-inner">
+          <div class="card-num">04</div>
+          <div>
+            <div class="card-stat">3 interventions</div>
+            <div class="card-type">UX Design · Human Factors</div>
             <div class="card-title">When Navigation Fails</div>
           </div>
           <div class="card-arrow">↗</div>
         </div>
       </div>
 
+      <!-- Row 3: Membrane + Meta -->
+      <div class="project-card card-lilac" onclick="window.location='membrane.html'">
+        <div class="card-inner">
+          <div class="card-num">05</div>
+          <div>
+            <div class="card-stat">AI product proposal</div>
+            <div class="card-type">Product Design · AI Strategy</div>
+            <div class="card-title">Membrane</div>
+          </div>
+          <div class="card-arrow">↗</div>
+        </div>
+      </div>
+
+      <div class="card-meta-inline" onclick="window.location='meta.html'">
+        <div class="meta-label">Meta</div>
+        <div class="meta-pipe"></div>
+        <div class="meta-text">
+          This portfolio was built through AI-assisted vibe-coding — Claude, Lovable, and a lot of iteration.
+          <span class="meta-link">Read about what that process actually looked like →</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <div class="meta-strip">
-    <div class="meta-label">Meta case study</div>
-    <div class="meta-pipe"></div>
-    <div class="meta-text">
-      This portfolio was built using AI — Lovable, Claude, and vibe-coding.
-      <a href="#">Read about what I learned building it as a product designer →</a>
-    </div>
-  </div>
+
 
   <section class="about-strip" id="about">
     <div class="about-quote">
@@ -485,8 +523,6 @@
   const nodeData = [
     // Core — centre
     { id: 'k',          label: 'karissa',          r: 13, group: 'core',   cx: 0.50, cy: 0.52, href: '#home',               tooltip: 'home' },
-    // Team leadership — directly above centre, anchored to k
-    { id: 'leadership', label: 'team leadership',  r: 5,  group: 'core',   cx: 0.50, cy: 0.08, href: '#about',              tooltip: 'about me' },
     // Research cluster — left arc, well spread vertically
     { id: 'ux',         label: 'research',         r: 10, group: 'orange', cx: 0.22, cy: 0.36, href: '#work',               tooltip: 'see work' },
     { id: 'cultural',   label: 'cultural intel',   r: 7,  group: 'orange', cx: 0.16, cy: 0.20, href: '#work',               tooltip: 'see work' },
@@ -494,19 +530,23 @@
     { id: 'segm',       label: 'segmentation',     r: 9,  group: 'orange', cx: 0.10, cy: 0.52, href: '#project-01',         tooltip: 'case study →' },
     { id: 'discourse',  label: 'discourse',        r: 7,  group: 'orange', cx: 0.12, cy: 0.70, href: '#project-02',         tooltip: 'case study →' },
     // AI / strategy — upper-right, spread vertically
-    { id: 'ai',         label: 'ai-native',        r: 10, group: 'lilac',  cx: 0.72, cy: 0.30, href: '#work',               tooltip: 'see work' },
+    { id: 'ai',         label: 'applied ai',       r: 10, group: 'lilac',  cx: 0.72, cy: 0.30, href: '#work',               tooltip: 'see work' },
     { id: 'strategy',   label: 'product mgmt',     r: 7,  group: 'lilac',  cx: 0.80, cy: 0.14, href: '#work',               tooltip: 'see work' },
     { id: 'ml',         label: 'ml workflows',     r: 6,  group: 'lilac',  cx: 0.82, cy: 0.44, href: '#work',               tooltip: 'see work' },
     // Data viz / engineering — lower-right
     { id: 'dataviz',    label: 'data viz',         r: 8,  group: 'blue',   cx: 0.68, cy: 0.70, href: '#project-03',         tooltip: 'case study →' },
     { id: 'observable', label: 'observable/js',    r: 5,  group: 'blue',   cx: 0.78, cy: 0.84, href: '#project-03',         tooltip: 'case study →' },
     { id: 'hf',         label: 'human factors',    r: 6,  group: 'blue',   cx: 0.56, cy: 0.82, href: '#project-04',         tooltip: 'case study →' },
-    // Tools — far right, evenly spaced vertically
-    { id: 'figma',      label: 'figma',            r: 4,  group: 'pink',   cx: 0.93, cy: 0.22, href: 'https://figma.com',         tooltip: 'figma.com ↗' },
-    { id: 'claude',     label: 'claude',           r: 5,  group: 'pink',   cx: 0.95, cy: 0.38, href: 'https://claude.ai',         tooltip: 'claude.ai ↗' },
-    { id: 'quiltai',    label: 'quilt.ai',         r: 5,  group: 'pink',   cx: 0.93, cy: 0.54, href: 'https://quilt.ai',          tooltip: 'quilt.ai ↗' },
-    { id: 'lovable',    label: 'lovable',          r: 4,  group: 'pink',   cx: 0.95, cy: 0.68, href: 'https://lovable.dev',       tooltip: 'lovable.dev ↗' },
-    { id: 'notebooklm', label: 'notebooklm',       r: 4,  group: 'pink',   cx: 0.93, cy: 0.80, href: 'https://notebooklm.google', tooltip: 'notebooklm ↗' },
+    // Tools — far right, lilac to match ai-native family
+    { id: 'figma',      label: 'figma',            r: 4,  group: 'lilac',  cx: 0.93, cy: 0.22, href: 'https://figma.com',         tooltip: 'figma.com ↗' },
+    { id: 'claude',     label: 'claude',           r: 5,  group: 'lilac',  cx: 0.95, cy: 0.38, href: 'https://claude.ai',         tooltip: 'claude.ai ↗' },
+    { id: 'quiltai',    label: 'quilt.ai',         r: 5,  group: 'lilac',  cx: 0.93, cy: 0.54, href: 'https://quilt.ai',          tooltip: 'quilt.ai ↗' },
+    { id: 'lovable',    label: 'lovable',          r: 4,  group: 'lilac',  cx: 0.95, cy: 0.68, href: 'https://lovable.dev',       tooltip: 'lovable.dev ↗' },
+    { id: 'notebooklm', label: 'notebooklm',       r: 4,  group: 'lilac',  cx: 0.93, cy: 0.80, href: 'https://notebooklm.google', tooltip: 'notebooklm ↗' },
+    // Design — pink, bridges blue and lilac clusters
+    { id: 'design',     label: 'ux design',        r: 6,  group: 'pink',   cx: 0.58, cy: 0.64, href: '#work',               tooltip: 'see work' },
+    { id: 'proddesign', label: 'product design',   r: 7,  group: 'pink',   cx: 0.66, cy: 0.56, href: '#work',               tooltip: 'see work' },
+    { id: 'usability',  label: 'usability testing', r: 6, group: 'pink',   cx: 0.50, cy: 0.74, href: '#work',               tooltip: 'see work' },
     // Personal — lower-left, spread horizontally
     { id: 'mtb',        label: 'mountain biking',  r: 5,  group: 'muted',  cx: 0.14, cy: 0.84, href: '#about',              tooltip: 'about me' },
     { id: 'climbing',   label: 'climbing',         r: 5,  group: 'muted',  cx: 0.28, cy: 0.88, href: '#about',              tooltip: 'about me' },
@@ -519,12 +559,14 @@
     // Research cluster — all connected internally
     ['ux','segm'], ['ux','discourse'], ['ux','mixed'], ['ux','cultural'],
     ['segm','cultural'], ['segm','mixed'], ['discourse','mixed'],
-    ['k','leadership'],
     // AI / strategy cluster (tight)
     ['ai','strategy'], ['ai','ml'],
+    // Design cluster
+    ['k','proddesign'], ['proddesign','design'], ['design','usability'],
+    ['design','hf'], ['proddesign','ai'], ['usability','ux'],
     // Tools hang off AI
     ['ai','claude'], ['ai','lovable'], ['figma','ux'], ['figma','ai'], ['claude','lovable'],
-    ['ai','quiltai'], ['quiltai','claude'], ['quiltai','notebooklm'], ['notebooklm','claude'],
+    ['ai','quiltai'], ['ml','quiltai'], ['notebooklm','claude'],
     // Data viz cluster — all connected internally
     ['dataviz','observable'], ['dataviz','hf'], ['observable','hf'],
     // Cross-cluster bridges
@@ -719,10 +761,25 @@
   let frame = 0;
   let hoveredNode = null;
   let tooltipAlpha = 0;
+
+  // Scroll-driven simulation — graph warms up as user scrolls into hero
+  let scrollProgress = 0;
+  function updateScrollProgress() {
+    const hero = document.getElementById('home');
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    const windowH = window.innerHeight;
+    const raw = 1 - (rect.bottom / (windowH + rect.height));
+    scrollProgress = Math.max(0, Math.min(1, raw));
+  }
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  updateScrollProgress();
+
   function loop() {
-    // Run extra sim steps early for faster initial settling
-    const steps = frame < 300 ? 6 : 1;
-    for (let i=0; i<steps; i++) tick();
+    // Base: 1 step at rest, up to 6 steps as user scrolls — clusters tighten
+    const scrollSteps = Math.round(1 + scrollProgress * 5);
+    const steps = frame < 200 ? Math.max(scrollSteps, 5) : scrollSteps;
+    for (let i = 0; i < steps; i++) tick();
     frame++;
     draw();
     requestAnimationFrame(loop);
