@@ -35,10 +35,11 @@
       --text-faint:     rgba(240,237,232,0.22);
       --border:         rgba(240,237,232,0.08);
       --border-mid:     rgba(240,237,232,0.14);
-      --card-orange-bg: #261408;
-      --card-lilac-bg:  #170f26;
-      --card-blue-bg:   #071c28;
-      --card-pink-bg:   #240e1a;
+      --card-orange-bg:      #261408;
+      --card-lilac-bg:       #170f26;
+      --card-lilac-soft-bg:  #18151a;
+      --card-blue-bg:        #071c28;
+      --card-pink-bg:        #240e1a;
     }
     [data-theme="light"] {
       --bg:             #faf7f2;
@@ -49,10 +50,11 @@
       --text-faint:     rgba(26,25,22,0.25);
       --border:         rgba(26,25,22,0.09);
       --border-mid:     rgba(26,25,22,0.15);
-      --card-orange-bg: #FFE8D5;
-      --card-lilac-bg:  #EBE0FF;
-      --card-blue-bg:   #CCF0FF;
-      --card-pink-bg:   #FFE0EC;
+      --card-orange-bg:      #FFE8D5;
+      --card-lilac-bg:       #EBE0FF;
+      --card-lilac-soft-bg:  #F0EEFF;
+      --card-blue-bg:        #CCF0FF;
+      --card-pink-bg:        #FFE0EC;
       --orange:  #E8540A;
       --lilac:   #5B35B0;
       --blue:    #1762A0;
@@ -264,6 +266,15 @@
       transition: opacity 0.2s, transform 0.2s var(--ease-out);
     }
 
+    /* WIDE CARD (full-width row) */
+    .card-wide { grid-column: 1 / -1; }
+    .card-lilac.card-wide { background: var(--card-lilac-soft-bg); }
+    .card-wide .card-inner { padding-bottom: 32px; }
+    .card-wide-desc {
+      font-size: 13px; line-height: 1.65; color: var(--text-muted);
+      margin-top: 10px; max-width: 480px;
+    }
+
     /* META INLINE CARD */
     .card-meta-inline {
       border-radius: 10px; padding: 18px 22px;
@@ -359,7 +370,7 @@
       .card-tall .card-inner { min-height: 180px; }
       .about-strip { grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
       .about-meta { align-items: flex-start; }
-      .nav-links a { display: none; }
+      .card-wide-desc { max-width: none; }
     }
 
     /* Node fallback: hidden on desktop, revealed on mobile */
@@ -377,6 +388,7 @@
       .hero-graph { position: relative; inset: auto; z-index: auto; margin-top: 28px; }
       #graphCanvas  { display: none; }
       .node-fallback { display: flex; }
+      .hero-tags { display: none; }
     }
   </style>
 </head>
@@ -480,12 +492,12 @@
         </div>
       </div>
 
-      <div class="project-card card-lilac" onclick="window.location='energy.html'">
+      <div class="project-card card-blue" onclick="window.location='energy.html'">
         <div class="card-inner">
           <div class="card-num">02</div>
           <div>
-            <div class="card-stat">63k+ tweets</div>
-            <div class="card-type">Discourse Analysis · Climate Policy</div>
+            <div class="card-stat">15 months of data</div>
+            <div class="card-type">Data Visualisation · Observable JS</div>
             <div class="card-title">Reading My Own Body</div>
           </div>
           <div class="card-arrow">↗</div>
@@ -493,49 +505,39 @@
       </div>
 
       <!-- Row 2: Oura + TrailForks -->
-      <div class="project-card card-blue" onclick="window.location='oura.html'">
+      <div class="project-card card-pink" onclick="window.location='oura.html'">
         <div class="card-inner">
           <div class="card-num">03</div>
           <div>
-            <div class="card-stat">15 months of data</div>
-            <div class="card-type">Data Visualisation · Observable JS</div>
+            <div class="card-stat">3 interventions</div>
+            <div class="card-type">UX Design · Human Factors</div>
             <div class="card-title">Designing for the Rider, Not the Route</div>
           </div>
           <div class="card-arrow">↗</div>
         </div>
       </div>
 
-      <div class="project-card card-pink" onclick="window.location='trailforks.html'">
+      <div class="project-card card-lilac" onclick="window.location='trailforks.html'">
         <div class="card-inner">
           <div class="card-num">04</div>
           <div>
-            <div class="card-stat">3 interventions</div>
-            <div class="card-type">UX Design · Human Factors</div>
+            <div class="card-stat">AI product proposal</div>
+            <div class="card-type">Product Design · AI Strategy</div>
             <div class="card-title">Building the Tool I Wished Existed</div>
           </div>
           <div class="card-arrow">↗</div>
         </div>
       </div>
 
-      <!-- Row 3: Membrane + Meta -->
-      <div class="project-card card-lilac" onclick="window.location='membrane.html'">
+      <!-- Row 3: Full-width process card -->
+      <div class="project-card card-lilac card-wide" onclick="window.location='membrane.html'">
         <div class="card-inner">
           <div class="card-num">05</div>
           <div>
-            <div class="card-stat">AI product proposal</div>
-            <div class="card-type">Product Design · AI Strategy</div>
-            <div class="card-title">This Portfolio Is the Case Study</div>
-          </div>
-          <div class="card-arrow">↗</div>
-        </div>
-      </div>
-
-      <div class="project-card card-orange" onclick="window.location='meta.html'">
-        <div class="card-inner">
-          <div>
             <div class="card-stat">3 tools</div>
-            <div class="card-type">Process · AI-assisted</div>
+            <div class="card-type">Process · AI-Assisted</div>
             <div class="card-title">This Portfolio Is the Case Study</div>
+            <p class="card-wide-desc">The tools, decisions, and iterations behind building this portfolio with AI.</p>
           </div>
           <div class="card-arrow">↗</div>
         </div>

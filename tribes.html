@@ -452,10 +452,12 @@
       .msc { transform: translateY(-8px); }
       .next-project { flex-direction: column; align-items: flex-start; }
       .nav-links a:not(.nav-back) { display: none; }
-      /* Mobile map: non-sticky */
+      /* Mobile map: non-sticky, horizontally scrollable */
       .map-sticky-wrap { position: relative; top: 0; }
       #mapCanvas { height: 320px; }
       .map-steps-wrap { display: none; }
+      .map-outer { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 0; padding-right: 0; }
+      .map-scene { min-width: 600px; padding: 0 20px; }
     }
     @media (max-width: 480px) {
       .metrics-row { grid-template-columns: 1fr; }
@@ -714,15 +716,7 @@
 
 </div>
 
-<!-- ── NEXT + FOOTER ─────────────────────────────────── -->
-<div class="next-project reveal">
-  <div>
-    <div class="next-label">Next case study</div>
-    <div class="next-title">Energy Discourse<br><em>in India</em></div>
-  </div>
-  <a href="energy.html" class="btn-next">Read case study →</a>
-</div>
-
+<!-- ── FOOTER ────────────────────────────────────────── -->
 <footer>
   <div class="footer-name">karissa.</div>
   <div class="footer-links">
