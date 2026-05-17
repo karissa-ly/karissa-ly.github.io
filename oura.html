@@ -104,7 +104,6 @@
       display: flex; gap: 48px; flex-wrap: wrap;
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.4s forwards;
     }
-    .meta-block {}
     .meta-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
       text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px;
@@ -127,7 +126,6 @@
       font-family: var(--serif); font-size: 11px; font-style: italic;
       color: var(--text-faint); padding-top: 4px; letter-spacing: 0.06em;
     }
-    .section-content {}
     .section-heading {
       font-family: var(--serif); font-size: 28px; font-weight: 400;
       line-height: 1.2; margin-bottom: 20px; color: var(--text);
@@ -190,7 +188,6 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 14px; flex-shrink: 0;
     }
-    .finding-text {}
     .finding-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
     .finding-desc { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
 
@@ -215,48 +212,37 @@
       font-size: 11px; font-weight: 500; letter-spacing: 0.05em;
       padding: 5px 13px; border-radius: 20px; border: 1px solid;
     }
-    .cs-tag.blue { background: rgba(125,206,255,0.1); color: var(--blue); border-color: rgba(125,206,255,0.25); }
-    .cs-tag.orange { background: rgba(255,122,53,0.1); color: var(--orange); border-color: rgba(255,122,53,0.25); }
-    .cs-tag.lilac { background: rgba(200,170,255,0.1); color: var(--lilac); border-color: rgba(200,170,255,0.25); }
-    .cs-tag.muted { background: var(--bg-subtle); color: var(--text-faint); border-color: var(--border); }
+    .cs-tag.blue   { background: rgba(125,206,255,0.1);  color: var(--blue);   border-color: rgba(125,206,255,0.25); }
+    .cs-tag.orange { background: rgba(255,122,53,0.1);   color: var(--orange); border-color: rgba(255,122,53,0.25); }
+    .cs-tag.lilac  { background: rgba(200,170,255,0.1);  color: var(--lilac);  border-color: rgba(200,170,255,0.25); }
+    .cs-tag.muted  { background: var(--bg-subtle); color: var(--text-faint); border-color: var(--border); }
 
     /* VIZ BLOCKS */
     .viz-block {
       margin-bottom: 48px;
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 32px;
-      align-items: start;
+      display: grid; grid-template-columns: 1fr 320px;
+      gap: 32px; align-items: start;
     }
     .viz-block:last-of-type { margin-bottom: 0; }
     .viz-img-wrap {
-      border-radius: 8px;
-      overflow: hidden;
+      border-radius: 8px; overflow: hidden;
       border: 0.5px solid var(--border);
-      background: var(--bg-card);
-      padding: 16px;
+      background: var(--bg-card); padding: 16px;
     }
     .viz-img-wrap img {
-      width: 100%;
-      display: block;
+      width: 100%; display: block;
       transition: transform 0.4s var(--ease);
     }
     .viz-img-wrap:hover img { transform: scale(1.02); }
-    .viz-caption {}
     .viz-caption-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
       text-transform: uppercase; color: var(--blue); margin-bottom: 10px;
     }
-    .viz-caption-text {
-      font-size: 13px; line-height: 1.75; color: var(--text-muted);
-    }
+    .viz-caption-text { font-size: 13px; line-height: 1.75; color: var(--text-muted); }
     .viz-cta {
-      margin-top: 40px; padding: 24px 28px;
-      border-radius: 8px;
-      background: rgba(125,206,255,0.06);
-      border: 1px solid rgba(125,206,255,0.2);
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 24px;
+      margin-top: 40px; padding: 24px 28px; border-radius: 8px;
+      background: rgba(125,206,255,0.06); border: 1px solid rgba(125,206,255,0.2);
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
     }
     .viz-cta p { font-size: 14px; color: var(--text-muted); }
     .btn-viz {
@@ -269,10 +255,7 @@
     [data-theme="light"] .btn-viz { color: #faf7f2; }
     .btn-viz:hover { opacity: 0.85; transform: translateY(-1px); }
 
-    @media (max-width: 720px) {
-      .viz-block { grid-template-columns: 1fr; }
-      .viz-cta { flex-direction: column; align-items: flex-start; }
-    }
+    /* NEXT PROJECT */
     .next-project {
       max-width: 1080px; margin: 0 auto; padding: 64px 32px;
       display: flex; justify-content: space-between; align-items: center; gap: 32px;
@@ -310,6 +293,12 @@
       transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
     }
     .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* Individual item reveals — viz blocks, finding cards, reflection cards */
+    .reveal-item {
+      opacity: 0.4; transform: translateY(20px);
+      transition: opacity 400ms ease-out, transform 400ms ease-out;
+    }
+    .reveal-item.visible { opacity: 1; transform: translateY(0); }
 
     /* RESPONSIVE */
     @media (max-width: 720px) {
@@ -317,6 +306,8 @@
       .case-section { grid-template-columns: 1fr; gap: 16px; }
       .method-grid { grid-template-columns: 1fr; }
       .reflection-grid { grid-template-columns: 1fr; }
+      .viz-block { grid-template-columns: 1fr; }
+      .viz-cta { flex-direction: column; align-items: flex-start; }
       .next-project { flex-direction: column; align-items: flex-start; }
       .nav-links a:not(.nav-back) { display: none; }
     }
@@ -369,20 +360,18 @@
 
   <div class="case-body">
 
-    <!-- CONTEXT -->
+    <!-- 01 CONTEXT -->
     <section class="case-section reveal">
       <div class="section-num">01 — Context</div>
       <div class="section-content">
         <h2 class="section-heading">A ring on my finger,<br><em>a year of my life</em></h2>
         <div class="section-body">
-          <p>The data covers a stretch of time that included leaving a job I'd been in for four years, a working holiday in Australia living out of a van, a trip to my parents' homeland in Vietnam, some bad news, and starting a master's programme in the UK.</p>
-          <p>The visualisations that follow aren't just data plots — they're over a year of my life, quantified. I chose to work with raw physiological signals rather than Oura's composite readiness scores, which I've always been sceptical of. <strong>HRV (heart rate variability)</strong> is used throughout as the primary proxy for recovery — a raw signal, not a derived metric, and one of the most sensitive indicators of both physical and psychological stress load.</p>
+          <p>The data covers leaving a job I'd been in for four years, a working holiday in Australia living out of a van, a trip to my parents' homeland in Vietnam, some bad news, and starting a master's programme in the UK.</p>
+          <p>I chose to work with raw physiological signals — not Oura's composite readiness scores. <strong>HRV (heart rate variability)</strong> is the primary recovery proxy throughout: a direct signal, not a derived metric.</p>
         </div>
-
         <div class="pull-quote">
           <p>"My body was keeping score before I was. The question this project is really asking is whether making that score visible actually tells me anything I couldn't have figured out on my own."</p>
         </div>
-
         <div class="tag-row">
           <span class="cs-tag blue">Observable Plot</span>
           <span class="cs-tag blue">JavaScript</span>
@@ -394,7 +383,7 @@
       </div>
     </section>
 
-    <!-- RESEARCH QUESTIONS -->
+    <!-- 02 RESEARCH QUESTIONS -->
     <section class="case-section reveal">
       <div class="section-num">02 — Research questions</div>
       <div class="section-content">
@@ -405,7 +394,7 @@
         <div class="rq-grid">
           <div class="rq-item">
             <div class="rq-num">01</div>
-            <div class="rq-text"><strong>Do physiological signals shift before I consciously feel overwhelmed or stressed?</strong> If they do, how much of a window have I actually had to address and combat these feelings — and have I been using it?</div>
+            <div class="rq-text"><strong>Do physiological signals shift before I consciously feel overwhelmed</strong> — and if so, how much warning do I actually have?</div>
           </div>
           <div class="rq-item">
             <div class="rq-num">02</div>
@@ -413,101 +402,101 @@
           </div>
           <div class="rq-item">
             <div class="rq-num">03</div>
-            <div class="rq-text"><strong>Does training at specific points in my menstrual cycle affect my readiness or recovery?</strong> Can I use these findings to sketch out what a personalised activity model might look like for me specifically?</div>
+            <div class="rq-text"><strong>Does training at specific points in my menstrual cycle affect readiness or recovery</strong> — and can the patterns sketch a personalised activity model?</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- APPROACH -->
+    <!-- 03 APPROACH -->
     <section class="case-section reveal">
       <div class="section-num">03 — Approach</div>
       <div class="section-content">
         <h2 class="section-heading">How I built<br><em>the analysis</em></h2>
         <div class="section-body">
-          <p>Raw data was exported directly from the Oura API and layered with self-reported tags logged throughout the period and workout data pulled from Apple Health. Rather than relying on Oura's composite scores, I worked with the underlying physiological signals to build my own picture.</p>
+          <p>Raw Oura API data, layered with Apple Health workouts and self-reported tags — working from underlying signals rather than composite scores.</p>
         </div>
         <div class="method-grid">
           <div class="method-card">
             <div class="method-step">Step 01</div>
             <div class="method-title">Data extraction</div>
-            <div class="method-desc">Pulled raw HRV, resting heart rate, body temperature deviation, and sleep data via the Oura API. Layered with Apple Health workout logs and manually coded life phase tags.</div>
+            <div class="method-desc">Raw HRV, resting heart rate, body temperature deviation, and sleep data via the Oura API, layered with Apple Health workout logs and manually coded life phase tags.</div>
           </div>
           <div class="method-card">
             <div class="method-step">Step 02</div>
             <div class="method-title">Personalised load metric</div>
-            <div class="method-desc">Built a custom training load metric rather than relying on generic step count — reflecting the real distinction between movement that creates recovery demand and movement that's just part of living.</div>
+            <div class="method-desc">Built a custom training load metric distinguishing recovery-demanding movement from incidental activity — rather than relying on generic step count.</div>
           </div>
           <div class="method-card">
             <div class="method-step">Step 03</div>
             <div class="method-title">Signal analysis</div>
-            <div class="method-desc">Used HRV as the primary recovery proxy. Analysed whether physiological signals shifted 3–5 days before consciously felt stress events, and whether single-day vs cumulative load better predicted recovery.</div>
+            <div class="method-desc">HRV as primary recovery proxy — testing whether physiological signals shift 3–5 days before felt stress, and whether cumulative load predicts recovery better than single-day duration.</div>
           </div>
           <div class="method-card">
             <div class="method-step">Step 04</div>
             <div class="method-title">Visualisation in Observable</div>
-            <div class="method-desc">Built interactive visualisations in Observable Plot and JavaScript, allowing navigation through life phases to surface patterns across the full 15-month arc.</div>
+            <div class="method-desc">Interactive visualisations in Observable Plot, navigable by life phase to surface patterns across the 15-month arc.</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- VISUALISATIONS -->
-    <section class="case-section full reveal">
+    <!-- 03.5 VISUALISATIONS -->
+    <section class="case-section full">
       <div class="section-content">
-        <div class="section-num" style="margin-bottom:16px;">03.5 — The visualisations</div>
-        <h2 class="section-heading">What it<br><em>looks like</em></h2>
-        <div class="section-body" style="margin-bottom:32px;">
-          <p>Three interactive visualisations make up the core of the project. Each answers a different research question and uses a different chart form — chosen because the shape of the question demanded it.</p>
+        <div class="section-num reveal" style="margin-bottom:16px;">03.5 — The visualisations</div>
+        <h2 class="section-heading reveal">What it<br><em>looks like</em></h2>
+        <div class="section-body reveal" style="margin-bottom:32px;">
+          <p>Five visualisations make up the core of the project — each using a different chart form, chosen because the question demanded it.</p>
         </div>
 
-        <div class="viz-block reveal">
+        <div class="viz-block reveal-item">
           <div class="viz-img-wrap">
-            <img src="viz-ridgeplot.png" alt="Ridge plot showing HRV distributions across life phases, with the Lapping Tasmania phase highlighted in blue" />
+            <img src="viz-ridgeplot.png" alt="Ridge plot showing HRV distributions across life phases" />
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 01 — Life phases ridge plot</div>
-            <div class="viz-caption-text">HRV distributions across eight life phases, stacked chronologically. The highlighted phase (blue) is selectable via an interactive slider. Each curve represents the full distribution of nightly HRV readings within that period — showing not just average recovery but how consistent or variable it was. The Tasmania phase is notably tighter and higher than surrounding phases.</div>
+            <div class="viz-caption-text">HRV distributions across eight life phases, stacked chronologically. Each curve shows the full distribution of nightly HRV — not just the average, but how consistent or variable recovery was within that period. Selectable via an interactive slider.</div>
           </div>
         </div>
 
-        <div class="viz-block reveal">
+        <div class="viz-block reveal-item">
           <div class="viz-img-wrap">
-            <img src="viz-stresshrv.png" alt="Line chart showing HRV trajectories before and after stress events, split by whether HRV was falling or rising before the event" />
+            <img src="viz-stresshrv.png" alt="Line chart showing HRV trajectories before and after stress events" />
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 02 — HRV around stress events</div>
-            <div class="viz-caption-text">Each line traces HRV from three days before to two days after a logged stress event. Orange lines show cases where HRV was already falling before the event; lilac shows cases where it was rising. The bold lines are smoothed averages. A "show crying" toggle overlays additional emotional tags — a design choice that felt important to include honestly.</div>
+            <div class="viz-caption-text">Each line traces HRV from three days before to two days after a logged stress event. Orange: HRV already falling before the event. Lilac: rising. A "show crying" toggle overlays emotional tags — a design choice that felt important to include honestly.</div>
           </div>
         </div>
 
-        <div class="viz-block reveal">
+        <div class="viz-block reveal-item">
           <div class="viz-img-wrap">
-            <img src="viz-cycleheatmap.png" alt="Heatmap showing HRV deviation from cycle average across 14 months of menstrual cycle data, with a crayon-texture aesthetic" />
+            <img src="viz-cycleheatmap.png" alt="Heatmap showing HRV deviation from cycle average across 14 months" />
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 03 — HRV vs cycle average heatmap</div>
-            <div class="viz-caption-text">Each cell represents one day of a menstrual cycle, coloured by how much that day's HRV deviated from the individual cycle's average. Purple = above average recovery; orange = below. Red outlines mark the first 7 days (menstruation). The handwritten aesthetic and crayon texture were deliberate — this is personal data about a personal experience, and clinical polish felt wrong.</div>
+            <div class="viz-caption-text">Each cell is one day of a menstrual cycle, coloured by HRV deviation from that cycle's average. Purple = above average recovery; orange = below. Red outlines mark the first 7 days. The handwritten, crayon-textured aesthetic was deliberate — clinical polish felt wrong for this data.</div>
           </div>
         </div>
 
-        <div class="viz-block reveal">
+        <div class="viz-block reveal-item">
           <div class="viz-img-wrap">
-            <img src="viz-beeswarm.png" alt="Beeswarm plot comparing HRV during period vs rest of cycle, split by active and rest days" />
+            <img src="viz-beeswarm.png" alt="Beeswarm plot comparing HRV during period vs rest of cycle" />
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 04 — Period vs rest of cycle beeswarm</div>
-            <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting that day. The narrower, higher distribution during the period phase versus the wider spread across the rest of cycle was one of the more surprising findings — suggesting recovery is more consistent, if lower, during menstruation.</div>
+            <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting. Recovery during menstruation is more consistent — if lower — than across the rest of the cycle. One of the more surprising findings.</div>
           </div>
         </div>
 
-        <div class="viz-block reveal">
+        <div class="viz-block reveal-item">
           <div class="viz-img-wrap">
-            <img src="viz-scatterplot.png" alt="Scatterplot of daily training load vs next-day HRV, split by exercise intensity, with quadrant labels" />
+            <img src="viz-scatterplot.png" alt="Scatterplot of daily training load vs next-day HRV with quadrant labels" />
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 05 — Training load vs next-day HRV</div>
-            <div class="viz-caption-text">The scatter is the finding: there's no clear relationship between how much I trained on a given day and how recovered I felt the next morning. The quadrant labels ("Low Load, High Recovery" etc.) were added to make the null result legible rather than just confusing. A null result honestly visualised is still a result.</div>
+            <div class="viz-caption-text">The scatter is the finding: no clear relationship between how much I trained and how recovered I felt the next morning. The quadrant labels make the null result legible rather than confusing — a null result honestly visualised is still a result.</div>
           </div>
         </div>
 
@@ -515,71 +504,70 @@
           <p>The notebook was submitted as a private Observable project. I'm happy to fork a copy to share — just get in touch.</p>
           <a href="mailto:karissatly@gmail.com?subject=Oura%20dataviz%20project" class="btn-viz">Request a copy →</a>
         </div>
-
       </div>
     </section>
 
-    <!-- FINDINGS -->
-    <section class="case-section reveal">
-      <div class="section-num">04 — Findings</div>
+    <!-- 04 FINDINGS -->
+    <section class="case-section">
+      <div class="section-num reveal">04 — Findings</div>
       <div class="section-content">
-        <h2 class="section-heading">What the data<br><em>actually showed</em></h2>
-        <div class="section-body">
-          <p>The findings were genuinely surprising in places — and honestly disappointing in others. That tension felt worth being honest about.</p>
+        <h2 class="section-heading reveal">What the data<br><em>actually showed</em></h2>
+        <div class="section-body reveal">
+          <p>The findings were genuinely surprising in places — honestly disappointing in others.</p>
         </div>
         <div class="finding-grid">
-          <div class="finding-item">
+          <div class="finding-item reveal-item">
             <div class="finding-icon">📉</div>
             <div class="finding-text">
               <div class="finding-title">There is a pre-stress physiological window — and it's narrow</div>
-              <div class="finding-desc">HRV does dip 3–5 days before consciously felt overwhelm in several instances. The window is inconsistent enough, though, that it cannot be reliably used as an early warning system. The visualisation can show a window exists — it cannot show how wide it actually is.</div>
+              <div class="finding-desc">HRV does dip 3–5 days before consciously felt overwhelm in several instances — but inconsistently enough that it can't serve as a reliable early warning. The window exists; its reliability doesn't.</div>
             </div>
           </div>
-          <div class="finding-item">
+          <div class="finding-item reveal-item">
             <div class="finding-icon">🏋️</div>
             <div class="finding-text">
               <div class="finding-title">Single-day training load is a poor predictor of recovery</div>
-              <div class="finding-desc">The scatterplot showed almost no relationship between one day's training duration and the next day's HRV. Cumulative load over 5–7 days is the more relevant variable — a limitation I'd fix with a rolling load metric in a future iteration.</div>
+              <div class="finding-desc">Almost no relationship between one day's training duration and next-day HRV. Cumulative load over 5–7 days is the more meaningful variable.</div>
             </div>
           </div>
-          <div class="finding-item">
+          <div class="finding-item reveal-item">
             <div class="finding-icon">🔄</div>
             <div class="finding-text">
               <div class="finding-title">Cycle phase patterns are suggestive, not conclusive</div>
-              <div class="finding-desc">There are visible patterns in HRV and recovery scores across menstrual cycle phases, pointing toward a personalised activity model. The dataset is too small and the confounding variables too numerous to draw firm conclusions, though — this is a question worth returning to with more data.</div>
+              <div class="finding-desc">Visible patterns in HRV across cycle phases point toward a personalised activity model — but with too many confounding variables to draw firm conclusions. Worth returning to with more data.</div>
             </div>
           </div>
-          <div class="finding-item">
+          <div class="finding-item reveal-item">
             <div class="finding-icon">🌏</div>
             <div class="finding-text">
               <div class="finding-title">Life phase matters more than any single variable</div>
-              <div class="finding-desc">The most visible patterns in the data weren't training-related — they tracked life events. The Australia phase produced consistently better recovery scores than the US phases on either side of it, and the return to the UK to start the MSc brought its own distinct physiological signature. That's either the van life, the sunshine, or the absence of deadlines. Probably all three.</div>
+              <div class="finding-desc">The most visible patterns tracked life events, not training loads. Australia produced consistently better recovery than the phases on either side — probably the van life, the sunshine, and the absence of deadlines.</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- REFLECTION -->
-    <section class="case-section reveal">
-      <div class="section-num">05 — Reflection</div>
+    <!-- 05 REFLECTION -->
+    <section class="case-section">
+      <div class="section-num reveal">05 — Reflection</div>
       <div class="section-content">
-        <h2 class="section-heading">What I'd do<br><em>differently</em></h2>
-        <div class="section-body">
-          <p>The most useful part of building this wasn't the findings — it was the process of deciding what to measure, why, and what I was willing to claim. Honest data visualisation is harder than it looks.</p>
+        <h2 class="section-heading reveal">What I'd do<br><em>differently</em></h2>
+        <div class="section-body reveal">
+          <p>The most useful part of building this wasn't the findings — it was deciding what to measure, why, and what I was willing to claim.</p>
         </div>
         <div class="reflection-grid">
-          <div class="reflection-card">
+          <div class="reflection-card reveal-item">
             <div class="reflection-label kept">What worked</div>
-            <div class="reflection-text">Using raw HRV over composite scores was the right call — it kept the analysis honest and prevented me from laundering Oura's assumptions into my own. The life phase slider gave the data narrative structure it would otherwise lack.</div>
+            <div class="reflection-text">Using raw HRV over composite scores kept the analysis honest and prevented me from laundering Oura's assumptions into my own. The life phase slider gave the data narrative structure it would otherwise lack.</div>
           </div>
-          <div class="reflection-card">
+          <div class="reflection-card reveal-item">
             <div class="reflection-label changed">What I'd change</div>
-            <div class="reflection-text">Road cycling and mountain biking were both logged as "cycling" in Apple Health despite very different recovery costs. A rolling 7-day load average would be a stronger variable than single-day duration. And I'd log stress events more rigorously from day one. A planned v2 will introduce multivariate regression across cumulative load, cycle phase, and life context — and revisit whether the pre-stress window holds up under more rigorous analysis.</div>
+            <div class="reflection-text">Road cycling and mountain biking were both logged as "cycling" in Apple Health despite very different recovery costs. A rolling 7-day load average would be a stronger variable than single-day duration. I'd also log stress events more rigorously from the start.</div>
           </div>
-          <div class="reflection-card">
+          <div class="reflection-card reveal-item">
             <div class="reflection-label learned">What I learned</div>
-            <div class="reflection-text">Building a personalised metric is an act of interpretation, not just calculation. Every design decision in a visualisation encodes assumptions — and being transparent about those assumptions is the most important thing a researcher can do.</div>
+            <div class="reflection-text">Building a personalised metric is an act of interpretation, not just calculation. Every design decision in a visualisation encodes assumptions — and being transparent about those is the most important thing a researcher can do.</div>
           </div>
         </div>
       </div>
@@ -591,7 +579,7 @@
   <div class="next-project reveal">
     <div>
       <div class="next-label">Next case study</div>
-      <div class="next-title">Consumer Tribes<br><em>at Scale</em></div>
+      <div class="next-title">Signals at Scale:<br><em>Mapping Japan's Hydration Clusters</em></div>
     </div>
     <a href="tribes.html" class="btn-next">Read case study →</a>
   </div>
@@ -615,17 +603,55 @@
       document.getElementById('modeLabel').textContent = isDark ? 'dark mode' : 'light mode';
     }
 
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
+    // Section and heading reveals
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
         if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 60);
-          obs.unobserve(e.target);
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.08 });
-    reveals.forEach(el => obs.observe(el));
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // Finding cards — staggered reveal
+    const findingItems = [...document.querySelectorAll('.finding-item')];
+    const findingObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const idx = findingItems.indexOf(e.target);
+          setTimeout(() => e.target.classList.add('visible'), idx * 100);
+          findingObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    findingItems.forEach(el => findingObs.observe(el));
+
+    // Reflection cards — left-to-right stagger
+    const reflCards = [...document.querySelectorAll('.reflection-card')];
+    const reflObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const idx = reflCards.indexOf(e.target);
+          setTimeout(() => e.target.classList.add('visible'), idx * 120);
+          reflObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reflCards.forEach(el => reflObs.observe(el));
+
+    // Viz blocks — Scrollama triggers each one as you scroll past
+    const scrollamaScript = document.createElement('script');
+    scrollamaScript.src = 'https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js';
+    scrollamaScript.onload = () => {
+      const scroller = scrollama();
+      scroller
+        .setup({ step: '.viz-block', offset: 0.65 })
+        .onStepEnter(({ element }) => {
+          element.classList.add('visible');
+        });
+    };
+    document.body.appendChild(scrollamaScript);
   </script>
 
 </body>
