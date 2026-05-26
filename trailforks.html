@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Designing for the Rider, Not the Route — Karissa Ly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --orange:  #FF7A35;
+      --lilac:   #C8AAFF;
+      --blue:    #7DCEFF;
+      --pink:    #FF96C3;
+      --serif:   'DM Serif Display', Georgia, serif;
+      --sans:    'Syne', system-ui, sans-serif;
+      --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="dark"] {
+      --bg:         #0d0c0b;
+      --bg-card:    #131210;
+      --bg-subtle:  rgba(240,237,232,0.04);
+      --text:       #f0ede8;
+      --text-muted: rgba(240,237,232,0.5);
+      --text-faint: rgba(240,237,232,0.25);
+      --border:     rgba(240,237,232,0.08);
+      --border-mid: rgba(240,237,232,0.14);
+      --accent:     #FF96C3;
+      --accent-dim: rgba(255,150,195,0.08);
+      --accent-border: rgba(255,150,195,0.2);
+    }
+    [data-theme="light"] {
+      --bg:         #faf7f2;
+      --bg-card:    #f2ede4;
+      --bg-subtle:  rgba(26,25,22,0.04);
+      --text:       #1a1916;
+      --text-muted: rgba(26,25,22,0.5);
+      --text-faint: rgba(26,25,22,0.25);
+      --border:     rgba(26,25,22,0.09);
+      --border-mid: rgba(26,25,22,0.15);
+      --blue:    #1762A0;
+      --orange:  #E8540A;
+      --lilac:   #5B35B0;
+      --pink:    #A8305A;
+      --accent:     #A8305A;
+      --accent-dim: rgba(168,48,90,0.08);
+      --accent-border: rgba(168,48,90,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); line-height: 1.7;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--sans); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
+      transition: background 0.3s;
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-back { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+    .nav-back:hover { color: var(--text); }
+    .mode-toggle {
+      background: var(--bg-subtle); border: 0.5px solid var(--border-mid);
+      border-radius: 20px; padding: 6px 12px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--text-muted); transition: color 0.2s, background 0.2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .mode-toggle:hover { color: var(--text); }
+
+    /* HERO */
+    .case-hero {
+      max-width: 1080px; margin: 0 auto;
+      padding: 72px 32px 56px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .case-type {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.1s forwards;
+    }
+    .case-title {
+      font-family: var(--serif); font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.05; font-weight: 400; margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.2s forwards;
+    }
+    .case-title em { font-style: italic; color: var(--accent); }
+    .case-intro {
+      font-size: 16px; line-height: 1.85; color: var(--text-muted);
+      max-width: 640px; margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.3s forwards;
+    }
+    .case-meta {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.4s forwards;
+    }
+    .meta-block {}
+    .meta-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px;
+    }
+    .meta-value { font-size: 13px; font-weight: 500; color: var(--text); }
+    .meta-value.accent { color: var(--accent); }
+
+    /* CONTENT */
+    .case-body { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    /* SECTION */
+    .case-section {
+      padding: 64px 0;
+      border-bottom: 0.5px solid var(--border);
+      display: grid; grid-template-columns: 200px 1fr; gap: 48px;
+      align-items: start;
+    }
+    .case-section.full { grid-template-columns: 1fr; }
+    .section-num {
+      font-family: var(--serif); font-size: 11px; font-style: italic;
+      color: var(--text-faint); padding-top: 4px; letter-spacing: 0.06em;
+    }
+    .section-heading {
+      font-family: var(--serif); font-size: 28px; font-weight: 400;
+      line-height: 1.2; margin-bottom: 20px; color: var(--text);
+    }
+    .section-heading em { font-style: italic; color: var(--accent); }
+    .section-body { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
+    .section-body p + p { margin-top: 16px; }
+    .section-body strong { color: var(--text); font-weight: 500; }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      margin: 36px 0; padding: 28px 32px;
+      border-left: 2px solid var(--accent);
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+    }
+    .pull-quote p {
+      font-family: var(--serif); font-size: 20px; font-style: italic;
+      line-height: 1.5; color: var(--text);
+    }
+
+    /* ERROR TABLE */
+    .error-table {
+      width: 100%; border-collapse: collapse; margin: 24px 0;
+      font-size: 13px;
+    }
+    .error-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-faint);
+      border-bottom: 0.5px solid var(--border-mid);
+    }
+    .error-table td {
+      padding: 12px 14px; border-bottom: 0.5px solid var(--border);
+      color: var(--text-muted); vertical-align: top; line-height: 1.6;
+    }
+    .error-table tr:last-child td { border-bottom: none; }
+    .error-table td:first-child { color: var(--text); font-weight: 500; }
+    .badge {
+      display: inline-block; padding: 3px 8px; border-radius: 4px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .badge-high { background: rgba(255,122,53,0.15); color: var(--orange); }
+    .badge-pink { background: var(--accent-dim); color: var(--accent); }
+
+    /* INTERVENTION BLOCKS */
+    .intervention {
+      margin: 40px 0; padding: 32px;
+      border-radius: 10px; background: var(--bg-card);
+      border: 0.5px solid var(--border);
+    }
+    .intervention + .intervention { margin-top: 16px; }
+    .intervention-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px; margin-bottom: 16px;
+    }
+    .intervention-num {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+    }
+    .intervention-title {
+      font-family: var(--serif); font-size: 20px; color: var(--text);
+    }
+    .intervention-error {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+      color: var(--text-faint); padding: 4px 10px;
+      border: 0.5px solid var(--border-mid); border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .intervention-desc {
+      font-size: 14px; line-height: 1.8; color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .intervention-img-wrap {
+      border-radius: 8px; overflow: hidden;
+      border: 0.5px solid var(--border);
+      background: var(--bg-subtle); padding: 16px;
+    }
+    .intervention-img-wrap img {
+      width: 100%; display: block; border-radius: 4px;
+    }
+    .intervention-caption {
+      margin-top: 10px; font-size: 12px;
+      color: var(--text-faint); font-style: italic;
+    }
+    .intervention-rationale {
+      margin-top: 20px; padding: 16px 20px;
+      border-radius: 6px;
+      background: var(--accent-dim);
+      border: 0.5px solid var(--accent-border);
+      font-size: 13px; line-height: 1.7; color: var(--text-muted);
+    }
+    .intervention-rationale strong { color: var(--accent); }
+
+    /* HTA */
+    .hta-wrap {
+      margin: 32px 0; border-radius: 8px; overflow: hidden;
+      border: 0.5px solid var(--border); background: #fff; padding: 20px;
+    }
+    .hta-wrap img { width: 100%; display: block; }
+    .hta-caption {
+      margin-top: 10px; font-size: 12px;
+      color: var(--text-faint); font-style: italic;
+    }
+
+    /* REFLECTION */
+    .reflection-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin: 24px 0;
+    }
+    .reflection-card {
+      padding: 22px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+    }
+    .reflection-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .reflection-text { font-size: 13px; line-height: 1.75; color: var(--text-muted); }
+
+    /* NEXT */
+    .next-project {
+      padding: 64px 0; display: flex; justify-content: space-between;
+      align-items: center; gap: 24px; flex-wrap: wrap;
+    }
+    .next-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
+    }
+    .next-title {
+      font-family: var(--serif); font-size: 22px; line-height: 1.2;
+    }
+    .next-title em { font-style: italic; color: var(--accent); }
+    .btn-next {
+      background: var(--accent); color: var(--bg);
+      padding: 12px 24px; border-radius: 6px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-next:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 32px; text-align: center;
+    }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-name { font-family: var(--serif); font-style: italic; font-size: 18px; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 720px) {
+      .case-section { grid-template-columns: 1fr; gap: 16px; }
+      .nav-inner { padding: 14px 20px; }
+      .case-hero { padding: 48px 20px 40px; }
+      .case-body { padding: 0 20px; }
+      .reflection-grid { grid-template-columns: 1fr; }
+      .intervention { padding: 20px; }
+      .intervention-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">k.</a>
+      <div class="nav-links">
+        <a href="index.html#work" class="nav-back">← All work</a>
+        <button class="mode-toggle" onclick="
+          const t = document.documentElement;
+          t.setAttribute('data-theme', t.getAttribute('data-theme')==='dark'?'light':'dark');
+          this.textContent = t.getAttribute('data-theme')==='dark'?'light mode':'dark mode';
+        ">light mode</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="case-hero">
+    <div class="case-type">UX Design · Human Factors</div>
+    <h1 class="case-title">Designing for the Rider,<br><em>Not the Route</em></h1>
+    <p class="case-intro">For my Human Factors module at City St George's, I analysed Trailforks Pro — the dominant mountain biking navigation app — as a human-system interaction problem. Mountain biking is a safety-critical activity. Misreading a trail difficulty rating or missing a junction at speed doesn't just mean getting lost. It can mean broken ribs, a spinal injury, or worse. This project identified where the interface creates those risks and proposed three redesign interventions to reduce them.</p>
+    <div class="case-meta">
+      <div class="meta-block">
+        <div class="meta-label">Type</div>
+        <div class="meta-value">UX Design · Human Factors</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Context</div>
+        <div class="meta-value">MSc Human Factors module · City St George's</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">System</div>
+        <div class="meta-value">Trailforks Pro (iOS)</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Output</div>
+        <div class="meta-value accent">3 redesign interventions</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-body">
+
+    <!-- 01 CONTEXT -->
+    <section class="case-section reveal">
+      <div class="section-num">01 — The problem</div>
+      <div>
+        <h2 class="section-heading">A pre-ride tool used<br><em>in the middle of a ride</em></h2>
+        <div class="section-body">
+          <p>Trailforks Pro is well-built for pre-ride planning — browsing trails, checking difficulty ratings, reviewing elevation profiles. Where it falls short is in-ride navigation. The turn-by-turn guidance is limited, and the interface was designed for a moment of calm attention that doesn't exist on a fast, technical trail.</p>
+          <p>Mountain biking demands continuous coordination between physical control and spatial awareness. Dividing attention between the trail and a screen creates the conditions for errors — misread difficulty ratings that put riders on terrain beyond their ability, missed junctions that send them down the wrong trail, and moments of interface interaction that cause instability or loss of control.</p>
+          <p>These aren't edge cases. They're predictable consequences of an interface that assumes available visual attention in an environment where it doesn't exist.</p>
+        </div>
+
+        <div class="hta-wrap reveal" style="margin-top:32px;">
+          <img src="trailforks-hta.png" alt="Hierarchical task analysis with risk overlay showing high-risk interaction points in red" />
+          <div class="hta-caption">Hierarchical task analysis with risk overlay. Red nodes mark the highest-risk interaction points — where errors are most likely to occur and most consequential when they do.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 INTERVENTIONS -->
+    <section class="case-section full reveal">
+      <div style="margin-bottom:32px;">
+        <div class="section-num" style="margin-bottom:12px;">02 — Interventions</div>
+        <h2 class="section-heading">Three proposals,<br><em>one principle</em></h2>
+        <div class="section-body" style="max-width:640px;">
+          <p>Each intervention restructures how existing information is presented — not what the system contains. The goal was to reduce cognitive demand at the moments when riders are least able to meet it.</p>
+        </div>
+      </div>
+
+      <div class="intervention reveal">
+        <div class="intervention-header">
+          <div>
+            <div class="intervention-num">Intervention 01</div>
+            <div class="intervention-title">Enhanced Trail Interpretation Layer</div>
+          </div>
+          <div class="intervention-error">Route interpretation errors</div>
+        </div>
+        <div class="intervention-desc">
+          Trailforks displays trail difficulty and condition data — but leaves interpretation to the rider. A rider who misjudges a black diamond trail or underestimates wet root sections isn't making a careless mistake. They're working with information the interface never fully translated. This intervention adds a condition-aware overlay and a "what this means" feature: not "wet conditions" but "wet conditions → reduced traction; slippery roots likely."
+        </div>
+        <div class="intervention-img-wrap">
+          <img src="trailforks-intervention-01.png" alt="Before and after: Enhanced trail interpretation layer showing condition-aware overlay and live conditions tooltip" />
+          <div class="intervention-caption">Before (left) and after (right). Condition data translated into rider-facing guidance rather than left for interpretation.</div>
+        </div>
+        <div class="intervention-rationale">
+          <strong>Design rationale:</strong> Shifts interpretation from user-driven to system-supported — reducing ambiguity and the cognitive effort required before a ride. Grounded in Norman's model of system-supported action. Comparable to Google Maps' contextual overlays, but applied to consequence rather than just visualisation.
+        </div>
+      </div>
+
+      <div class="intervention reveal">
+        <div class="intervention-header">
+          <div>
+            <div class="intervention-num">Intervention 02</div>
+            <div class="intervention-title">Pre-Junction Decision Support</div>
+          </div>
+          <div class="intervention-error">Navigation errors at junctions</div>
+        </div>
+        <div class="intervention-desc">
+          Junction errors happen fast. Matching a digital map to a physical trail environment under time pressure, with limited visual bandwidth, is where riders go wrong. Trailforks has a junction feature (Traildar) — but it requires the rider to configure and seek it out. This intervention automates the identification of high-risk decision points, delivers anticipatory cues before the junction arrives, and filters the map to show only the relevant path.
+        </div>
+        <div class="intervention-img-wrap">
+          <img src="trailforks-intervention-02.png" alt="Before and after: Pre-junction decision support showing anticipatory cue 'Junction in 20m → keep right' on a simplified map view" />
+          <div class="intervention-caption">Before (left) and after (right). Anticipatory cue surfaces before the junction. Irrelevant paths filtered out.</div>
+        </div>
+        <div class="intervention-rationale">
+          <strong>Design rationale:</strong> Shifts from user-configured to system-triggered support. Makes uncertainty visible so riders can adjust speed and attention before the decision point, not at it. Reduces reliance on recognition heuristics under time pressure.
+        </div>
+      </div>
+
+      <div class="intervention reveal">
+        <div class="intervention-header">
+          <div>
+            <div class="intervention-num">Intervention 03</div>
+            <div class="intervention-title">Attention-Aware Ride Mode</div>
+          </div>
+          <div class="intervention-error">Attention-related errors while riding</div>
+        </div>
+        <div class="intervention-desc">
+          The root problem: the interface assumes continuous visual attention in an environment where that assumption is dangerous. Dual-task interference between navigation and bike control at speed isn't a use case to accommodate — it's a risk to design out. This intervention proposes a ride mode that activates during riding: a glanceable interface with a single directional cue, restricted interaction while moving, and suppression of everything non-essential.
+        </div>
+        <div class="intervention-img-wrap">
+          <img src="trailforks-intervention-03.png" alt="Ride Mode: single directional cue with slide-to-unlock interaction lock" />
+          <div class="intervention-caption">Ride Mode: one cue, one interaction. "Slide to unlock" prevents accidental input while moving.</div>
+        </div>
+        <div class="intervention-rationale">
+          <strong>Design rationale:</strong> The system adapts to reduced attentional capacity rather than competing for it. Passive guidance under high-demand conditions. Similar to Strava and device focus modes — applied here to a safety-critical navigation context where the stakes are higher.
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 REFLECTION -->
+    <section class="case-section full reveal">
+      <div style="margin-bottom:32px;">
+        <div class="section-num" style="margin-bottom:12px;">03 — Reflection</div>
+        <h2 class="section-heading">What I took<br><em>from this</em></h2>
+      </div>
+
+      <div class="reflection-grid">
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--accent);">What worked</div>
+          <div class="reflection-text">Starting from error analysis rather than design intuition kept the interventions honest. The hierarchical task analysis forced me to map what riders are actually doing at each stage — and exposed how much the current interface assumes about available attention that doesn't exist in practice.</div>
+        </div>
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--lilac);">What I'd change</div>
+          <div class="reflection-text">The personas were built from observation and personal riding experience rather than primary research. A stronger version of this project would involve usability testing with real riders across experience levels — especially for the ride mode, where the interaction model needs validation under actual riding conditions.</div>
+        </div>
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--orange);">The harder question</div>
+          <div class="reflection-text">All three interventions depend on data quality they can't guarantee. Community-generated trail information is inconsistent — an interpretation layer is only as good as what it's interpreting. The interface is fixable. The underlying data infrastructure is a harder problem.</div>
+        </div>
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--pink);">What I learned</div>
+          <div class="reflection-text">Designing for safety-critical environments means designing for the moments when people are least able to use what you've built. The measure of a good intervention isn't usability in ideal conditions — it's error reduction in the conditions that actually cause harm.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT -->
+    <div class="next-project reveal">
+      <div>
+        <div class="next-label">Next case study</div>
+        <div class="next-title">Building the Tool<br><em>I Wished Existed</em></div>
+      </div>
+      <a href="membrane.html" class="btn-next">Read case study →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">karissa.</div>
+      <div class="footer-links">
+        <a href="https://linkedin.com/in/karissaly" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:karissatly@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    revealEls.forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
