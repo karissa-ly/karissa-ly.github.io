@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Body Was Keeping Score — Karissa Ly</title>
+  <title>My Oura Data, Visualised — Karissa Ly</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -149,7 +149,7 @@
     }
 
     /* RESEARCH QUESTIONS */
-    .rq-grid { display: flex; flex-direction: column; gap: 12px; margin: 24px 0; }
+    .rq-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 24px 0; }
     .rq-item {
       padding: 18px 22px; border-radius: 8px;
       background: var(--bg-card); border: 0.5px solid var(--border);
@@ -162,8 +162,31 @@
     .rq-text { font-size: 14px; line-height: 1.7; color: var(--text-muted); }
     .rq-text strong { color: var(--text); font-weight: 500; }
 
-    /* METHOD STEPS */
-    .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+    /* METHOD TIMELINE */
+    .method-timeline { position: relative; margin: 24px 0; padding-left: 40px; }
+    .timeline-track {
+      position: absolute; left: 7px; top: 0; bottom: 0; width: 1.5px;
+      background: rgba(125, 206, 255, 0.15);
+    }
+    [data-theme="light"] .timeline-track { background: rgba(23, 98, 160, 0.12); }
+    .timeline-fill { width: 100%; height: 0; background: var(--blue); transition: height 0.5s ease; }
+    .method-step-item {
+      position: relative; margin-bottom: 24px;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .method-step-item:last-child { margin-bottom: 0; }
+    .method-step-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-node {
+      position: absolute; left: -32px; transform: translateX(-50%); top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 1.5px solid rgba(125, 206, 255, 0.22); background: var(--bg);
+      transition: border-color 0.4s ease, background 0.4s ease;
+    }
+    .method-step-item.visible .timeline-node {
+      border-color: var(--blue); background: rgba(125, 206, 255, 0.1);
+    }
+    [data-theme="light"] .method-step-item.visible .timeline-node { background: rgba(23, 98, 160, 0.08); }
     .method-card {
       padding: 22px; border-radius: 8px;
       background: var(--bg-card); border: 0.5px solid var(--border);
@@ -172,7 +195,6 @@
       font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
       text-transform: uppercase; color: var(--blue); margin-bottom: 8px;
     }
-    .method-title { font-family: var(--serif); font-size: 17px; margin-bottom: 10px; color: var(--text); }
     .method-desc { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
 
     /* FINDINGS */
@@ -192,7 +214,7 @@
     .finding-desc { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
 
     /* REFLECTION CARDS */
-    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 24px 0; }
+    .reflection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
     .reflection-card {
       padding: 22px; border-radius: 8px;
       background: var(--bg-card); border: 0.5px solid var(--border);
@@ -204,6 +226,7 @@
     .reflection-label.kept { color: var(--blue); }
     .reflection-label.changed { color: var(--orange); }
     .reflection-label.learned { color: var(--lilac); }
+    .reflection-label.pink { color: var(--pink); }
     .reflection-text { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
 
     /* TAGS */
@@ -304,7 +327,7 @@
     @media (max-width: 720px) {
       .case-hero, .case-body, .next-project, footer { padding-left: 20px; padding-right: 20px; }
       .case-section { grid-template-columns: 1fr; gap: 16px; }
-      .method-grid { grid-template-columns: 1fr; }
+      .rq-grid { grid-template-columns: 1fr; }
       .reflection-grid { grid-template-columns: 1fr; }
       .viz-block { grid-template-columns: 1fr; }
       .viz-cta { flex-direction: column; align-items: flex-start; }
@@ -333,12 +356,12 @@
   <!-- HERO -->
   <header class="case-hero">
     <div class="case-type">Data Visualisation · MSc UX Engineering</div>
-    <h1 class="case-title">My Body Was<br><em>Keeping Score</em></h1>
+    <h1 class="case-title">My Oura Data,<br><em>Visualised</em></h1>
     <p class="case-intro">
-      I bought an Oura ring after months of sleeping badly and not knowing why.
+      I bought an Oura ring after a stretch of poor sleep and no obvious explanation.
       Fifteen months later, I had 450+ nights of physiological data and a question
       worth asking: does this data actually tell me anything I couldn't have
-      figured out through trial and error on my own?
+      figured out on my own?
     </p>
     <div class="case-meta">
       <div class="meta-block">
@@ -368,7 +391,7 @@
       <div class="section-content">
         <h2 class="section-heading">A ring on my finger,<br><em>a year of my life</em></h2>
         <div class="section-body">
-          <p>The data covers leaving a job I'd been in for four years, a working holiday in Australia living out of a van, a trip to my parents' homeland in Vietnam, some bad news, and starting a master's programme in the UK.</p>
+          <p>The data covers a stretch of time that included leaving a four-year job, travelling, and starting a master's programme in the UK.</p>
           <p>I chose to work with raw physiological signals — not Oura's composite readiness scores. <strong>HRV (heart rate variability)</strong> is the primary recovery proxy throughout: a direct signal, not a derived metric.</p>
         </div>
         <div class="pull-quote">
@@ -418,26 +441,35 @@
         <div class="section-body">
           <p>Raw Oura API data, layered with Apple Health workouts and self-reported tags — working from underlying signals rather than composite scores.</p>
         </div>
-        <div class="method-grid">
-          <div class="method-card">
-            <div class="method-step">Step 01</div>
-            <div class="method-title">Data extraction</div>
-            <div class="method-desc">Raw HRV, resting heart rate, body temperature deviation, and sleep data via the Oura API, layered with Apple Health workout logs and manually coded life phase tags.</div>
+        <div class="method-timeline">
+          <div class="timeline-track"><div class="timeline-fill"></div></div>
+          <div class="method-step-item">
+            <div class="timeline-node"></div>
+            <div class="method-card">
+              <div class="method-step">Step 01 — Extract &amp; Clean</div>
+              <div class="method-desc">Pulled raw HRV, resting heart rate, body temperature, and sleep data via the Oura API, layered with Apple Health workouts and manually coded life phase tags. More time than expected went into cleaning — reconciling inconsistent activity labels (road cycling and mountain biking both logged as 'cycling'), deciding which variables were worth keeping, and building a custom training load metric rather than relying on generic step count.</div>
+            </div>
           </div>
-          <div class="method-card">
-            <div class="method-step">Step 02</div>
-            <div class="method-title">Personalised load metric</div>
-            <div class="method-desc">Built a custom training load metric distinguishing recovery-demanding movement from incidental activity — rather than relying on generic step count.</div>
+          <div class="method-step-item">
+            <div class="timeline-node"></div>
+            <div class="method-card">
+              <div class="method-step">Step 02 — Explore &amp; Sketch</div>
+              <div class="method-desc">No straight line to the visualisations. The analysis started with exploratory sketches — trying different chart forms, asking new questions as patterns emerged, and following tangents that sometimes led nowhere. Several variables that seemed promising were dropped; others surfaced unexpectedly.</div>
+            </div>
           </div>
-          <div class="method-card">
-            <div class="method-step">Step 03</div>
-            <div class="method-title">Signal analysis</div>
-            <div class="method-desc">HRV as primary recovery proxy — testing whether physiological signals shift 3–5 days before felt stress, and whether cumulative load predicts recovery better than single-day duration.</div>
+          <div class="method-step-item">
+            <div class="timeline-node"></div>
+            <div class="method-card">
+              <div class="method-step">Step 03 — Iterate &amp; Focus</div>
+              <div class="method-desc">Exploration generated spin-off questions faster than answers. The process involved repeatedly dialling back to the original three research questions to avoid scope creep — deciding what the project was actually trying to say, and what to leave for v2.</div>
+            </div>
           </div>
-          <div class="method-card">
-            <div class="method-step">Step 04</div>
-            <div class="method-title">Visualisation in Observable</div>
-            <div class="method-desc">Interactive visualisations in Observable Plot, navigable by life phase to surface patterns across the 15-month arc.</div>
+          <div class="method-step-item">
+            <div class="timeline-node"></div>
+            <div class="method-card">
+              <div class="method-step">Step 04 — Build &amp; Finalise</div>
+              <div class="method-desc">Final visualisations built in Observable Plot, with design decisions made alongside analytical ones — choosing chart forms because the question demanded them, not the other way around.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -446,10 +478,10 @@
     <!-- 03.5 VISUALISATIONS -->
     <section class="case-section full">
       <div class="section-content">
-        <div class="section-num reveal" style="margin-bottom:16px;">03.5 — The visualisations</div>
+        <div class="section-num reveal" style="margin-bottom:16px;">04 — The visualisations</div>
         <h2 class="section-heading reveal">What it<br><em>looks like</em></h2>
         <div class="section-body reveal" style="margin-bottom:32px;">
-          <p>Five visualisations make up the core of the project — each using a different chart form, chosen because the question demanded it.</p>
+          <p>Five visualisations — one per research thread.</p>
         </div>
 
         <div class="viz-block reveal-item">
@@ -488,7 +520,7 @@
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 04 — Period vs rest of cycle beeswarm</div>
-            <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting. Recovery during menstruation is more consistent — if lower — than across the rest of the cycle. One of the more surprising findings.</div>
+            <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting. Recovery during menstruation is more consistent — if lower — than across the rest of the cycle.</div>
           </div>
         </div>
 
@@ -509,66 +541,29 @@
       </div>
     </section>
 
-    <!-- 04 FINDINGS -->
-    <section class="case-section">
-      <div class="section-num reveal">04 — Findings</div>
-      <div class="section-content">
-        <h2 class="section-heading reveal">What the data<br><em>actually showed</em></h2>
-        <div class="section-body reveal">
-          <p>The findings were genuinely surprising in places — honestly disappointing in others.</p>
-        </div>
-        <div class="finding-grid">
-          <div class="finding-item reveal-item">
-            <div class="finding-icon">📉</div>
-            <div class="finding-text">
-              <div class="finding-title">There is a pre-stress physiological window — and it's narrow</div>
-              <div class="finding-desc">HRV does dip 3–5 days before consciously felt overwhelm in several instances — but inconsistently enough that it can't serve as a reliable early warning. The window exists; its reliability doesn't.</div>
-            </div>
-          </div>
-          <div class="finding-item reveal-item">
-            <div class="finding-icon">🏋️</div>
-            <div class="finding-text">
-              <div class="finding-title">Single-day training load is a poor predictor of recovery</div>
-              <div class="finding-desc">Almost no relationship between one day's training duration and next-day HRV. Cumulative load over 5–7 days is the more meaningful variable.</div>
-            </div>
-          </div>
-          <div class="finding-item reveal-item">
-            <div class="finding-icon">🔄</div>
-            <div class="finding-text">
-              <div class="finding-title">Cycle phase patterns are suggestive, not conclusive</div>
-              <div class="finding-desc">Visible patterns in HRV across cycle phases point toward a personalised activity model — but with too many confounding variables to draw firm conclusions. Worth returning to with more data.</div>
-            </div>
-          </div>
-          <div class="finding-item reveal-item">
-            <div class="finding-icon">🌏</div>
-            <div class="finding-text">
-              <div class="finding-title">Life phase matters more than any single variable</div>
-              <div class="finding-desc">The most visible patterns tracked life events, not training loads. Australia produced consistently better recovery than the phases on either side — probably the van life, the sunshine, and the absence of deadlines.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- 05 REFLECTION -->
     <section class="case-section">
       <div class="section-num reveal">05 — Reflection</div>
       <div class="section-content">
-        <h2 class="section-heading reveal">What I'd do<br><em>differently</em></h2>
+        <h2 class="section-heading reveal">Key takeaways</h2>
         <div class="section-body reveal">
           <p>The most useful part of building this wasn't the findings — it was deciding what to measure, why, and what I was willing to claim.</p>
         </div>
         <div class="reflection-grid">
           <div class="reflection-card reveal-item">
-            <div class="reflection-label kept">What worked</div>
+            <div class="reflection-label kept">What I found</div>
+            <div class="reflection-text">Single-day training load had almost no relationship with next-day HRV — the scatter was the finding. Cumulative load over 5–7 days is the more meaningful variable, which the current visualisation doesn't capture. The clearest patterns in the data weren't training-related at all — they tracked life events. The Australia phase produced consistently better recovery than the phases before and after it. That's either the van life, the sunshine, or the absence of deadlines. Probably all three.</div>
+          </div>
+          <div class="reflection-card reveal-item">
+            <div class="reflection-label learned">What worked</div>
             <div class="reflection-text">Using raw HRV over composite scores kept the analysis honest and prevented me from laundering Oura's assumptions into my own. The life phase slider gave the data narrative structure it would otherwise lack.</div>
           </div>
           <div class="reflection-card reveal-item">
             <div class="reflection-label changed">What I'd change</div>
-            <div class="reflection-text">Road cycling and mountain biking were both logged as "cycling" in Apple Health despite very different recovery costs. A rolling 7-day load average would be a stronger variable than single-day duration. I'd also log stress events more rigorously from the start.</div>
+            <div class="reflection-text">Road cycling and mountain biking were both logged as "cycling" in Apple Health despite very different recovery costs. A rolling 7-day load average would be a stronger variable than single-day duration. I'd also log stress events more rigorously from the start. A planned v2 will introduce multivariate regression across cumulative load, cycle phase, and life context — and revisit whether the pre-stress window holds up under more rigorous analysis.</div>
           </div>
           <div class="reflection-card reveal-item">
-            <div class="reflection-label learned">What I learned</div>
+            <div class="reflection-label pink">What I learned</div>
             <div class="reflection-text">Building a personalised metric is an act of interpretation, not just calculation. Every design decision in a visualisation encodes assumptions — and being transparent about those is the most important thing a researcher can do.</div>
           </div>
         </div>
@@ -651,6 +646,29 @@
         .setup({ step: '.viz-block', offset: 0.65 })
         .onStepEnter(({ element }) => {
           element.classList.add('visible');
+        });
+
+      function updateTimelineFill(revealedCount) {
+        const fill = document.querySelector('.timeline-fill');
+        const timeline = document.querySelector('.method-timeline');
+        if (!fill || !timeline) return;
+        const items = timeline.querySelectorAll('.method-step-item');
+        if (revealedCount <= 0) { fill.style.height = '0px'; return; }
+        if (revealedCount >= items.length) { fill.style.height = '100%'; return; }
+        const lastItem = items[revealedCount - 1];
+        const node = lastItem.querySelector('.timeline-node');
+        const nodeCenter = lastItem.offsetTop + node.offsetTop + node.offsetHeight / 2;
+        fill.style.height = nodeCenter + 'px';
+      }
+
+      let timelineRevealed = 0;
+      const timelineScroller = scrollama();
+      timelineScroller
+        .setup({ step: '.method-step-item', offset: 0.75 })
+        .onStepEnter(({ element, index }) => {
+          element.classList.add('visible');
+          timelineRevealed = Math.max(timelineRevealed, index + 1);
+          updateTimelineFill(timelineRevealed);
         });
     };
     document.body.appendChild(scrollamaScript);
