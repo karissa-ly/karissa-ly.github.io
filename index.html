@@ -6,7 +6,8 @@
   <title>Karissa Ly | Product Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -22,8 +23,8 @@
       --pink:         #FF96C3;
       --pink-dim:     rgba(255,150,195,0.12);
       --pink-border:  rgba(255,150,195,0.28);
-      --serif: 'DM Serif Display', Georgia, serif;
-      --sans:  'Syne', system-ui, sans-serif;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans:  'Satoshi', system-ui, sans-serif;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
     [data-theme="dark"] {
@@ -230,12 +231,18 @@
     .project-card:hover { transform: translateY(-3px); }
     .project-card:hover .card-arrow { opacity: 1; transform: translate(0,0); }
     .card-inner {
-      padding: 24px; min-height: 148px;
-      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+      padding: 24px; min-height: 280px;
+      display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1;
     }
+    .card-bg-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
     .card-tall .card-inner { min-height: 240px; }
     .card-span { grid-row: span 2; }
     .card-orange { background: var(--card-orange-bg); }
+    .card-orange::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='2' cy='2' r='1' fill='white' fill-opacity='0.05'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
     .card-lilac  { background: var(--card-lilac-bg); }
     .card-blue   { background: var(--card-blue-bg); }
     .card-pink   { background: var(--card-pink-bg); }
@@ -501,7 +508,8 @@
         </div>
       </div>
 
-      <div class="project-card card-blue" onclick="window.location='oura.html'">
+      <div class="project-card card-blue" onclick="window.location='oura.html'" style="background-image: url('viz-cycleheatmap.png'); background-size: cover; background-position: center;">
+        <div class="card-bg-overlay" style="background: rgba(13, 40, 50, 0.82);"></div>
         <div class="card-inner">
           <div class="card-num">02</div>
           <div>
@@ -513,7 +521,8 @@
       </div>
 
       <!-- Row 2: Oura + TrailForks -->
-      <div class="project-card card-pink" onclick="window.location='trailforks.html'">
+      <div class="project-card card-pink" onclick="window.location='trailforks.html'" style="background-image: url('trailforks-intervention-01.png'); background-size: auto 88%; background-position: right center; background-repeat: no-repeat;">
+        <div class="card-bg-overlay" style="background: linear-gradient(to right, rgba(60,20,40,0.92) 50%, rgba(60,20,40,0.5) 100%);"></div>
         <div class="card-inner">
           <div class="card-num">03</div>
           <div>
@@ -826,7 +835,7 @@
       // Label
       if (n.r >= 4) {
         const fs = n.r >= 7 ? 10 : 9;
-        ctx.font = `${n.group === 'core' ? 600 : 400} ${fs}px 'Syne', sans-serif`;
+        ctx.font = `${n.group === 'core' ? 600 : 400} ${fs}px 'Satoshi', sans-serif`;
         ctx.fillStyle = isHovered ? p.label.replace(/[\d.]+\)$/, '0.9)') : p.label;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
@@ -841,7 +850,7 @@
       const n = hoveredNode;
       const text = n.tooltip;
       const pad = 8;
-      ctx.font = `500 10px 'Syne', sans-serif`;
+      ctx.font = `500 10px 'Satoshi', sans-serif`;
       const tw = ctx.measureText(text).width;
       const bw = tw + pad * 2;
       const bh = 22;
@@ -874,7 +883,7 @@
       else { exploreStart = null; }
       if (a > 0) {
         ctx.globalAlpha = a * 0.6;
-        ctx.font = `500 11px 'Syne', sans-serif`;
+        ctx.font = `500 11px 'Satoshi', sans-serif`;
         ctx.fillStyle = p.label;
         ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
         ctx.fillText('explore ↗', cssW - 16, cssH - 16);
