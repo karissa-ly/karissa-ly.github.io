@@ -26,6 +26,11 @@
       --serif: 'Playfair Display', Georgia, serif;
       --sans:  'Satoshi', system-ui, sans-serif;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --card-orange-bg:      #261408;
+      --card-lilac-bg:       #170f26;
+      --card-lilac-soft-bg:  #18151a;
+      --card-blue-bg:        #071c28;
+      --card-pink-bg:        #240e1a;
     }
     [data-theme="dark"] {
       --bg:             #0d0c0b;
@@ -36,11 +41,6 @@
       --text-faint:     rgba(240,237,232,0.22);
       --border:         rgba(240,237,232,0.08);
       --border-mid:     rgba(240,237,232,0.14);
-      --card-orange-bg:      #261408;
-      --card-lilac-bg:       #170f26;
-      --card-lilac-soft-bg:  #18151a;
-      --card-blue-bg:        #071c28;
-      --card-pink-bg:        #240e1a;
     }
     [data-theme="light"] {
       --bg:             #faf7f2;
@@ -51,15 +51,15 @@
       --text-faint:     rgba(26,25,22,0.25);
       --border:         rgba(26,25,22,0.09);
       --border-mid:     rgba(26,25,22,0.15);
-      --card-orange-bg:      #FFE8D5;
-      --card-lilac-bg:       #EBE0FF;
-      --card-lilac-soft-bg:  #F0EEFF;
-      --card-blue-bg:        #CCF0FF;
-      --card-pink-bg:        #FFE0EC;
       --orange:  #E8540A;
       --lilac:   #5B35B0;
       --blue:    #1762A0;
       --pink:    #A8305A;
+      --card-orange-bg:     #5c2c10;
+      --card-blue-bg:       #0d3347;
+      --card-pink-bg:       #4a1a30;
+      --card-lilac-bg:      #2a1848;
+      --card-lilac-soft-bg: #302838;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -187,12 +187,12 @@
       opacity: 0; animation: fadeUp 0.7s var(--ease-out) 0.4s forwards;
     }
     .btn-primary {
-      background: var(--orange); color: #fff; border: none;
+      background: transparent; color: var(--orange); border: 0.5px solid var(--orange);
       padding: 11px 22px; border-radius: 5px;
       font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
       transition: opacity 0.2s, transform 0.15s;
     }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:hover { opacity: 0.72; transform: translateY(-1px); }
     .btn-ghost {
       background: transparent; border: 0.5px solid var(--border-mid);
       color: var(--text-muted); padding: 11px 22px; border-radius: 5px;
@@ -227,6 +227,9 @@
     .project-card {
       border-radius: 10px; overflow: hidden; cursor: pointer; position: relative;
       transition: transform 0.25s var(--ease-out);
+      --text:       #f0ede8;
+      --text-muted: rgba(240,237,232,0.45);
+      --text-faint: rgba(240,237,232,0.22);
     }
     .project-card:hover { transform: translateY(-3px); }
     .project-card:hover .card-arrow { opacity: 1; transform: translate(0,0); }
@@ -238,11 +241,6 @@
     .card-tall .card-inner { min-height: 240px; }
     .card-span { grid-row: span 2; }
     .card-orange { background: var(--card-orange-bg); }
-    .card-orange::after {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='2' cy='2' r='1' fill='white' fill-opacity='0.05'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-    }
     .card-lilac  { background: var(--card-lilac-bg); }
     .card-blue   { background: var(--card-blue-bg); }
     .card-pink   { background: var(--card-pink-bg); }
@@ -253,6 +251,8 @@
       position: absolute; top: 20px; right: 22px; pointer-events: none; transition: opacity 0.2s;
     }
     .project-card:hover .card-num { opacity: 0.13; }
+    .card-pink .card-num { opacity: 0.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    .card-pink:hover .card-num { opacity: 0.28; }
     .card-stat {
       display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
       padding: 3px 9px; border-radius: 3px; margin-bottom: 8px;
@@ -263,9 +263,10 @@
     .card-pink   .card-stat { background: var(--pink-dim);   color: var(--pink); }
     .card-type {
       font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px;
+      text-transform: uppercase; color: rgba(240,237,232,0.6); margin-bottom: 4px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
-    .card-title { font-family: var(--serif); font-size: 18px; line-height: 1.25; color: var(--text); }
+    .card-title { font-family: var(--serif); font-size: 18px; line-height: 1.25; color: var(--text); text-shadow: 0 1px 6px rgba(0,0,0,0.4); }
     .card-tall .card-title { font-size: 22px; }
     .card-arrow {
       position: absolute; bottom: 22px; right: 22px; font-size: 18px;
@@ -497,7 +498,8 @@
     <div class="work-grid">
 
       <!-- Row 1: Tribes + Energy -->
-      <div class="project-card card-orange" onclick="window.location='signals-at-scale.html'">
+      <div class="project-card card-orange" onclick="window.location='signals-at-scale.html'" style="background-image: url('signals-perceptual-map.png'); background-size: 160%; background-position: center 25%;">
+        <div class="card-bg-overlay" style="background: rgba(38, 20, 8, 0.82);"></div>
         <div class="card-inner">
           <div class="card-num">01</div>
           <div>
