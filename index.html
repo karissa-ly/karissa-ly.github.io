@@ -320,9 +320,10 @@
     /* ABOUT */
     .about-strip {
       padding: 44px 32px 52px; max-width: 1080px; margin: 48px auto 0;
-      display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+      display: flex; gap: 4rem; align-items: center;
       border-top: 0.5px solid var(--border);
     }
+    .about-text { flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .about-quote {
       font-size: clamp(18px,2.5vw,24px);
       line-height: 1.5; color: var(--text-muted); max-width: 560px;
@@ -331,6 +332,11 @@
     .about-meta { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0; }
     .about-item { font-size: 12px; letter-spacing: 0.04em; color: var(--text-faint); white-space: nowrap; }
     .about-item span { color: var(--orange); font-weight: 500; }
+    .about-photo {
+      width: 280px; height: 360px; flex-shrink: 0;
+      object-fit: cover; object-position: center 75%;
+      border-radius: 12px; align-self: center;
+    }
 
     /* FOOTER */
     footer {
@@ -371,8 +377,9 @@
       .work-grid { grid-template-columns: 1fr; }
       .card-span { grid-row: span 1; }
       .card-tall .card-inner { min-height: 180px; }
-      .about-strip { grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
+      .about-strip { flex-direction: column; gap: 24px; margin-top: 32px; align-items: stretch; }
       .about-meta { align-items: flex-start; }
+      .about-photo { width: 100%; max-width: 280px; }
       .card-wide-desc { max-width: none; }
     }
 
@@ -417,7 +424,7 @@
     <div class="scroll-sticky">
       <section class="hero" id="home">
         <div class="hero-content">
-          <div class="hero-eyebrow">Chase PM Intern · Available September 2026</div>
+          <div class="hero-eyebrow">Incoming PM Intern @ Chase · Summer 2026</div>
           <h1 class="hero-headline">
             Research first,<br>
             Build second.<br>
@@ -547,19 +554,22 @@
 
 
   <section class="about-strip" id="about">
-    <div class="about-quote">
-      Vietnamese-American. Mid rock climber, aspiring mountain biker, and
-      above-average barista. Pole dancer. <strong>Obsessed with how culture shapes
-      behaviour and how behaviour shapes products.</strong>
+    <div class="about-text">
+      <div class="about-quote">
+        Vietnamese-American. Mid rock climber, aspiring mountain biker, and
+        above-average barista. Pole dancer. <strong>Obsessed with how culture shapes
+        behaviour and how behaviour shapes products.</strong>
+      </div>
+      <div class="about-meta">
+        <div class="about-item">Based in <span>London</span></div>
+        <div class="about-item">Open to <span>full-time &amp; internship roles</span></div>
+        <div class="about-item" style="margin-top:4px;">MSc UX Engineering</div>
+        <div class="about-item">City St George's, University of London <span>2026–27</span></div>
+        <div class="about-item" style="margin-top:4px;">PSM I certified</div>
+        <div class="about-item">EN · VI · FR</div>
+      </div>
     </div>
-    <div class="about-meta">
-      <div class="about-item">Based in <span>London</span></div>
-      <div class="about-item">Open to <span>full-time &amp; internship roles</span></div>
-      <div class="about-item" style="margin-top:4px;">MSc UX Engineering</div>
-      <div class="about-item">City St George's, University of London <span>2026–27</span></div>
-      <div class="about-item" style="margin-top:4px;">PSM I certified</div>
-      <div class="about-item">EN · VI · FR</div>
-    </div>
+    <img class="about-photo" src="about-photo.jpg" alt="Karissa Ly" />
   </section>
 
   <footer>
