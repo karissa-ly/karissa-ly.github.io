@@ -125,16 +125,16 @@
     /* ── METRICS ROW ─────────────────────────────────── */
     .metrics-row {
       max-width: 1080px; margin: 0 auto;
-      padding: 48px 32px;
-      display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
+      padding: 0 32px;
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
       border-bottom: 0.5px solid var(--border);
-      background: var(--border);
     }
     .metric-card {
-      background: var(--bg);
-      padding: 32px 28px;
+      padding: 48px 28px;
       display: flex; flex-direction: column; gap: 8px;
+      border-right: 0.5px solid var(--border);
     }
+    .metric-card:last-child { border-right: none; }
     .metric-num {
       font-family: var(--serif); font-size: clamp(36px, 4vw, 52px);
       line-height: 1; color: var(--orange);
