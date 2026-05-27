@@ -93,7 +93,7 @@
     /* HERO */
     .case-hero {
       max-width: 1080px; margin: 0 auto;
-      padding: 72px 32px 56px;
+      padding: 48px 32px 40px;
       border-bottom: 0.5px solid var(--border);
     }
     .case-type {
@@ -129,7 +129,7 @@
 
     /* SECTION */
     .case-section {
-      padding: 64px 0;
+      padding: 40px 0;
       border-bottom: 0.5px solid var(--border);
       display: grid; grid-template-columns: 200px 1fr; gap: 48px;
       align-items: start;
@@ -187,31 +187,42 @@
 
     /* INTERVENTION BLOCKS */
     .intervention {
-      margin: 40px 0; padding: 32px;
-      border-radius: 10px; background: var(--bg-card);
-      border: 0.5px solid var(--border);
+      margin: 112px 0;
     }
-    .intervention + .intervention { margin-top: 16px; }
+    .intervention + .intervention { margin-top: 112px; }
+    .intervention-inner {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .intervention-visual, .intervention-content {
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .intervention-visual.visible, .intervention-content.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    .intervention-visual { height: 520px; }
+    .intervention-content { padding-top: 0; }
     .intervention-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between; gap: 16px; margin-bottom: 16px;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 6px; margin-bottom: 12px;
     }
     .intervention-num {
       font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+      text-transform: uppercase; color: var(--accent);
     }
     .intervention-title {
-      font-family: var(--serif); font-size: 20px; color: var(--text);
+      font-family: var(--serif); font-size: 22px; color: var(--text);
     }
     .intervention-error {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
-      color: var(--text-faint); padding: 4px 10px;
-      border: 0.5px solid var(--border-mid); border-radius: 20px;
-      white-space: nowrap; flex-shrink: 0;
+      font-size: 10px; font-weight: 400; letter-spacing: 0.06em;
+      color: var(--text-faint); text-transform: none;
     }
     .intervention-desc {
       font-size: 14px; line-height: 1.8; color: var(--text-muted);
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
     .intervention-img-wrap {
       border-radius: 8px; overflow: hidden;
@@ -220,16 +231,38 @@
     }
     .intervention-img-wrap img {
       width: 100%; display: block; border-radius: 4px;
+      max-height: 600px; object-fit: contain;
     }
     .intervention-caption {
       margin-top: 10px; font-size: 12px;
       color: var(--text-faint); font-style: italic;
     }
+    .before-after-single { margin: 0; }
+    .ba-img-full {
+      width: 100%; height: 100%;
+      object-fit: contain; display: block;
+    }
+    .ba-labels {
+      display: grid; grid-template-columns: 1fr 1fr;
+      text-align: center; margin-top: 10px;
+    }
+    .ba-label.before {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint);
+      padding-right: 6%;
+    }
+    .ba-label.after {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent);
+      padding-left: 4%;
+    }
     .intervention-rationale {
-      margin-top: 20px; padding: 16px 20px;
+      margin-top: 32px;
+      padding: 16px 20px;
       border-radius: 6px;
       background: var(--accent-dim);
       border: 0.5px solid var(--accent-border);
+      border-top: 0.5px solid var(--border);
       font-size: 13px; line-height: 1.7; color: var(--text-muted);
     }
     .intervention-rationale strong { color: var(--accent); }
@@ -248,7 +281,7 @@
     /* REFLECTION */
     .reflection-grid {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 12px; margin: 24px 0;
+      gap: 12px; margin: 0;
     }
     .reflection-card {
       padding: 22px; border-radius: 8px;
@@ -307,7 +340,7 @@
       .case-body { padding: 0 20px; }
       .reflection-grid { grid-template-columns: 1fr; }
       .intervention { padding: 20px; }
-      .intervention-header { flex-direction: column; }
+      .intervention-inner { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -330,7 +363,7 @@
   <div class="case-hero">
     <div class="case-type">UX Design · Human Factors</div>
     <h1 class="case-title">Designing for the Rider,<br><em>Not the Route</em></h1>
-    <p class="case-intro">For my Human Factors module at City St George's, I analysed Trailforks Pro — the dominant mountain biking navigation app — as a human-system interaction problem. Mountain biking is a safety-critical activity. Misreading a trail difficulty rating or missing a junction at speed doesn't just mean getting lost. It can mean broken ribs, a spinal injury, or worse. This project identified where the interface creates those risks and proposed three redesign interventions to reduce them.</p>
+    <p class="case-intro">For my Human Factors module at City St George's, I analysed Trailforks Pro (the dominant mountain biking navigation app) as a human-system interaction problem. Mountain biking is an extreme sport. It's a dangerous, safety-critical activity where errors such as missing a junction at speed could lead to real bodily harm: a bad fall, broken bones, spinal injuries, or worse. This project identified where the interface creates those risks and proposed three redesign interventions to reduce them.</p>
     <div class="case-meta">
       <div class="meta-block">
         <div class="meta-label">Type</div>
@@ -381,63 +414,75 @@
         </div>
       </div>
 
-      <div class="intervention reveal">
-        <div class="intervention-header">
-          <div>
-            <div class="intervention-num">Intervention 01</div>
-            <div class="intervention-title">Enhanced Trail Interpretation Layer</div>
+      <div class="intervention">
+        <div class="intervention-inner">
+          <div class="intervention-visual">
+            <div class="before-after-single">
+              <img src="trailforks-intervention-01.png" class="ba-img-full" alt="Before and after: Enhanced trail interpretation layer" />
+              <div class="ba-labels">
+                <span class="ba-label before">Before</span>
+                <span class="ba-label after">After</span>
+              </div>
+            </div>
           </div>
-          <div class="intervention-error">Route interpretation errors</div>
-        </div>
-        <div class="intervention-desc">
-          Trailforks displays trail difficulty and condition data — but leaves interpretation to the rider. A rider who misjudges a black diamond trail or underestimates wet root sections isn't making a careless mistake. They're working with information the interface never fully translated. This intervention adds a condition-aware overlay and a "what this means" feature: not "wet conditions" but "wet conditions → reduced traction; slippery roots likely."
-        </div>
-        <div class="intervention-img-wrap">
-          <img src="trailforks-intervention-01.png" alt="Before and after: Enhanced trail interpretation layer showing condition-aware overlay and live conditions tooltip" />
-          <div class="intervention-caption">Before (left) and after (right). Condition data translated into rider-facing guidance rather than left for interpretation.</div>
-        </div>
-        <div class="intervention-rationale">
-          <strong>Design rationale:</strong> Shifts interpretation from user-driven to system-supported — reducing ambiguity and the cognitive effort required before a ride. Grounded in Norman's model of system-supported action. Comparable to Google Maps' contextual overlays, but applied to consequence rather than just visualisation.
+          <div class="intervention-content">
+            <div class="intervention-header">
+              <div class="intervention-num">Intervention 01 <span class="intervention-error">· Route interpretation errors</span></div>
+              <div class="intervention-title">Enhanced Trail Interpretation Layer</div>
+            </div>
+            <div class="intervention-desc">
+              Trailforks displays trail difficulty and condition data — but leaves interpretation to the rider. A rider who misjudges a black diamond trail or underestimates wet root sections isn't making a careless mistake. They're working with information the interface never fully translated. This intervention adds a condition-aware overlay and a "what this means" feature: not "wet conditions" but "wet conditions → reduced traction; slippery roots likely."
+            </div>
+            <div class="intervention-rationale">
+              <strong>Design rationale:</strong> Shifts interpretation from user-driven to system-supported — reducing ambiguity and the cognitive effort required before a ride. Grounded in Norman's model of system-supported action. Comparable to Google Maps' contextual overlays, but applied to consequence rather than just visualisation.
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="intervention reveal">
-        <div class="intervention-header">
-          <div>
-            <div class="intervention-num">Intervention 02</div>
-            <div class="intervention-title">Pre-Junction Decision Support</div>
+      <div class="intervention">
+        <div class="intervention-inner">
+          <div class="intervention-visual">
+            <div class="before-after-single">
+              <img src="trailforks-intervention-02.png" class="ba-img-full" alt="Before and after: Pre-junction decision support" />
+              <div class="ba-labels">
+                <span class="ba-label before">Before</span>
+                <span class="ba-label after">After</span>
+              </div>
+            </div>
           </div>
-          <div class="intervention-error">Navigation errors at junctions</div>
-        </div>
-        <div class="intervention-desc">
-          Junction errors happen fast. Matching a digital map to a physical trail environment under time pressure, with limited visual bandwidth, is where riders go wrong. Trailforks has a junction feature (Traildar) — but it requires the rider to configure and seek it out. This intervention automates the identification of high-risk decision points, delivers anticipatory cues before the junction arrives, and filters the map to show only the relevant path.
-        </div>
-        <div class="intervention-img-wrap">
-          <img src="trailforks-intervention-02.png" alt="Before and after: Pre-junction decision support showing anticipatory cue 'Junction in 20m → keep right' on a simplified map view" />
-          <div class="intervention-caption">Before (left) and after (right). Anticipatory cue surfaces before the junction. Irrelevant paths filtered out.</div>
-        </div>
-        <div class="intervention-rationale">
-          <strong>Design rationale:</strong> Shifts from user-configured to system-triggered support. Makes uncertainty visible so riders can adjust speed and attention before the decision point, not at it. Reduces reliance on recognition heuristics under time pressure.
+          <div class="intervention-content">
+            <div class="intervention-header">
+              <div class="intervention-num">Intervention 02 <span class="intervention-error">· Navigation errors at junctions</span></div>
+              <div class="intervention-title">Pre-Junction Decision Support</div>
+            </div>
+            <div class="intervention-desc">
+              Junction errors happen fast. Matching a digital map to a physical trail environment under time pressure, with limited visual bandwidth, is where riders go wrong. Trailforks has a junction feature (Traildar) — but it requires the rider to configure and seek it out. This intervention automates the identification of high-risk decision points, delivers anticipatory cues before the junction arrives, and filters the map to show only the relevant path.
+            </div>
+            <div class="intervention-rationale">
+              <strong>Design rationale:</strong> Shifts from user-configured to system-triggered support. Makes uncertainty visible so riders can adjust speed and attention before the decision point, not at it. Reduces reliance on recognition heuristics under time pressure.
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="intervention reveal">
-        <div class="intervention-header">
-          <div>
-            <div class="intervention-num">Intervention 03</div>
-            <div class="intervention-title">Attention-Aware Ride Mode</div>
+      <div class="intervention">
+        <div class="intervention-inner">
+          <div class="intervention-content">
+            <div class="intervention-header">
+              <div class="intervention-num">Intervention 03 <span class="intervention-error">· Attention-related errors while riding</span></div>
+              <div class="intervention-title">Attention-Aware Ride Mode</div>
+            </div>
+            <div class="intervention-desc">
+              The root problem: the interface assumes continuous visual attention in an environment where that assumption is dangerous. Dual-task interference between navigation and bike control at speed isn't a use case to accommodate — it's a risk to design out. This intervention proposes a ride mode that activates during riding: a glanceable interface with a single directional cue, restricted interaction while moving, and suppression of everything non-essential.
+            </div>
+            <div class="intervention-rationale">
+              <strong>Design rationale:</strong> The system adapts to reduced attentional capacity rather than competing for it. Passive guidance under high-demand conditions. Similar to Strava and device focus modes — applied here to a safety-critical navigation context where the stakes are higher.
+            </div>
           </div>
-          <div class="intervention-error">Attention-related errors while riding</div>
-        </div>
-        <div class="intervention-desc">
-          The root problem: the interface assumes continuous visual attention in an environment where that assumption is dangerous. Dual-task interference between navigation and bike control at speed isn't a use case to accommodate — it's a risk to design out. This intervention proposes a ride mode that activates during riding: a glanceable interface with a single directional cue, restricted interaction while moving, and suppression of everything non-essential.
-        </div>
-        <div class="intervention-img-wrap">
-          <img src="trailforks-intervention-03.png" alt="Ride Mode: single directional cue with slide-to-unlock interaction lock" />
-          <div class="intervention-caption">Ride Mode: one cue, one interaction. "Slide to unlock" prevents accidental input while moving.</div>
-        </div>
-        <div class="intervention-rationale">
-          <strong>Design rationale:</strong> The system adapts to reduced attentional capacity rather than competing for it. Passive guidance under high-demand conditions. Similar to Strava and device focus modes — applied here to a safety-critical navigation context where the stakes are higher.
+          <div class="intervention-visual">
+            <img src="trailforks-intervention-03.png" alt="Ride Mode: single directional cue with slide-to-unlock interaction lock" style="max-width: 360px; width: 100%; height: 100%; display: block; margin-left: auto; margin-right: 0; object-fit: contain;" />
+          </div>
         </div>
       </div>
     </section>
@@ -463,7 +508,7 @@
           <div class="reflection-text">All three interventions depend on data quality they can't guarantee. Community-generated trail information is inconsistent — an interpretation layer is only as good as what it's interpreting. The interface is fixable. The underlying data infrastructure is a harder problem.</div>
         </div>
         <div class="reflection-card">
-          <div class="reflection-label" style="color: var(--pink);">What I learned</div>
+          <div class="reflection-label" style="color: var(--blue);">What I learned</div>
           <div class="reflection-text">Designing for safety-critical environments means designing for the moments when people are least able to use what you've built. The measure of a good intervention isn't usability in ideal conditions — it's error reduction in the conditions that actually cause harm.</div>
         </div>
       </div>
@@ -491,7 +536,7 @@
   </footer>
 
   <script>
-    // Scroll reveal
+    // Scroll reveal for general .reveal elements
     const revealEls = document.querySelectorAll('.reveal');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -502,6 +547,20 @@
       });
     }, { threshold: 0.05 });
     revealEls.forEach(el => obs.observe(el));
+
+    // Staggered intervention reveal: visual first, content 200ms later
+    const interventionObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const visual = e.target.querySelector('.intervention-visual');
+          const content = e.target.querySelector('.intervention-content');
+          if (visual) visual.classList.add('visible');
+          if (content) setTimeout(() => content.classList.add('visible'), 200);
+          interventionObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.intervention').forEach(el => interventionObs.observe(el));
   </script>
 
 </body>
