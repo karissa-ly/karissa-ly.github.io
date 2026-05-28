@@ -397,7 +397,7 @@
     @media (max-width: 680px) {
       .nav-inner, .work, .about-strip, footer { padding-left: 20px; padding-right: 20px; }
       .nav-links { gap: 16px; }
-      .mode-toggle { min-width: 44px; min-height: 44px; padding: 0; justify-content: center; font-size: 16px; }
+      .mode-toggle { min-width: 44px; min-height: 44px; }
       .hero { padding: 48px 20px 32px; }
       .section-divider { margin: 0 20px; }
       .meta-strip { margin-left: 20px; margin-right: 20px; max-width: none; }
@@ -412,7 +412,7 @@
 
     /* Node fallback: hidden on desktop, revealed on mobile */
     .node-fallback  { display: none; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
-    .mobile-diagram { display: none; width: 100%; height: 300px; }
+    .mobile-diagram { display: none; width: 100%; height: auto; margin-top: 8px; }
 
     @media (max-width: 767px) {
       /* Collapse scrollytelling into normal document flow */
@@ -612,12 +612,50 @@
   function renderMobileDiagram() {
     const container = document.getElementById('mobileDiagram');
     if (!container || !window.nodesConfig) return;
-    const W = 340, H = 300;
+
+    const W = 400, H = 500;
+
+    // Portrait-optimised positions keyed by config node id.
+    // Desktop cx/cy are used as fallback for any node not listed here.
+    const mobilePositions = {
+      'k':          { cx: 0.50, cy: 0.45 },
+      'ux':         { cx: 0.22, cy: 0.38 },
+      'design':     { cx: 0.50, cy: 0.62 },
+      'ai':         { cx: 0.75, cy: 0.38 },
+      'proddesign': { cx: 0.65, cy: 0.62 },
+      'dataviz':    { cx: 0.28, cy: 0.65 },
+      'usability':  { cx: 0.25, cy: 0.52 },
+      'cultural':   { cx: 0.10, cy: 0.28 },
+      'mixed':      { cx: 0.22, cy: 0.22 },
+      'segm':       { cx: 0.12, cy: 0.48 },
+      'strategy':   { cx: 0.88, cy: 0.28 },
+      'ml':         { cx: 0.90, cy: 0.45 },
+      'figma':      { cx: 0.78, cy: 0.58 },
+      'claude':     { cx: 0.92, cy: 0.58 },
+      'quiltai':    { cx: 0.42, cy: 0.25 },
+      'lovable':    { cx: 0.85, cy: 0.70 },
+      'notebooklm': { cx: 0.70, cy: 0.22 },
+      'observable': { cx: 0.18, cy: 0.78 },
+      'hf':         { cx: 0.42, cy: 0.75 },
+      'climbing':   { cx: 0.15, cy: 0.88 },
+      'mtb':        { cx: 0.35, cy: 0.90 },
+      'pole':       { cx: 0.55, cy: 0.88 },
+    };
+
+    // Per-node label adjustments for crowded personal cluster
+    const labelOverrides = {
+      'climbing': { anchor: 'end',    dx: -8, dy: 0   },
+      'mtb':      { anchor: 'middle', dx: 0,  dy: -14 },
+      'pole':     { anchor: 'start',  dx: 8,  dy: 0   },
+    };
+
+    const pos = id => mobilePositions[id] || null;
+
     const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
+    svg.style.cssText = 'display:block; margin:0 auto; width:100%; height:auto; max-width:420px;';
+
     const cs = getComputedStyle(document.documentElement);
     const colors = {
       core:   cs.getPropertyValue('--node-core').trim()   || '#f0ede8',
@@ -629,21 +667,26 @@
     };
     const edgeCol  = cs.getPropertyValue('--edge-color').trim() || 'rgba(240,237,232,0.12)';
     const labelCol = cs.getPropertyValue('--text-muted').trim() || 'rgba(240,237,232,0.5)';
+
     const nds = window.nodesConfig.nodes;
     const eds = window.nodesConfig.edges;
     const nmap = {};
     nds.forEach(n => nmap[n.id] = n);
+
     eds.forEach(([aId, bId]) => {
       const a = nmap[aId], b = nmap[bId];
       if (!a || !b) return;
+      const ap = pos(aId) || a, bp = pos(bId) || b;
       const line = document.createElementNS(ns, 'line');
-      line.setAttribute('x1', a.cx * W); line.setAttribute('y1', a.cy * H);
-      line.setAttribute('x2', b.cx * W); line.setAttribute('y2', b.cy * H);
+      line.setAttribute('x1', ap.cx * W); line.setAttribute('y1', ap.cy * H);
+      line.setAttribute('x2', bp.cx * W); line.setAttribute('y2', bp.cy * H);
       line.setAttribute('stroke', edgeCol); line.setAttribute('stroke-width', '0.8');
       svg.appendChild(line);
     });
+
     nds.forEach(n => {
-      const x = n.cx * W, y = n.cy * H;
+      const p = pos(n.id) || n;
+      const x = p.cx * W, y = p.cy * H;
       const g = document.createElementNS(ns, 'g');
       if (n.href) {
         g.style.cursor = 'pointer';
@@ -658,10 +701,12 @@
       circle.setAttribute('fill-opacity', n.group === 'muted' ? '0.35' : '0.85');
       g.appendChild(circle);
       if (n.r >= 5) {
+        const lo = labelOverrides[n.id] || { anchor: 'middle', dx: 0, dy: 0 };
         const label = document.createElementNS(ns, 'text');
-        label.setAttribute('x', x); label.setAttribute('y', y + n.r + 8);
-        label.setAttribute('text-anchor', 'middle');
-        label.setAttribute('font-size', n.r >= 7 ? '7' : '6.5');
+        label.setAttribute('x', x + lo.dx);
+        label.setAttribute('y', y + n.r + 8 + lo.dy);
+        label.setAttribute('text-anchor', lo.anchor);
+        label.setAttribute('font-size', n.r >= 7 ? '8' : '7');
         label.setAttribute('font-family', "'Satoshi', system-ui, sans-serif");
         label.setAttribute('fill', labelCol);
         label.textContent = n.label;
@@ -669,6 +714,7 @@
       }
       svg.appendChild(g);
     });
+
     container.innerHTML = '';
     container.appendChild(svg);
   }
