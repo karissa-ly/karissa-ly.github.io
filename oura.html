@@ -82,7 +82,7 @@
     /* HERO */
     .case-hero {
       max-width: 1080px; margin: 0 auto;
-      padding: 72px 32px 56px;
+      padding: 48px 32px 40px;
       border-bottom: 0.5px solid var(--border);
     }
     .case-type {
@@ -91,14 +91,14 @@
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.1s forwards;
     }
     .case-title {
-      font-family: var(--serif); font-size: clamp(38px, 5vw, 64px);
+      font-family: var(--serif); font-size: clamp(36px, 5vw, 60px);
       line-height: 1.05; font-weight: 400; margin-bottom: 24px;
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.2s forwards;
     }
     .case-title em { font-style: italic; color: var(--blue); }
     .case-intro {
       font-size: 16px; line-height: 1.85; color: var(--text-muted);
-      max-width: 640px; margin-bottom: 48px;
+      max-width: 640px; margin-bottom: 40px;
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.3s forwards;
     }
     .case-meta {
@@ -117,7 +117,7 @@
 
     /* SECTION */
     .case-section {
-      padding: 64px 0;
+      padding: 40px 0;
       border-bottom: 0.5px solid var(--border);
       display: grid; grid-template-columns: 200px 1fr; gap: 48px;
       align-items: start;
@@ -129,9 +129,9 @@
     }
     .section-heading {
       font-family: var(--serif); font-size: 28px; font-weight: 400;
-      line-height: 1.2; margin-bottom: 20px; color: var(--text);
+      line-height: 1.2; margin-bottom: 16px; color: var(--text);
     }
-    .section-heading em { font-style: italic; color: var(--blue); }
+    .section-heading em { font-style: normal; color: var(--blue); }
     .section-body { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
     .section-body p + p { margin-top: 16px; }
     .section-body strong { color: var(--text); font-weight: 500; }
@@ -228,7 +228,7 @@
     .reflection-label.changed { color: var(--orange); }
     .reflection-label.learned { color: var(--lilac); }
     .reflection-label.pink { color: var(--pink); }
-    .reflection-text { font-size: 13px; line-height: 1.7; color: var(--text-muted); }
+    .reflection-text { font-size: 14px; line-height: 1.75; color: var(--text-muted); }
 
     /* TAGS */
     .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 32px; }
@@ -281,12 +281,12 @@
 
     /* NEXT PROJECT */
     .next-project {
-      max-width: 1080px; margin: 0 auto; padding: 64px 32px;
+      max-width: 1080px; margin: 0 auto; padding: 48px 0;
       display: flex; justify-content: space-between; align-items: center; gap: 32px;
     }
-    .next-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
-    .next-title { font-family: var(--serif); font-size: 28px; color: var(--text); }
-    .next-title em { font-style: italic; color: var(--orange); }
+    .next-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+    .next-title { font-family: var(--serif); font-size: 22px; line-height: 1.2; color: var(--text); }
+    .next-title em { font-style: normal; color: var(--orange); }
     .btn-next {
       background: var(--orange); color: #fff; border: none;
       padding: 12px 24px; border-radius: 5px; font-size: 12px;
@@ -302,7 +302,7 @@
       max-width: 1080px; margin: 0 auto;
       display: flex; justify-content: space-between; align-items: center;
     }
-    .footer-name { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text-faint); }
+    .footer-name { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--text-faint); }
     .footer-links { display: flex; gap: 20px; }
     .footer-links a { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); transition: color 0.2s; }
     .footer-links a:hover { color: var(--blue); }
@@ -366,8 +366,12 @@
         <div class="meta-value">Personal data visualisation</div>
       </div>
       <div class="meta-block">
+        <div class="meta-label">Context</div>
+        <div class="meta-value">MSc UX Engineering · Data Visualisation module</div>
+      </div>
+      <div class="meta-block">
         <div class="meta-label">Tools</div>
-        <div class="meta-value">Observable Plot · JavaScript · Oura API · Apple Health</div>
+        <div class="meta-value">Observable Plot · JavaScript</div>
       </div>
       <div class="meta-block">
         <div class="meta-label">Year</div>
@@ -503,10 +507,20 @@
 
         <div class="viz-block reveal-item">
           <div class="viz-img-wrap">
+            <img src="viz-scatterplot.png" alt="Scatterplot of daily training load vs next-day HRV with quadrant labels" />
+          </div>
+          <div class="viz-caption">
+            <div class="viz-caption-label">Visualisation 03 — Training load vs next-day HRV</div>
+            <div class="viz-caption-text">The scatter is the finding: no clear relationship between how much I trained and how recovered I felt the next morning. The quadrant labels make the null result legible rather than confusing — a null result honestly visualised is still a result.</div>
+          </div>
+        </div>
+
+        <div class="viz-block reveal-item">
+          <div class="viz-img-wrap">
             <img src="viz-cycleheatmap.png" alt="Heatmap showing HRV deviation from cycle average across 14 months" />
           </div>
           <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 03 — HRV vs cycle average heatmap</div>
+            <div class="viz-caption-label">Visualisation 04 — HRV vs cycle average heatmap</div>
             <div class="viz-caption-text">Each cell is one day of a menstrual cycle, coloured by HRV deviation from that cycle's average. Purple = above average recovery; orange = below. Red outlines mark the first 7 days. The handwritten, crayon-textured aesthetic was deliberate — clinical polish felt wrong for this data.</div>
           </div>
         </div>
@@ -516,18 +530,8 @@
             <img src="viz-beeswarm.png" alt="Beeswarm plot comparing HRV during period vs rest of cycle" />
           </div>
           <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 04 — Period vs rest of cycle beeswarm</div>
+            <div class="viz-caption-label">Visualisation 05 — Period vs rest of cycle beeswarm</div>
             <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting. Recovery during menstruation is more consistent — if lower — than across the rest of the cycle.</div>
-          </div>
-        </div>
-
-        <div class="viz-block reveal-item">
-          <div class="viz-img-wrap">
-            <img src="viz-scatterplot.png" alt="Scatterplot of daily training load vs next-day HRV with quadrant labels" />
-          </div>
-          <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 05 — Training load vs next-day HRV</div>
-            <div class="viz-caption-text">The scatter is the finding: no clear relationship between how much I trained and how recovered I felt the next morning. The quadrant labels make the null result legible rather than confusing — a null result honestly visualised is still a result.</div>
           </div>
         </div>
 

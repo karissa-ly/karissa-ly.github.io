@@ -140,7 +140,7 @@
       font-family: var(--serif); font-size: 28px; font-weight: 400;
       line-height: 1.2; margin-bottom: 16px;
     }
-    .section-heading em { font-style: italic; color: var(--accent); }
+    .section-heading em { font-style: normal; color: var(--accent); }
     .section-body { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
     .section-body p + p { margin-top: 14px; }
     .section-body strong { color: var(--text); font-weight: 500; }
@@ -152,7 +152,7 @@
     }
     .diagram-wrap img { width: 100%; display: block; }
     .diagram-caption {
-      margin-top: 10px; font-size: 12px;
+      margin-top: 10px; font-size: 13px;
       color: var(--text-faint); font-style: italic;
     }
     .diagram-wrap.dark-bg { background: var(--bg-card); }
@@ -238,7 +238,7 @@
       font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
       text-transform: uppercase; margin-bottom: 12px;
     }
-    .reflection-text { font-size: 13px; line-height: 1.75; color: var(--text-muted); }
+    .reflection-text { font-size: 14px; line-height: 1.75; color: var(--text-muted); }
 
     /* NEXT */
     .next-project {
@@ -251,7 +251,7 @@
       text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
     }
     .next-title { font-family: var(--serif); font-size: 22px; line-height: 1.2; }
-    .next-title em { font-style: italic; color: var(--accent); }
+    .next-title em { font-style: normal; color: var(--accent); }
     .btn-next {
       background: var(--accent); color: var(--bg);
       padding: 12px 24px; border-radius: 6px;
@@ -338,7 +338,7 @@
     <!-- 01 THE PROBLEM -->
     <section class="case-section reveal">
       <div class="section-num">01 — The problem</div>
-      <div>
+      <div class="section-content">
         <h2 class="section-heading">Research gets done.<br><em>Then it disappears.</em></h2>
         <div class="section-body">
           <p>As AI embeds itself in UX workflows, role boundaries are collapsing — designers research, PMs design, researchers ship. The consequence is lost decision traceability: insights get disconnected from the decisions they should inform, and the first viable concept gets pursued without sufficient grounding in evidence.</p>
@@ -355,7 +355,7 @@
     <!-- 02 THE SOLUTION -->
     <section class="case-section reveal">
       <div class="section-num">02 — The solution</div>
-      <div>
+      <div class="section-content">
         <h2 class="section-heading">A persistent layer,<br><em>not another tool</em></h2>
         <div class="section-body">
           <p>Membrane isn't a replacement for Figma, Dovetail, or Otter.ai. It sits across them — ingesting research inputs, structuring them into citable <strong>insight nodes</strong>, and making those nodes retrievable at every subsequent design decision.</p>
@@ -375,33 +375,30 @@
     </section>
 
     <!-- 03 REFLECTION -->
-    <section class="case-section full reveal">
-      <div style="display:grid; grid-template-columns: 200px 1fr; gap: 48px; margin-bottom: 20px;">
-        <div class="section-num">03 — Reflection</div>
-        <div>
-          <h2 class="section-heading">What I took<br><em>from this</em></h2>
-          <div class="section-body" style="margin-bottom: 0;">
-            <p>This project was inspired by Professor Radu Jianu's teaching, particularly his framing of AI as a structuring layer rather than a generator, a distinction that shaped the entire proposal. A guest talk from Micaela Dixon at Picsart added further context on how AI is actually being used inside product teams at scale.</p>
+    <section class="case-section reveal">
+      <div class="section-num">03 — Reflection</div>
+      <div class="section-content">
+        <h2 class="section-heading">What I took<br><em>from this</em></h2>
+        <div class="section-body">
+          <p>This project was inspired by Professor Radu Jianu's teaching, particularly his framing of AI as a structuring layer rather than a generator, a distinction that shaped the entire proposal. A guest talk from Micaela Dixon at Picsart added further context on how AI is actually being used inside product teams at scale.</p>
+        </div>
+        <div class="reflection-grid">
+          <div class="reflection-card">
+            <div class="reflection-label" style="color: var(--accent);">What worked</div>
+            <div class="reflection-text">The insight node as a design unit is the strongest part — concrete, citable, and coherent across all four phases. Grounding it in retrieval rather than generation keeps it honest: the system surfaces, humans decide. The competitive analysis held up too — no existing tool genuinely spans the full workflow.</div>
           </div>
-        </div>
-      </div>
-
-      <div class="reflection-grid">
-        <div class="reflection-card">
-          <div class="reflection-label" style="color: var(--accent);">What worked</div>
-          <div class="reflection-text">The insight node as a design unit is the strongest part — concrete, citable, and coherent across all four phases. Grounding it in retrieval rather than generation keeps it honest: the system surfaces, humans decide. The competitive analysis held up too — no existing tool genuinely spans the full workflow.</div>
-        </div>
-        <div class="reflection-card">
-          <div class="reflection-label" style="color: var(--blue);">What I'd develop further</div>
-          <div class="reflection-text">The divergence detection logic in the Develop phase is the least resolved part. Flagging "insufficient divergence" requires defining what sufficient looks like, which is harder than it sounds. A v2 would focus here first. The target user framing also needs revisiting — I scoped Membrane for early-career builders, but the traceability problem is just as real for senior practitioners who have the skills but not the time to maintain rigour across fast-moving projects.</div>
-        </div>
-        <div class="reflection-card">
-          <div class="reflection-label" style="color: var(--orange);">What I got wrong</div>
-          <div class="reflection-text">The technical ambition outpaced the practical thinking in places. Reaching for multimodal models to compare design artefacts felt compelling on paper, but there are simpler entry points I didn't explore thoroughly enough. The proposal would have been stronger for more constraint, not more capability.</div>
-        </div>
-        <div class="reflection-card">
-          <div class="reflection-label" style="color: var(--pink);">What I learned</div>
-          <div class="reflection-text">Designing a tool that sits between other tools is harder than designing a standalone one. Every decision about what Membrane does is also a decision about what it leaves to Figma, Dovetail, or the designer. That boundary is where the most interesting design thinking happened, and where I'd spend more time if I built it for real.</div>
+          <div class="reflection-card">
+            <div class="reflection-label" style="color: var(--blue);">What I'd develop further</div>
+            <div class="reflection-text">The divergence detection logic in the Develop phase is the least resolved part. Flagging "insufficient divergence" requires defining what sufficient looks like, which is harder than it sounds. A v2 would focus here first. The target user framing also needs revisiting — I scoped Membrane for early-career builders, but the traceability problem is just as real for senior practitioners who have the skills but not the time to maintain rigour across fast-moving projects.</div>
+          </div>
+          <div class="reflection-card">
+            <div class="reflection-label" style="color: var(--orange);">What I got wrong</div>
+            <div class="reflection-text">The technical ambition outpaced the practical thinking in places. Reaching for multimodal models to compare design artefacts felt compelling on paper, but there are simpler entry points I didn't explore thoroughly enough. The proposal would have been stronger for more constraint, not more capability.</div>
+          </div>
+          <div class="reflection-card">
+            <div class="reflection-label" style="color: var(--pink);">What I learned</div>
+            <div class="reflection-text">Designing a tool that sits between other tools is harder than designing a standalone one. Every decision about what Membrane does is also a decision about what it leaves to Figma, Dovetail, or the designer. That boundary is where the most interesting design thinking happened, and where I'd spend more time if I built it for real.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -409,10 +406,10 @@
     <!-- NEXT -->
     <div class="next-project reveal">
       <div>
-        <div class="next-label">Next</div>
+        <div class="next-label">Next case study</div>
         <div class="next-title">This Portfolio<br><em>Is the Case Study</em></div>
       </div>
-      <a href="meta.html" class="btn-next">Read more →</a>
+      <a href="meta.html" class="btn-next">Read case study →</a>
     </div>
 
   </div>

@@ -103,14 +103,14 @@
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.1s forwards;
     }
     .case-title {
-      font-family: var(--serif); font-size: clamp(38px, 5vw, 64px);
+      font-family: var(--serif); font-size: clamp(36px, 5vw, 60px);
       line-height: 1.05; font-weight: 400; margin-bottom: 24px;
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.2s forwards;
     }
     .case-title em { font-style: italic; color: var(--accent); }
     .case-intro {
       font-size: 16px; line-height: 1.85; color: var(--text-muted);
-      max-width: 640px; margin-bottom: 48px;
+      max-width: 640px; margin-bottom: 40px;
       opacity: 0; animation: fadeUp 0.7s var(--ease) 0.3s forwards;
     }
     .case-meta {
@@ -142,9 +142,9 @@
     }
     .section-heading {
       font-family: var(--serif); font-size: 28px; font-weight: 400;
-      line-height: 1.2; margin-bottom: 20px; color: var(--text);
+      line-height: 1.2; margin-bottom: 16px; color: var(--text);
     }
-    .section-heading em { font-style: italic; color: var(--accent); }
+    .section-heading em { font-style: normal; color: var(--accent); }
     .section-body { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
     .section-body p + p { margin-top: 16px; }
     .section-body strong { color: var(--text); font-weight: 500; }
@@ -235,7 +235,7 @@
       max-height: 600px; object-fit: contain;
     }
     .intervention-caption {
-      margin-top: 10px; font-size: 12px;
+      margin-top: 10px; font-size: 13px;
       color: var(--text-faint); font-style: italic;
     }
     .before-after-single { margin: 0; }
@@ -264,7 +264,7 @@
       background: var(--accent-dim);
       border: 0.5px solid var(--accent-border);
       border-top: 0.5px solid var(--border);
-      font-size: 13px; line-height: 1.7; color: var(--text-muted);
+      font-size: 14px; line-height: 1.7; color: var(--text-muted);
     }
     .intervention-rationale strong { color: var(--accent); }
 
@@ -292,11 +292,11 @@
       font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
       text-transform: uppercase; margin-bottom: 12px;
     }
-    .reflection-text { font-size: 13px; line-height: 1.75; color: var(--text-muted); }
+    .reflection-text { font-size: 14px; line-height: 1.75; color: var(--text-muted); }
 
     /* NEXT */
     .next-project {
-      padding: 64px 0; display: flex; justify-content: space-between;
+      padding: 48px 0; display: flex; justify-content: space-between;
       align-items: center; gap: 24px; flex-wrap: wrap;
     }
     .next-label {
@@ -306,7 +306,7 @@
     .next-title {
       font-family: var(--serif); font-size: 22px; line-height: 1.2;
     }
-    .next-title em { font-style: italic; color: var(--accent); }
+    .next-title em { font-style: normal; color: var(--accent); }
     .btn-next {
       background: var(--accent); color: var(--bg);
       padding: 12px 24px; border-radius: 6px;
@@ -372,7 +372,7 @@
       </div>
       <div class="meta-block">
         <div class="meta-label">Context</div>
-        <div class="meta-value">MSc Human Factors module · City St George's</div>
+        <div class="meta-value">MSc UX Engineering · Human Factors module</div>
       </div>
       <div class="meta-block">
         <div class="meta-label">System</div>
@@ -390,7 +390,7 @@
     <!-- 01 CONTEXT -->
     <section class="case-section reveal">
       <div class="section-num">01 — The problem</div>
-      <div>
+      <div class="section-content">
         <h2 class="section-heading">A pre-ride tool used<br><em>in the middle of a ride</em></h2>
         <div class="section-body">
           <p>Trailforks Pro is well-built for pre-ride planning — browsing trails, checking difficulty ratings, reviewing elevation profiles. Where it falls short is in-ride navigation. The turn-by-turn guidance is limited, and the interface was designed for a moment of calm attention that doesn't exist on a fast, technical trail.</p>
@@ -489,13 +489,11 @@
     </section>
 
     <!-- 03 REFLECTION -->
-    <section class="case-section full reveal">
-      <div style="margin-bottom:32px;">
-        <div class="section-num" style="margin-bottom:12px;">03 — Reflection</div>
+    <section class="case-section reveal">
+      <div class="section-num">03 — Reflection</div>
+      <div class="section-content">
         <h2 class="section-heading">What I took<br><em>from this</em></h2>
-      </div>
-
-      <div class="reflection-grid">
+        <div class="reflection-grid">
         <div class="reflection-card">
           <div class="reflection-label" style="color: var(--accent);">What worked</div>
           <div class="reflection-text">Starting from error analysis rather than design intuition kept the interventions honest. The hierarchical task analysis forced me to map what riders are actually doing at each stage — and exposed how much the current interface assumes about available attention that doesn't exist in practice.</div>
@@ -511,6 +509,7 @@
         <div class="reflection-card">
           <div class="reflection-label" style="color: var(--blue);">What I learned</div>
           <div class="reflection-text">Designing for safety-critical environments means designing for the moments when people are least able to use what you've built. The measure of a good intervention isn't usability in ideal conditions — it's error reduction in the conditions that actually cause harm.</div>
+        </div>
         </div>
       </div>
     </section>
