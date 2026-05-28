@@ -63,7 +63,7 @@
       max-width: 1080px; margin: 0 auto; padding: 18px 32px;
       display: flex; justify-content: space-between; align-items: center;
     }
-    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 20px; }
     .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-links a { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
@@ -343,12 +343,11 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">k.</a>
+      <a href="index.html" class="nav-logo">Karissa Ly</a>
       <div class="nav-links">
         <a href="index.html#work" class="nav-back">← All work</a>
         <button class="mode-toggle" id="modeToggle" onclick="toggleTheme()">
-          <svg id="modeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <span id="modeLabel">light mode</span>
+          <span id="modeLabel">☽</span>
         </button>
       </div>
     </div>
@@ -591,14 +590,11 @@
   </footer>
 
   <script>
-    const sunIcon  = `<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>`;
-    const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
     function toggleTheme() {
       const html = document.documentElement;
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.getElementById('modeIcon').innerHTML = isDark ? sunIcon : moonIcon;
-      document.getElementById('modeLabel').textContent = isDark ? 'dark mode' : 'light mode';
+      document.getElementById('modeLabel').textContent = isDark ? '☀' : '☽';
     }
 
     // Section and heading reveals

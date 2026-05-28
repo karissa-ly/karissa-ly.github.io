@@ -67,7 +67,7 @@
       max-width: 1080px; margin: 0 auto; padding: 18px 32px;
       display: flex; justify-content: space-between; align-items: center;
     }
-    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 20px; }
     .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-back {
       font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
@@ -85,7 +85,7 @@
 
     /* HERO */
     .meta-hero {
-      max-width: 680px; margin: 0 auto;
+      max-width: 1080px; margin: 0 auto;
       padding: 72px 32px 56px;
     }
     .meta-type {
@@ -102,7 +102,7 @@
 
     /* ESSAY */
     .meta-essay {
-      max-width: 680px; margin: 0 auto;
+      max-width: 1080px; margin: 0 auto;
       padding: 0 32px 80px;
     }
     .meta-essay p {
@@ -166,14 +166,14 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">k.</a>
+      <a href="index.html" class="nav-logo">Karissa Ly</a>
       <div class="nav-links">
         <a href="index.html#work" class="nav-back">← All work</a>
         <button class="mode-toggle" onclick="
           const t = document.documentElement;
           t.setAttribute('data-theme', t.getAttribute('data-theme')==='dark'?'light':'dark');
-          this.textContent = t.getAttribute('data-theme')==='dark'?'light mode':'dark mode';
-        ">light mode</button>
+          this.textContent = t.getAttribute('data-theme')==='dark'?'☽':'☀';
+        ">☽</button>
       </div>
     </div>
   </nav>

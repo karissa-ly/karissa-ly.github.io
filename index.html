@@ -26,11 +26,6 @@
       --serif: 'Playfair Display', Georgia, serif;
       --sans:  'Satoshi', system-ui, sans-serif;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-      --card-orange-bg:      #261408;
-      --card-lilac-bg:       #170f26;
-      --card-lilac-soft-bg:  #18151a;
-      --card-blue-bg:        #071c28;
-      --card-pink-bg:        #240e1a;
     }
     [data-theme="dark"] {
       --bg:             #0d0c0b;
@@ -55,12 +50,27 @@
       --lilac:   #5B35B0;
       --blue:    #1762A0;
       --pink:    #A8305A;
-      --card-orange-bg:     #5c2c10;
-      --card-blue-bg:       #0d3347;
-      --card-pink-bg:       #4a1a30;
-      --card-lilac-bg:      #2a1848;
-      --card-lilac-soft-bg: #302838;
     }
+
+    [data-theme="light"] .project-card {
+      background: #f0ece6; border: 1px solid rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"]  .card-orange { background-image: url('signals-perceptual-map.png') !important; background-size: 90% !important; background-position: right center !important; background-repeat: no-repeat !important; }
+    [data-theme="dark"]  .card-blue   { background-size: cover !important; background-position: center !important; }
+    [data-theme="dark"]  .card-pink   { background-size: 45% !important; background-position: right center !important; background-repeat: no-repeat !important; }
+    [data-theme="dark"]  .card-lilac:not(.card-wide) { background-size: cover !important; background-position: center !important; }
+    [data-theme="light"] .card-orange { background-image: url('signals-perceptual-map-light.png') !important; background-size: 90% !important; background-position: right center !important; background-repeat: no-repeat !important; }
+    [data-theme="light"] .card-orange .card-bg-overlay { background: rgba(240,236,230,0.6) !important; }
+    [data-theme="light"] .card-blue   { background-size: cover !important; background-position: center !important; }
+    [data-theme="light"] .card-blue   .card-bg-overlay { background: rgba(240,236,230,0.65) !important; }
+    [data-theme="light"] .card-pink   { background-size: 45% !important; background-position: right center !important; background-repeat: no-repeat !important; }
+    [data-theme="light"] .card-pink   .card-bg-overlay { background: rgba(240,236,230,0.6) !important; }
+    [data-theme="light"] .card-lilac:not(.card-wide) { background-size: cover !important; background-position: center !important; }
+    [data-theme="light"] .card-lilac:not(.card-wide) .card-bg-overlay { background: rgba(240,236,230,0.65) !important; }
+    [data-theme="light"] .card-type { color: #666666; text-shadow: none; }
+    [data-theme="light"] .card-title { color: #1a1a1a; text-shadow: none; }
+    [data-theme="light"] .card-arrow { color: #1a1a1a; opacity: 0.55; }
+    [data-theme="light"] .project-card:hover .card-arrow { opacity: 1; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; scroll-behavior: smooth; }
@@ -84,7 +94,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 32px; max-width: 1080px; margin: 0 auto;
     }
-    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--text); }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--text); }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a {
       font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
@@ -152,6 +162,7 @@
       );
       z-index: -1;
       pointer-events: none;
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
     }
     .hero-graph {
       position: absolute;
@@ -212,6 +223,7 @@
     .tag-orange { background: var(--orange-dim); color: var(--orange); border-color: var(--orange-border); }
     .tag-lilac  { background: var(--lilac-dim);  color: var(--lilac);  border-color: var(--lilac-border); }
     .tag-blue   { background: var(--blue-dim);   color: var(--blue);   border-color: var(--blue-border); }
+    .tag-pink   { background: var(--pink-dim);   color: var(--pink);   border-color: var(--pink-border); }
     .tag-muted  { background: var(--bg-subtle);  color: var(--text-faint); border-color: var(--border); }
 
     /* DIVIDER */
@@ -226,12 +238,13 @@
     .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .project-card {
       border-radius: 10px; overflow: hidden; cursor: pointer; position: relative;
-      transition: transform 0.25s var(--ease-out);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      background: #1a1a1a; border: none;
       --text:       #f0ede8;
       --text-muted: rgba(240,237,232,0.45);
       --text-faint: rgba(240,237,232,0.22);
     }
-    .project-card:hover { transform: translateY(-3px); }
+    .project-card:hover { opacity: 0.88; transform: translateY(-1px); }
     .project-card:hover .card-arrow { opacity: 1; transform: translate(0,0); }
     .card-inner {
       padding: 24px; min-height: 280px;
@@ -240,19 +253,7 @@
     .card-bg-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
     .card-tall .card-inner { min-height: 240px; }
     .card-span { grid-row: span 2; }
-    .card-orange { background: var(--card-orange-bg); }
-    .card-lilac  { background: var(--card-lilac-bg); }
-    .card-blue   { background: var(--card-blue-bg); }
-    .card-pink   { background: var(--card-pink-bg); }
-    .card-muted  { background: var(--bg-subtle); border: 0.5px solid var(--border); }
-    .card-num {
-      font-family: var(--serif); font-size: 48px; line-height: 1;
-      color: var(--text); opacity: 0.07;
-      position: absolute; top: 20px; right: 22px; pointer-events: none; transition: opacity 0.2s;
-    }
-    .project-card:hover .card-num { opacity: 0.13; }
-    .card-pink .card-num { opacity: 0.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .card-pink:hover .card-num { opacity: 0.28; }
+    .card-muted  { background: var(--bg-subtle); }
     .card-stat {
       display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
       padding: 3px 9px; border-radius: 3px; margin-bottom: 8px;
@@ -276,7 +277,7 @@
 
     /* WIDE CARD (full-width row) */
     .card-wide { grid-column: 1 / -1; }
-    .card-lilac.card-wide { background: var(--card-lilac-soft-bg); }
+    .card-lilac.card-wide { }
     .card-wide .card-inner { padding-bottom: 32px; }
     .card-wide-desc {
       font-size: 13px; line-height: 1.65; color: var(--text-muted);
@@ -414,14 +415,13 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="#" class="nav-logo">k.</a>
+      <a href="#" class="nav-logo">Karissa Ly</a>
       <div class="nav-links">
         <a href="#work">work</a>
         <a href="#about">about</a>
         <a href="mailto:karissatly@gmail.com">contact</a>
         <button class="mode-toggle" id="modeToggle" onclick="toggleTheme()" aria-label="Toggle colour mode">
-          <svg id="modeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <span id="modeLabel">light mode</span>
+          <span id="modeLabel">☽</span>
         </button>
       </div>
     </div>
@@ -450,7 +450,7 @@
           </div>
           <div class="hero-tags">
             <span class="tag tag-lilac">Product Management</span>
-            <span class="tag tag-blue">UX Design</span>
+            <span class="tag tag-pink">UX Design</span>
             <span class="tag tag-blue">Data Visualisation</span>
             <span class="tag tag-lilac">AI Methods</span>
             <span class="tag tag-orange">Consumer Research</span>
@@ -466,7 +466,7 @@
             <span class="tag tag-lilac">Product Management</span>
             <span class="tag tag-lilac">ML Workflows</span>
             <span class="tag tag-blue">Data Visualisation</span>
-            <span class="tag tag-blue">UX Design</span>
+            <span class="tag tag-pink">UX Design</span>
             <span class="tag tag-blue">Human Factors</span>
             <span class="tag tag-muted">Figma</span>
             <span class="tag tag-muted">Claude</span>
@@ -499,9 +499,8 @@
 
       <!-- Row 1: Tribes + Energy -->
       <div class="project-card card-orange" onclick="window.location='signals-at-scale.html'" style="background-image: url('signals-perceptual-map.png'); background-size: 160%; background-position: center 25%;">
-        <div class="card-bg-overlay" style="background: rgba(38, 20, 8, 0.82);"></div>
+        <div class="card-bg-overlay" style="background: rgba(13,12,11,0.75);"></div>
         <div class="card-inner">
-          <div class="card-num">01</div>
           <div>
             <div class="card-type">AI Research · Consumer Insights</div>
             <div class="card-title">Signals at Scale</div>
@@ -511,9 +510,8 @@
       </div>
 
       <div class="project-card card-blue" onclick="window.location='oura.html'" style="background-image: url('viz-cycleheatmap.png'); background-size: cover; background-position: center;">
-        <div class="card-bg-overlay" style="background: rgba(13, 40, 50, 0.82);"></div>
+        <div class="card-bg-overlay" style="background: rgba(13,12,11,0.85);"></div>
         <div class="card-inner">
-          <div class="card-num">02</div>
           <div>
             <div class="card-type">Data Visualisation · Observable JS</div>
             <div class="card-title">My Oura Data, Visualised</div>
@@ -524,9 +522,8 @@
 
       <!-- Row 2: Oura + TrailForks -->
       <div class="project-card card-pink" onclick="window.location='trailforks.html'" style="background-image: url('trailforks-intervention-01.png'); background-size: auto 88%; background-position: right center; background-repeat: no-repeat;">
-        <div class="card-bg-overlay" style="background: linear-gradient(to right, rgba(60,20,40,0.92) 50%, rgba(60,20,40,0.5) 100%);"></div>
+        <div class="card-bg-overlay" style="background: rgba(13,12,11,0.85);"></div>
         <div class="card-inner">
-          <div class="card-num">03</div>
           <div>
             <div class="card-type">UX Design · Human Factors</div>
             <div class="card-title">Designing for the Rider, Not the Route</div>
@@ -536,9 +533,8 @@
       </div>
 
       <div class="project-card card-lilac" onclick="window.location='membrane.html'" style="background-image: url('membrane-doublediamond.png'); background-size: cover; background-position: center; position: relative;">
-        <div class="card-bg-overlay" style="background: rgba(20, 10, 40, 0.85);"></div>
+        <div class="card-bg-overlay" style="background: rgba(13,12,11,0.85);"></div>
         <div class="card-inner">
-          <div class="card-num">04</div>
           <div>
             <div class="card-type">Product Design · AI Strategy</div>
             <div class="card-title">Building the Tool I Wished Existed</div>
@@ -548,15 +544,14 @@
       </div>
 
       <!-- Row 3: Full-width process card -->
-      <div class="project-card card-lilac card-wide" style="cursor:default;">
+      <div class="project-card card-lilac card-wide" onclick="window.location='meta.html'" style="background-image: radial-gradient(circle, rgba(240,237,232,0.15) 1px, transparent 1px); background-size: 20px 20px;">
         <div class="card-inner">
-          <div class="card-num">05</div>
           <div>
             <div class="card-type">Vibe-Coding</div>
             <div class="card-title">This Portfolio Is the Case Study</div>
             <p class="card-wide-desc">The tools, decisions, and iterations behind building this portfolio with AI.</p>
           </div>
-          <div class="card-arrow" style="opacity:1;transform:none;font-size:10px;letter-spacing:0.08em;font-family:var(--sans);font-weight:500;color:var(--text-faint);">coming soon</div>
+          <div class="card-arrow">↗</div>
         </div>
       </div>
 
@@ -594,14 +589,14 @@
 
   <script>
   // THEME TOGGLE
-  const sunIcon  = `<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>`;
-  const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
   function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('modeIcon').innerHTML = isDark ? sunIcon : moonIcon;
-    document.getElementById('modeLabel').textContent = isDark ? 'dark mode' : 'light mode';
+    const t = document.documentElement;
+    const canvas = document.getElementById('graphCanvas');
+    canvas.style.opacity = '0';
+    t.setAttribute('data-theme', t.getAttribute('data-theme')==='dark'?'light':'dark');
+    setTimeout(() => { canvas.style.opacity = '1'; }, 300);
+    const icon = t.getAttribute('data-theme')==='dark' ? '☽' : '☀';
+    document.getElementById('modeLabel').textContent = icon;
   }
 
   // SCROLL REVEAL
