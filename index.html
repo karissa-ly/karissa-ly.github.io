@@ -677,6 +677,8 @@
       svg.appendChild(line);
     });
 
+    const labeledNodes = new Set(['k', 'design', 'ux', 'ai', 'dataviz', 'proddesign', 'quiltai', 'strategy', 'cultural']);
+
     nds.forEach(n => {
       const p = pos(n.id) || n;
       const x = p.cx * W, y = p.cy * H;
@@ -688,12 +690,26 @@
           else { const tgt = document.querySelector(n.href); if (tgt) tgt.scrollIntoView({ behavior: 'smooth' }); }
         });
       }
-      const mobileR = n.group === 'core' ? 12 : n.group === 'muted' ? 6 : 8;
+      const mobileR = n.group === 'core' ? 11 : n.group === 'muted' ? 5 : 7;
+      const fill = colors[n.group] || colors.muted;
       const circle = document.createElementNS(ns, 'circle');
       circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', mobileR);
-      circle.setAttribute('fill', colors[n.group] || colors.muted);
+      circle.setAttribute('fill', fill);
       circle.setAttribute('fill-opacity', n.group === 'muted' ? '0.35' : '0.85');
       g.appendChild(circle);
+      if (labeledNodes.has(n.id)) {
+        const isCore = n.id === 'k';
+        const label = document.createElementNS(ns, 'text');
+        label.setAttribute('x', x);
+        label.setAttribute('y', y - mobileR - 10);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', isCore ? '13' : '11');
+        label.setAttribute('font-weight', isCore ? '600' : '400');
+        label.setAttribute('font-family', "'Satoshi', sans-serif");
+        label.setAttribute('fill', fill);
+        label.textContent = n.label;
+        g.appendChild(label);
+      }
       svg.appendChild(g);
     });
 
