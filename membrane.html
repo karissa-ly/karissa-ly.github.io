@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building the Tool I Wished Existed — Karissa Ly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --orange:  #FF7A35;
+      --lilac:   #C8AAFF;
+      --blue:    #7DCEFF;
+      --pink:    #FF96C3;
+      --serif:   'Playfair Display', Georgia, serif;
+      --sans:    'Satoshi', system-ui, sans-serif;
+      --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="dark"] {
+      --bg:         #0d0c0b;
+      --bg-card:    #131210;
+      --bg-subtle:  rgba(240,237,232,0.04);
+      --text:       #f0ede8;
+      --text-muted: rgba(240,237,232,0.5);
+      --text-faint: rgba(240,237,232,0.25);
+      --border:     rgba(240,237,232,0.08);
+      --border-mid: rgba(240,237,232,0.14);
+      --accent:     #C8AAFF;
+      --accent-dim: rgba(200,170,255,0.08);
+      --accent-border: rgba(200,170,255,0.2);
+    }
+    [data-theme="light"] {
+      --bg:         #faf7f2;
+      --bg-card:    #f2ede4;
+      --bg-subtle:  rgba(26,25,22,0.04);
+      --text:       #1a1916;
+      --text-muted: rgba(26,25,22,0.5);
+      --text-faint: rgba(26,25,22,0.25);
+      --border:     rgba(26,25,22,0.09);
+      --border-mid: rgba(26,25,22,0.15);
+      --blue:    #1762A0;
+      --orange:  #E8540A;
+      --lilac:   #5B35B0;
+      --pink:    #A8305A;
+      --accent:     #5B35B0;
+      --accent-dim: rgba(91,53,176,0.08);
+      --accent-border: rgba(91,53,176,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); line-height: 1.7;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--sans); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-back {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted);
+      transition: color 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-back:hover { color: var(--text); }
+    .mode-toggle {
+      background: var(--bg-subtle); border: 0.5px solid var(--border-mid);
+      border-radius: 20px; padding: 6px 12px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--text-muted); transition: color 0.2s, background 0.2s;
+    }
+    .mode-toggle:hover { color: var(--text); }
+
+    /* HERO */
+    .case-hero {
+      max-width: 1080px; margin: 0 auto;
+      padding: 48px 32px 40px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .case-type {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.1s forwards;
+    }
+    .case-title {
+      font-family: var(--serif); font-size: clamp(36px, 5vw, 60px);
+      line-height: 1.05; font-weight: 400; margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.2s forwards;
+    }
+    .case-title em { font-style: italic; color: var(--accent); }
+    .case-intro {
+      font-size: 16px; line-height: 1.85; color: var(--text-muted);
+      max-width: 640px; margin-bottom: 40px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.3s forwards;
+    }
+    .case-meta {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.4s forwards;
+    }
+    .meta-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px;
+    }
+    .meta-value { font-size: 13px; font-weight: 500; }
+    .meta-value.accent { color: var(--accent); }
+
+    /* BODY */
+    .case-body { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    .case-section {
+      padding: 40px 0; border-bottom: 0.5px solid var(--border);
+      display: grid; grid-template-columns: 200px 1fr;
+      gap: 48px; align-items: start;
+    }
+    .case-section.full { grid-template-columns: 1fr; }
+    .section-num {
+      font-family: var(--serif); font-size: 11px; font-style: italic;
+      color: var(--text-faint); padding-top: 4px; letter-spacing: 0.06em;
+    }
+    .section-heading {
+      font-family: var(--serif); font-size: 28px; font-weight: 400;
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .section-heading em { font-style: italic; color: var(--accent); }
+    .section-body { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
+    .section-body p + p { margin-top: 14px; }
+    .section-body strong { color: var(--text); font-weight: 500; }
+
+    /* DIAGRAM IMAGES */
+    .diagram-wrap {
+      margin: 28px 0; border-radius: 8px; overflow: hidden;
+      border: 0.5px solid var(--border); background: #fff; padding: 20px;
+    }
+    .diagram-wrap img { width: 100%; display: block; }
+    .diagram-caption {
+      margin-top: 10px; font-size: 12px;
+      color: var(--text-faint); font-style: italic;
+    }
+    .diagram-wrap.dark-bg { background: var(--bg-card); }
+    .diagram-wrap.dark-bg img { border-radius: 4px; }
+
+    /* INSIGHT NODE */
+    .insight-node {
+      margin: 28px 0; padding: 24px 28px;
+      border-radius: 10px; background: var(--bg-card);
+      border: 0.5px solid var(--accent-border);
+      position: relative;
+    }
+    .insight-node-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+    }
+    .insight-node-content {
+      font-size: 14px; line-height: 1.8; color: var(--text-muted);
+    }
+    .insight-node-meta {
+      margin-top: 14px; padding-top: 14px;
+      border-top: 0.5px solid var(--border);
+      display: flex; gap: 20px; flex-wrap: wrap;
+    }
+    .node-meta-item { font-size: 11px; color: var(--text-faint); }
+    .node-meta-item span { color: var(--text-muted); font-weight: 500; }
+
+    /* COMPETITOR ROW */
+    .competitor-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin: 24px 0;
+    }
+    .competitor-card {
+      padding: 16px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+    }
+    .competitor-name {
+      font-size: 12px; font-weight: 600; color: var(--text);
+      margin-bottom: 6px;
+    }
+    .competitor-desc {
+      font-size: 11px; line-height: 1.6; color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .competitor-gap {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--orange);
+    }
+
+    /* PHASE STRIP */
+    .phase-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin: 28px 0;
+      border-radius: 8px; overflow: hidden;
+      border: 0.5px solid var(--border);
+    }
+    .phase-block {
+      padding: 18px 16px;
+      border-right: 0.5px solid var(--border);
+      background: var(--bg-card);
+    }
+    .phase-block:last-child { border-right: none; }
+    .phase-name {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+    }
+    .phase-output {
+      font-size: 11px; font-weight: 500; color: var(--text);
+      margin-bottom: 6px;
+    }
+    .phase-desc { font-size: 11px; line-height: 1.6; color: var(--text-muted); }
+
+    /* REFLECTION */
+    .reflection-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin: 16px 0;
+    }
+    .reflection-card {
+      padding: 22px; border-radius: 8px;
+      background: var(--bg-card); border: 0.5px solid var(--border);
+    }
+    .reflection-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .reflection-text { font-size: 13px; line-height: 1.75; color: var(--text-muted); }
+
+    /* NEXT */
+    .next-project {
+      padding: 48px 0; display: flex;
+      justify-content: space-between; align-items: center;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .next-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
+    }
+    .next-title { font-family: var(--serif); font-size: 22px; line-height: 1.2; }
+    .next-title em { font-style: italic; color: var(--accent); }
+    .btn-next {
+      background: var(--accent); color: var(--bg);
+      padding: 12px 24px; border-radius: 6px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-next:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer { border-top: 0.5px solid var(--border); padding: 32px; }
+    .footer-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .footer-name { font-family: var(--serif); font-style: italic; font-size: 18px; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted); transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 720px) {
+      .case-section { grid-template-columns: 1fr; gap: 16px; }
+      .nav-inner { padding: 14px 20px; }
+      .case-hero, .case-body { padding-left: 20px; padding-right: 20px; }
+      .competitor-grid { grid-template-columns: 1fr 1fr; }
+      .phase-strip { grid-template-columns: 1fr 1fr; }
+      .reflection-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">k.</a>
+      <div class="nav-links">
+        <a href="index.html#work" class="nav-back">← All work</a>
+        <button class="mode-toggle" onclick="
+          const t = document.documentElement;
+          t.setAttribute('data-theme', t.getAttribute('data-theme')==='dark'?'light':'dark');
+          this.textContent = t.getAttribute('data-theme')==='dark'?'light mode':'dark mode';
+        ">light mode</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="case-hero">
+    <div class="case-type">Product Design · AI Strategy</div>
+    <h1 class="case-title">Building the Tool<br><em>I Wished Existed</em></h1>
+    <p class="case-intro">For my AI for UX Professionals module at City St George's, I designed Membrane, an AI-enhanced process layer that keeps research connected to design decisions across the full UX workflow. The problem it addresses is one I'd seen firsthand: research gets generated, handed over, and decisions get made anyway with no visible thread back to the evidence. Insights rarely travel well. They get generated, filed, and forgotten, and the work that should have been informed by them moves forward on intuition instead.</p>
+    <div class="case-meta">
+      <div class="meta-block">
+        <div class="meta-label">Type</div>
+        <div class="meta-value">Product design · AI strategy</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Context</div>
+        <div class="meta-value">MSc UX Engineering · AI for UX module</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Format</div>
+        <div class="meta-value">Proposal — not yet built</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Target user</div>
+        <div class="meta-value accent">Product builders at any level</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-body">
+
+    <!-- 01 THE PROBLEM -->
+    <section class="case-section reveal">
+      <div class="section-num">01 — The problem</div>
+      <div>
+        <h2 class="section-heading">Research gets done.<br><em>Then it disappears.</em></h2>
+        <div class="section-body">
+          <p>As AI embeds itself in UX workflows, role boundaries are collapsing — designers research, PMs design, researchers ship. The consequence is lost decision traceability: insights get disconnected from the decisions they should inform, and the first viable concept gets pursued without sufficient grounding in evidence.</p>
+          <p>Existing tools address parts of this. Dovetail structures qualitative data, Miro supports collaboration, UX Pilot accelerates output. None maintain continuity across the full workflow. The insights exist. The connections don't.</p>
+        </div>
+
+        <div class="diagram-wrap reveal" style="margin-top:24px;">
+          <img src="membrane-doublediamond.png" alt="Double diamond process diagram mapping Membrane against competitors showing coverage gaps" />
+          <div class="diagram-caption">Membrane spans the full double diamond. Competitors cover partial phases — none maintain continuity across all four.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 THE SOLUTION -->
+    <section class="case-section reveal">
+      <div class="section-num">02 — The solution</div>
+      <div>
+        <h2 class="section-heading">A persistent layer,<br><em>not another tool</em></h2>
+        <div class="section-body">
+          <p>Membrane isn't a replacement for Figma, Dovetail, or Otter.ai. It sits across them — ingesting research inputs, structuring them into citable <strong>insight nodes</strong>, and making those nodes retrievable at every subsequent design decision.</p>
+          <p>The insight node is the core design idea: a structured, citable unit of research evidence that travels with the project rather than the person. Each node contains a distilled insight, supporting evidence, confidence score, and tags. Nodes form a persistent knowledge base. At delivery, they surface to support PRD generation with every output explicitly linked to its research source.</p>
+          <p>Membrane is intentionally constraint-based rather than generative. It doesn't suggest designs — it flags unaddressed nodes and prompts consideration of alternatives before converging. The goal is to slow premature closure, not automate creativity.</p>
+        </div>
+
+        <div class="diagram-wrap reveal" style="margin-top:20px;">
+          <img src="membrane-userflow.png" alt="User-Membrane flow diagram across discover, define, develop, deliver phases" />
+          <div class="diagram-caption">The user-Membrane flow. Human validation is required before nodes enter the knowledge base — AI structures, humans decide.</div>
+        </div>
+
+        <div class="section-body" style="margin-top:20px;">
+          <p>Under the hood, Membrane uses <strong>LLMs</strong> for insight extraction from unstructured inputs, <strong>embedding and clustering</strong> for node generation and deduplication, and <strong>RAG</strong> for retrieval at delivery — so every generated output is traceable to a specific validated node rather than synthesised from context alone.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 REFLECTION -->
+    <section class="case-section full reveal">
+      <div style="display:grid; grid-template-columns: 200px 1fr; gap: 48px; margin-bottom: 20px;">
+        <div class="section-num">03 — Reflection</div>
+        <div>
+          <h2 class="section-heading">What I took<br><em>from this</em></h2>
+          <div class="section-body" style="margin-bottom: 0;">
+            <p>This project was inspired by Professor Radu Jianu's teaching, particularly his framing of AI as a structuring layer rather than a generator, a distinction that shaped the entire proposal. A guest talk from Micaela Dixon at Picsart added further context on how AI is actually being used inside product teams at scale.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reflection-grid">
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--accent);">What worked</div>
+          <div class="reflection-text">The insight node as a design unit is the strongest part — concrete, citable, and coherent across all four phases. Grounding it in retrieval rather than generation keeps it honest: the system surfaces, humans decide. The competitive analysis held up too — no existing tool genuinely spans the full workflow.</div>
+        </div>
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--blue);">What I'd develop further</div>
+          <div class="reflection-text">The divergence detection logic in the Develop phase is the least resolved part. Flagging "insufficient divergence" requires defining what sufficient looks like, which is harder than it sounds. A v2 would focus here first. The target user framing also needs revisiting — I scoped Membrane for early-career builders, but the traceability problem is just as real for senior practitioners who have the skills but not the time to maintain rigour across fast-moving projects.</div>
+        </div>
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--orange);">What I got wrong</div>
+          <div class="reflection-text">The technical ambition outpaced the practical thinking in places. Reaching for multimodal models to compare design artefacts felt compelling on paper, but there are simpler entry points I didn't explore thoroughly enough. The proposal would have been stronger for more constraint, not more capability.</div>
+        </div>
+        <div class="reflection-card">
+          <div class="reflection-label" style="color: var(--pink);">What I learned</div>
+          <div class="reflection-text">Designing a tool that sits between other tools is harder than designing a standalone one. Every decision about what Membrane does is also a decision about what it leaves to Figma, Dovetail, or the designer. That boundary is where the most interesting design thinking happened, and where I'd spend more time if I built it for real.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT -->
+    <div class="next-project reveal">
+      <div>
+        <div class="next-label">Next</div>
+        <div class="next-title">This Portfolio<br><em>Is the Case Study</em></div>
+      </div>
+      <a href="meta.html" class="btn-next">Read more →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">karissa.</div>
+      <div class="footer-links">
+        <a href="https://linkedin.com/in/karissaly" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:karissatly@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    revealEls.forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
