@@ -36,6 +36,13 @@
       --text-faint:     rgba(240,237,232,0.22);
       --border:         rgba(240,237,232,0.08);
       --border-mid:     rgba(240,237,232,0.14);
+      --node-core:      #f0ede8;
+      --node-orange:    #FF7A35;
+      --node-lilac:     #C8AAFF;
+      --node-blue:      #7DCEFF;
+      --node-pink:      #FF96C3;
+      --node-muted:     rgba(240,237,232,0.3);
+      --edge-color:     rgba(240,237,232,0.12);
     }
     [data-theme="light"] {
       --bg:             #faf7f2;
@@ -50,6 +57,13 @@
       --lilac:   #5B35B0;
       --blue:    #1762A0;
       --pink:    #A8305A;
+      --node-core:      #1a1916;
+      --node-orange:    #E8540A;
+      --node-lilac:     #5B35B0;
+      --node-blue:      #1762A0;
+      --node-pink:      #A8305A;
+      --node-muted:     rgba(26,25,22,0.28);
+      --edge-color:     rgba(26,25,22,0.1);
     }
 
     [data-theme="light"] .project-card {
@@ -375,11 +389,15 @@
       .hero-graph { margin-top: 8px; }
       #graphCanvas { height: 240px; }
     }
+    @media (max-width: 480px) {
+      .nav-inner { padding-top: 6px; padding-bottom: 6px; }
+      .nav-links a { display: none; }
+      .nav-logo { min-height: 44px; display: flex; align-items: center; }
+    }
     @media (max-width: 680px) {
       .nav-inner, .work, .about-strip, footer { padding-left: 20px; padding-right: 20px; }
       .nav-links { gap: 16px; }
-      .mode-toggle span { display: none; }
-      .mode-toggle { padding: 6px 8px; }
+      .mode-toggle { min-width: 44px; min-height: 44px; padding: 0; justify-content: center; font-size: 16px; }
       .hero { padding: 48px 20px 32px; }
       .section-divider { margin: 0 20px; }
       .meta-strip { margin-left: 20px; margin-right: 20px; max-width: none; }
@@ -393,7 +411,8 @@
     }
 
     /* Node fallback: hidden on desktop, revealed on mobile */
-    .node-fallback { display: none; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+    .node-fallback  { display: none; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+    .mobile-diagram { display: none; width: 100%; height: 300px; }
 
     @media (max-width: 767px) {
       /* Collapse scrollytelling into normal document flow */
@@ -403,10 +422,11 @@
       .hero { flex-direction: column; height: auto; padding: 40px 20px 36px; align-items: flex-start; }
       .hero-content  { width: 100%; }
       .hero-content::before { display: none; }
-      /* Hide canvas; show text fallback instead */
+      /* Hide canvas; show SVG diagram instead */
       .hero-graph { position: relative; inset: auto; z-index: auto; margin-top: 28px; }
-      #graphCanvas  { display: none; }
-      .node-fallback { display: flex; }
+      #graphCanvas    { display: none; }
+      .node-fallback  { display: none; }
+      .mobile-diagram { display: block; }
       .hero-tags { display: none; }
     }
   </style>
@@ -458,20 +478,7 @@
         </div>
         <div class="hero-graph">
           <canvas id="graphCanvas"></canvas>
-          <div class="node-fallback" aria-hidden="true">
-            <span class="tag tag-orange">Consumer Research</span>
-            <span class="tag tag-orange">Segmentation</span>
-            <span class="tag tag-orange">Discourse Analysis</span>
-            <span class="tag tag-lilac">Applied AI</span>
-            <span class="tag tag-lilac">Product Management</span>
-            <span class="tag tag-lilac">ML Workflows</span>
-            <span class="tag tag-blue">Data Visualisation</span>
-            <span class="tag tag-pink">UX Design</span>
-            <span class="tag tag-blue">Human Factors</span>
-            <span class="tag tag-muted">Figma</span>
-            <span class="tag tag-muted">Claude</span>
-            <span class="tag tag-muted">Quilt.AI</span>
-          </div>
+          <div id="mobileDiagram" class="mobile-diagram" aria-hidden="true"></div>
         </div>
       </section>
     </div>
@@ -587,6 +594,7 @@
     </div>
   </footer>
 
+  <script src="nodes.config.js"></script>
   <script>
   // THEME TOGGLE
   function toggleTheme() {
@@ -597,7 +605,75 @@
     setTimeout(() => { canvas.style.opacity = '1'; }, 300);
     const icon = t.getAttribute('data-theme')==='dark' ? '☽' : '☀';
     document.getElementById('modeLabel').textContent = icon;
+    renderMobileDiagram();
   }
+
+  // MOBILE SVG DIAGRAM
+  function renderMobileDiagram() {
+    const container = document.getElementById('mobileDiagram');
+    if (!container || !window.nodesConfig) return;
+    const W = 340, H = 300;
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    const cs = getComputedStyle(document.documentElement);
+    const colors = {
+      core:   cs.getPropertyValue('--node-core').trim()   || '#f0ede8',
+      orange: cs.getPropertyValue('--node-orange').trim() || '#FF7A35',
+      lilac:  cs.getPropertyValue('--node-lilac').trim()  || '#C8AAFF',
+      blue:   cs.getPropertyValue('--node-blue').trim()   || '#7DCEFF',
+      pink:   cs.getPropertyValue('--node-pink').trim()   || '#FF96C3',
+      muted:  cs.getPropertyValue('--node-muted').trim()  || 'rgba(240,237,232,0.3)',
+    };
+    const edgeCol  = cs.getPropertyValue('--edge-color').trim() || 'rgba(240,237,232,0.12)';
+    const labelCol = cs.getPropertyValue('--text-muted').trim() || 'rgba(240,237,232,0.5)';
+    const nds = window.nodesConfig.nodes;
+    const eds = window.nodesConfig.edges;
+    const nmap = {};
+    nds.forEach(n => nmap[n.id] = n);
+    eds.forEach(([aId, bId]) => {
+      const a = nmap[aId], b = nmap[bId];
+      if (!a || !b) return;
+      const line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', a.cx * W); line.setAttribute('y1', a.cy * H);
+      line.setAttribute('x2', b.cx * W); line.setAttribute('y2', b.cy * H);
+      line.setAttribute('stroke', edgeCol); line.setAttribute('stroke-width', '0.8');
+      svg.appendChild(line);
+    });
+    nds.forEach(n => {
+      const x = n.cx * W, y = n.cy * H;
+      const g = document.createElementNS(ns, 'g');
+      if (n.href) {
+        g.style.cursor = 'pointer';
+        g.addEventListener('click', () => {
+          if (n.href.startsWith('http')) window.open(n.href, '_blank', 'noopener');
+          else { const tgt = document.querySelector(n.href); if (tgt) tgt.scrollIntoView({ behavior: 'smooth' }); }
+        });
+      }
+      const circle = document.createElementNS(ns, 'circle');
+      circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', n.r);
+      circle.setAttribute('fill', colors[n.group] || colors.muted);
+      circle.setAttribute('fill-opacity', n.group === 'muted' ? '0.35' : '0.85');
+      g.appendChild(circle);
+      if (n.r >= 5) {
+        const label = document.createElementNS(ns, 'text');
+        label.setAttribute('x', x); label.setAttribute('y', y + n.r + 8);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', n.r >= 7 ? '7' : '6.5');
+        label.setAttribute('font-family', "'Satoshi', system-ui, sans-serif");
+        label.setAttribute('fill', labelCol);
+        label.textContent = n.label;
+        g.appendChild(label);
+      }
+      svg.appendChild(g);
+    });
+    container.innerHTML = '';
+    container.appendChild(svg);
+  }
+
+  document.addEventListener('DOMContentLoaded', renderMobileDiagram);
 
   // SCROLL REVEAL
   const revealEls = document.querySelectorAll('.project-card, .card-meta-inline');
@@ -637,61 +713,8 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  // Node sizes reflect how much of Karissa's identity/work each represents.
-  // group also doubles as cluster id — nodes in same group attract each other.
-  // cx/cy = soft cluster target (0-1 fraction of canvas), overrides pure centre gravity.
-  const nodeData = [
-    // Core — centre-right
-    { id: 'k',          label: 'karissa',          r: 13, group: 'core',   cx: 0.68, cy: 0.50, href: '#home',               tooltip: 'home' },
-    // Orange cluster — upper-left, tight
-    { id: 'ux',         label: 'research',         r: 10, group: 'orange', cx: 0.55, cy: 0.32, href: '#work',               tooltip: 'see work' },
-    { id: 'cultural',   label: 'cultural intel',   r: 7,  group: 'orange', cx: 0.50, cy: 0.20, href: '#work',               tooltip: 'see work' },
-    { id: 'mixed',      label: 'mixed methods',    r: 6,  group: 'orange', cx: 0.60, cy: 0.20, href: '#work',               tooltip: 'see work' },
-    { id: 'segm',       label: 'segmentation',     r: 9,  group: 'orange', cx: 0.50, cy: 0.44, href: '#project-01',         tooltip: 'case study →' },
-    // Lilac cluster — upper-right, tight
-    { id: 'ai',         label: 'applied ai',       r: 10, group: 'lilac',  cx: 0.80, cy: 0.28, href: '#work',               tooltip: 'see work' },
-    { id: 'strategy',   label: 'product mgmt',     r: 8,  group: 'lilac',  cx: 0.76, cy: 0.18, href: '#work',               tooltip: 'see work' },
-    { id: 'ml',         label: 'ml workflows',     r: 6,  group: 'lilac',  cx: 0.84, cy: 0.20, href: '#work',               tooltip: 'see work' },
-    { id: 'figma',      label: 'figma',            r: 4,  group: 'lilac',  cx: 0.90, cy: 0.14, href: 'https://figma.com',         tooltip: 'figma.com ↗' },
-    { id: 'claude',     label: 'claude',           r: 5,  group: 'lilac',  cx: 0.92, cy: 0.24, href: 'https://claude.ai',         tooltip: 'claude.ai ↗' },
-    { id: 'quiltai',    label: 'quilt.ai',         r: 8,  group: 'lilac',  cx: 0.675, cy: 0.30, href: 'https://quilt.ai',          tooltip: 'quilt.ai ↗' },
-    { id: 'lovable',    label: 'lovable',          r: 4,  group: 'lilac',  cx: 0.92, cy: 0.42, href: 'https://lovable.dev',       tooltip: 'lovable.dev ↗' },
-    // Blue cluster — lower-right, tight
-    { id: 'dataviz',    label: 'data viz',         r: 8,  group: 'blue',   cx: 0.84, cy: 0.72, href: '#project-03',         tooltip: 'case study →' },
-    { id: 'observable', label: 'observable/js',    r: 5,  group: 'blue',   cx: 0.88, cy: 0.80, href: '#project-03',         tooltip: 'case study →' },
-    { id: 'hf',         label: 'human factors',    r: 6,  group: 'pink',   cx: 0.68, cy: 0.72, href: '#project-04',         tooltip: 'case study →' },
-    { id: 'notebooklm', label: 'notebooklm',       r: 4,  group: 'lilac',  cx: 0.93, cy: 0.50, href: 'https://notebooklm.google', tooltip: 'notebooklm ↗' },
-    // Pink cluster — centre-right, tight
-    { id: 'proddesign', label: 'product design',   r: 7,  group: 'pink',   cx: 0.78, cy: 0.50, href: '#work',               tooltip: 'see work' },
-    { id: 'design',     label: 'ux design',        r: 7,  group: 'pink',   cx: 0.74, cy: 0.60, href: '#work',               tooltip: 'see work' },
-    { id: 'usability',  label: 'usability testing', r: 6, group: 'pink',   cx: 0.70, cy: 0.68, href: '#work',               tooltip: 'see work' },
-    // Muted cluster — lower-left, tight
-    { id: 'mtb',        label: 'mountain biking',  r: 5,  group: 'muted',  cx: 0.52, cy: 0.82, href: '#about',              tooltip: 'about me' },
-    { id: 'climbing',   label: 'climbing',         r: 5,  group: 'muted',  cx: 0.58, cy: 0.88, href: '#about',              tooltip: 'about me' },
-    { id: 'pole',       label: 'pole dance',       r: 5,  group: 'muted',  cx: 0.64, cy: 0.82, href: '#about',              tooltip: 'about me' },
-  ];
-
-  const edgeData = [
-    // Core connects to main cluster anchors only
-    ['k','ux'], ['k','ai'], ['k','proddesign'], ['k','dataviz'], ['k','strategy'],
-    // Research cluster — internal connections
-    ['ux','segm'], ['ux','mixed'], ['ux','cultural'],
-    ['segm','mixed'], ['cultural','mixed'],
-    // AI / strategy cluster
-    ['ai','strategy'], ['ai','ml'], ['strategy','proddesign'],
-    // Design cluster — connected to both AI and research
-    ['proddesign','design'], ['design','usability'], ['design','hf'],
-    ['usability','ux'], ['proddesign','dataviz'],
-    // Tools hang off AI and quiltai off research (used there)
-    ['ai','claude'], ['figma','ai'], ['ai','lovable'],
-    ['ai','quiltai'], ['ml','quiltai'], ['notebooklm','ai'], ['quiltai','ux'], ['quiltai','strategy'],
-    // Data viz cluster
-    ['dataviz','observable'],
-    // Cross-cluster bridges
-    ['ux','ai'], ['ai','dataviz'], ['segm','ai'], ['proddesign','ai'],
-    // Personal — connected to each other only, climbing bridges to karissa
-    ['k','climbing'], ['climbing','pole'], ['climbing','mtb'],
-  ];
+  const nodeData = window.nodesConfig.nodes;
+  const edgeData = window.nodesConfig.edges;
 
   // Palette per theme
   const PAL = {
