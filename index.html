@@ -413,18 +413,18 @@
 
     /* Node fallback: hidden on desktop, revealed on mobile */
     .node-fallback  { display: none; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
-    .mobile-diagram { display: none; width: 100%; height: auto; margin-top: 24px; padding: 0 8px; justify-content: center; }
+    .mobile-diagram { display: none; width: 100%; height: auto; margin-top: 0; padding: 0 8px; justify-content: center; }
 
     @media (max-width: 767px) {
       /* Collapse scrollytelling into normal document flow */
       .scroll-sticky { position: relative; height: auto; overflow: visible; }
       .scroll-steps  { display: none; }
       /* Hero: stack text above diagram area, full width */
-      .hero { flex-direction: column; height: auto; padding: 40px 20px 36px; align-items: flex-start; }
+      .hero { flex-direction: column; height: auto; padding: 40px 20px 16px; align-items: flex-start; }
       .hero-content  { width: 100%; }
       .hero-content::before { display: none; }
       /* Hide canvas; show SVG diagram instead */
-      .hero-graph { position: relative; inset: auto; z-index: auto; margin-top: 28px; }
+      .hero-graph { position: relative; inset: auto; z-index: auto; margin-top: 0; padding-top: 0; }
       #graphCanvas    { display: none; }
       .node-fallback  { display: none; }
       .mobile-diagram { display: flex; }
@@ -643,13 +643,6 @@
       'pole':       { cx: 0.55, cy: 0.88 },
     };
 
-    // Per-node label adjustments for crowded personal cluster
-    const labelOverrides = {
-      'climbing': { anchor: 'end',    dx: -8, dy: 0   },
-      'mtb':      { anchor: 'middle', dx: 0,  dy: -14 },
-      'pole':     { anchor: 'start',  dx: 8,  dy: 0   },
-    };
-
     const pos = id => mobilePositions[id] || null;
 
     const ns = 'http://www.w3.org/2000/svg';
@@ -666,8 +659,7 @@
       pink:   cs.getPropertyValue('--node-pink').trim()   || '#FF96C3',
       muted:  cs.getPropertyValue('--node-muted').trim()  || 'rgba(240,237,232,0.3)',
     };
-    const edgeCol  = cs.getPropertyValue('--edge-color').trim() || 'rgba(240,237,232,0.12)';
-    const labelCol = cs.getPropertyValue('--text-muted').trim() || 'rgba(240,237,232,0.5)';
+    const edgeCol = cs.getPropertyValue('--edge-color').trim() || 'rgba(240,237,232,0.12)';
 
     const nds = window.nodesConfig.nodes;
     const eds = window.nodesConfig.edges;
@@ -696,23 +688,12 @@
           else { const tgt = document.querySelector(n.href); if (tgt) tgt.scrollIntoView({ behavior: 'smooth' }); }
         });
       }
+      const mobileR = n.group === 'core' ? 12 : n.group === 'muted' ? 6 : 8;
       const circle = document.createElementNS(ns, 'circle');
-      circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', n.r);
+      circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', mobileR);
       circle.setAttribute('fill', colors[n.group] || colors.muted);
       circle.setAttribute('fill-opacity', n.group === 'muted' ? '0.35' : '0.85');
       g.appendChild(circle);
-      if (n.r >= 5) {
-        const lo = labelOverrides[n.id] || { anchor: 'middle', dx: 0, dy: 0 };
-        const label = document.createElementNS(ns, 'text');
-        label.setAttribute('x', x + lo.dx);
-        label.setAttribute('y', y + n.r + 8 + lo.dy);
-        label.setAttribute('text-anchor', lo.anchor);
-        label.setAttribute('font-size', n.r >= 7 ? '8' : '7');
-        label.setAttribute('font-family', "'Satoshi', system-ui, sans-serif");
-        label.setAttribute('fill', labelCol);
-        label.textContent = n.label;
-        g.appendChild(label);
-      }
       svg.appendChild(g);
     });
 
