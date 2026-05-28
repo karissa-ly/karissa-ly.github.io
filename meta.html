@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>This Portfolio Is the Case Study — Karissa Ly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --orange:  #FF7A35;
+      --lilac:   #C8AAFF;
+      --blue:    #7DCEFF;
+      --pink:    #FF96C3;
+      --serif:   'Playfair Display', Georgia, serif;
+      --sans:    'Satoshi', system-ui, sans-serif;
+      --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-theme="dark"] {
+      --bg:         #0d0c0b;
+      --bg-card:    #131210;
+      --bg-subtle:  rgba(240,237,232,0.04);
+      --text:       #f0ede8;
+      --text-muted: rgba(240,237,232,0.5);
+      --text-faint: rgba(240,237,232,0.25);
+      --border:     rgba(240,237,232,0.08);
+      --border-mid: rgba(240,237,232,0.14);
+      --accent:     #FF7A35;
+    }
+    [data-theme="light"] {
+      --bg:         #faf7f2;
+      --bg-card:    #f2ede4;
+      --bg-subtle:  rgba(26,25,22,0.04);
+      --text:       #1a1916;
+      --text-muted: rgba(26,25,22,0.5);
+      --text-faint: rgba(26,25,22,0.25);
+      --border:     rgba(26,25,22,0.09);
+      --border-mid: rgba(26,25,22,0.15);
+      --orange:  #E8540A;
+      --accent:     #E8540A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); line-height: 1.7;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--sans); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 0.5px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo { font-family: var(--serif); font-style: italic; font-size: 22px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-back {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .mode-toggle {
+      background: var(--bg-subtle); border: 0.5px solid var(--border-mid);
+      border-radius: 20px; padding: 6px 12px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--text-muted); transition: color 0.2s, background 0.2s;
+    }
+    .mode-toggle:hover { color: var(--text); }
+
+    /* HERO */
+    .meta-hero {
+      max-width: 680px; margin: 0 auto;
+      padding: 72px 32px 56px;
+    }
+    .meta-type {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.1s forwards;
+    }
+    .meta-title {
+      font-family: var(--serif); font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.05; font-weight: 400; margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.7s var(--ease) 0.2s forwards;
+    }
+    .meta-title em { font-style: italic; color: var(--accent); }
+
+    /* ESSAY */
+    .meta-essay {
+      max-width: 680px; margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+    .meta-essay p {
+      font-size: 16px; line-height: 1.9;
+      color: var(--text-muted); margin-bottom: 24px;
+    }
+    .meta-essay p:last-child { margin-bottom: 0; }
+    .meta-essay strong { color: var(--text); font-weight: 500; }
+    .meta-essay em { font-style: italic; color: var(--text); }
+
+    .meta-divider {
+      width: 40px; height: 1px;
+      background: var(--border-mid); margin: 40px 0;
+    }
+
+    /* STACK */
+    .meta-stack {
+      margin: 32px 0; padding: 24px 28px;
+      border-radius: 10px; background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .stack-item {}
+    .stack-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px;
+    }
+    .stack-value { font-size: 13px; font-weight: 500; color: var(--text); }
+
+    /* BACK LINK */
+    .meta-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; color: var(--accent);
+      border-bottom: 0.5px solid rgba(255,122,53,0.3);
+      padding-bottom: 2px; transition: opacity 0.2s;
+    }
+    .meta-back:hover { opacity: 0.75; }
+
+    /* FOOTER */
+    footer { border-top: 0.5px solid var(--border); padding: 32px; }
+    .footer-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .footer-name { font-family: var(--serif); font-style: italic; font-size: 18px; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted); transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 720px) {
+      .meta-hero, .meta-essay { padding-left: 20px; padding-right: 20px; }
+      .nav-inner { padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">k.</a>
+      <div class="nav-links">
+        <a href="index.html#work" class="nav-back">← All work</a>
+        <button class="mode-toggle" onclick="
+          const t = document.documentElement;
+          t.setAttribute('data-theme', t.getAttribute('data-theme')==='dark'?'light':'dark');
+          this.textContent = t.getAttribute('data-theme')==='dark'?'light mode':'dark mode';
+        ">light mode</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="meta-hero">
+    <div class="meta-type">Vibe-Coding</div>
+    <h1 class="meta-title">This Portfolio<br>Is the <em>Case Study</em></h1>
+  </div>
+
+  <div class="meta-essay">
+
+    <p>I tried building a portfolio from a template years ago. It never felt like me, so I abandoned it.</p>
+
+    <p>This one started as an experiment. I was playing around with Lovable for an assignment — just testing how far you could get with prompting alone — and thought I'd try generating a portfolio layout while I was at it. It kind of worked. But Lovable goes high-fidelity fast, and I kept wanting to change things it wasn't built to change easily. So I moved into Claude and started writing the code myself, with Claude doing most of the heavy lifting and me directing it.</p>
+
+    <p>The node-link diagram was the part I was most excited about. During my first term, my data visualisation lecturer Professor Jo Wood opened the module by showing us work from the Information is Beautiful awards — including <a href="https://rootsofracism.taaf.org/" target="_blank" rel="noopener" style="color: var(--accent); border-bottom: 0.5px solid rgba(255,122,53,0.3);">Roots of Racism by TAAF</a>, which was my first proper encounter with scrollytelling, and I was immediately obsessed. Later in the module he showed us node-link diagrams as a way of visualising networks and relationships. I wanted to use the same idea to visualise myself: skills, tools, interests as a network rather than a list. Data visualisation is a side passion of mine, something I genuinely almost pursued further, so putting it at the centre of the homepage felt right.</p>
+
+    <p>The scrollytelling took a long time to get working. I went down several rabbit holes before landing on Scrollama.js. The physics simulation that drives the node clustering is still not perfect. I'm okay with that — it's more interesting for being slightly alive.</p>
+
+    <p>Everything on this site is something I made, learned from, or lived through. This is a live document — I'll keep building it.</p>
+
+    <div class="meta-divider"></div>
+
+    <p>The stack, for anyone curious:</p>
+
+    <div class="meta-stack">
+      <div class="stack-item">
+        <div class="stack-label">Built with</div>
+        <div class="stack-value">HTML · CSS · JavaScript</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-label">AI tools</div>
+        <div class="stack-value">Claude · Lovable</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-label">Fonts</div>
+        <div class="stack-value">Playfair Display · Satoshi</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-label">Hosting</div>
+        <div class="stack-value">GitHub Pages</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-label">Scrollytelling</div>
+        <div class="stack-value">Scrollama.js</div>
+      </div>
+    </div>
+
+    <div class="meta-divider"></div>
+
+    <p>If you've read this far, you've seen most of what I can do. The rest is in the work.</p>
+
+    <a href="index.html#work" class="meta-back">← Back to the work</a>
+
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">karissa.</div>
+      <div class="footer-links">
+        <a href="https://linkedin.com/in/karissaly" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:karissatly@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
