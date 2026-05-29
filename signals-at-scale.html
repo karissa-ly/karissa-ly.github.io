@@ -851,7 +851,8 @@ function drawMap() {
   mapCtx.fillStyle = C.bg; mapCtx.fillRect(0, 0, mW, mH);
 
   // Quadrant label text (very faint)
-  mapCtx.font = `600 10px 'Syne',sans-serif`;
+  const qSize = Math.max(7, Math.round(10 * rScale));
+  mapCtx.font = `600 ${qSize}px 'Syne',sans-serif`;
   mapCtx.fillStyle = C.qLbl;
   const qlabels = [
     [0.02, 0.04, 'left',  'top',    'Wellness · Future'],
@@ -925,10 +926,14 @@ function drawMap() {
     if (s > 0.45) {
       const alpha = Math.min(1, (s - 0.45) / 0.35);
       mapCtx.globalAlpha = alpha;
-      mapCtx.font = `400 10px 'Syne',sans-serif`;
+      const labelSize = Math.max(7, Math.round(10 * rScale));
+      mapCtx.font = `400 ${labelSize}px 'Syne',sans-serif`;
       mapCtx.fillStyle = C.bLbl;
       mapCtx.textAlign = 'center'; mapCtx.textBaseline = 'top';
-      b.label.split('\n').forEach((ln, li) => mapCtx.fillText(ln, bx, by + r + 5 + li * 12));
+      if (!(mW < 500 && r < 20)) {
+        const lineH = Math.max(9, Math.round(12 * rScale));
+        b.label.split('\n').forEach((ln, li) => mapCtx.fillText(ln, bx, by + r + 4 + li * lineH));
+      }
       mapCtx.globalAlpha = 1;
     }
   });
