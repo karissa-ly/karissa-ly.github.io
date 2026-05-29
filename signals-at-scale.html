@@ -455,12 +455,13 @@
       .nav-links a:not(.nav-back) { display: none; }
       .mode-toggle span { display: none; }
       .mode-toggle { padding: 6px 8px; }
-      /* Mobile map: non-sticky, horizontally scrollable */
+      /* Mobile map: non-sticky, contained */
+      body { overflow-x: hidden; }
       .map-sticky-wrap { position: relative; top: 0; }
-      #mapCanvas { height: 320px; }
+      #mapCanvas { width: 100%; height: auto; }
       .map-steps-wrap { display: none; }
-      .map-outer { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 0; padding-right: 0; }
-      .map-scene { min-width: 600px; padding: 0 20px; }
+      .map-outer { overflow-x: hidden; max-width: 100%; width: 100%; padding-left: 0; padding-right: 0; }
+      .map-scene { min-width: unset; padding: 0 20px; }
     }
     @media (max-width: 480px) {
       .metrics-row { grid-template-columns: 1fr; }
