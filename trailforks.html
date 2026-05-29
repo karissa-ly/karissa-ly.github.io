@@ -335,20 +335,25 @@
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 720px) {
-      .case-section { grid-template-columns: 1fr; gap: 16px; }
+      .case-section { grid-template-columns: 1fr; gap: 16px; padding: 32px 0; }
       .nav-inner { padding: 14px 20px; }
       .case-hero { padding: 48px 20px 40px; }
       .case-body { padding: 0 20px; }
       .reflection-grid { grid-template-columns: 1fr; }
-      .intervention { padding: 20px; margin: 40px 0; }
+      .case-title { font-size: clamp(24px, 6vw, 32px); }
+      .intervention { padding: 16px; margin: 32px 0; }
+      .intervention + .intervention { margin-top: 24px; }
       .intervention-inner { grid-template-columns: 1fr; }
       /* Phone mockup containers: reduce vertical padding */
       .intervention-visual { height: auto; padding-top: 16px; padding-bottom: 16px; }
+      /* Consistent max height across all three intervention images */
+      .intervention-visual img { max-height: 420px; object-fit: contain; }
       /* Intervention 03 has visual after content in DOM (desktop reversal) — pull it before on mobile */
       .intervention:last-child .intervention-visual { order: -1; }
       /* Single mockup (intervention 03): cap size to match paired mockups */
-      .intervention-visual > img { max-width: 220px !important; width: 100% !important; margin: 0 auto !important; display: block !important; height: auto !important; }
-      /* HTA diagram: natural landscape orientation, no rotation */
+      .intervention-visual > img { max-width: 220px !important; width: 100% !important; margin: 0 auto !important; display: block !important; height: auto !important; max-height: 420px !important; object-fit: contain !important; }
+      /* HTA diagram: remove bottom padding excess, natural landscape orientation */
+      .hta-wrap { padding: 8px 8px 0 8px; }
       .hta-wrap img { width: 100%; max-width: 100%; height: auto; display: block; transform: none; image-orientation: none; }
     }
   </style>
