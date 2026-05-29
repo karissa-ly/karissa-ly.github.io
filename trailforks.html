@@ -344,6 +344,8 @@
       .intervention-inner { grid-template-columns: 1fr; }
       /* Phone mockup containers: reduce vertical padding */
       .intervention-visual { height: auto; padding-top: 16px; padding-bottom: 16px; }
+      /* Intervention 03 has visual after content in DOM (desktop reversal) — pull it before on mobile */
+      .intervention:last-child .intervention-visual { order: -1; }
       /* Single mockup (intervention 03): cap size to match paired mockups */
       .intervention-visual > img { max-width: 220px !important; width: 100% !important; margin: 0 auto !important; display: block !important; height: auto !important; }
       /* HTA diagram: natural landscape orientation, no rotation */
