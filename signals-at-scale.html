@@ -458,7 +458,7 @@
       /* Mobile map: non-sticky, contained */
       body { overflow-x: hidden; }
       .map-sticky-wrap { position: relative; top: 0; }
-      #mapCanvas { width: 100%; height: auto; }
+      #mapCanvas { width: 100%; height: 320px; }
       .map-steps-wrap { display: none; }
       .map-outer { overflow-x: hidden; max-width: 100%; width: 100%; padding-left: 0; padding-right: 0; }
       .map-scene { min-width: unset; padding: 0 20px; }
@@ -841,6 +841,7 @@ function drawMap() {
   if (!mapCtx || !mW) return;
   const C = mapColors();
   const pad = { t:44, r:28, b:52, l:52 };
+  if (mW < 500) { pad.b = 72; pad.t = 52; }
   const pw = mW - pad.l - pad.r;
   const ph = mH - pad.t - pad.b;
   const rScale = Math.min(1, mW / 780);
@@ -931,8 +932,14 @@ function drawMap() {
       mapCtx.fillStyle = C.bLbl;
       mapCtx.textAlign = 'center'; mapCtx.textBaseline = 'top';
       if (!(mW < 500 && r < 20 && b.group === 'low')) {
+        if (mW < 500) {
+          if (b.label.includes('Ritual'))                              { mapCtx.textAlign = 'left'; }
+          if (b.label.includes('Performance') && b.group !== 'low')   { mapCtx.textAlign = 'right'; }
+          if (b.label.includes('Glow'))                               { mapCtx.textAlign = 'center'; }
+        }
         const lineH = Math.max(9, Math.round(12 * rScale));
         b.label.split('\n').forEach((ln, li) => mapCtx.fillText(ln, bx, by + r + 4 + li * lineH));
+        mapCtx.textAlign = 'center';
       }
       mapCtx.globalAlpha = 1;
     }
