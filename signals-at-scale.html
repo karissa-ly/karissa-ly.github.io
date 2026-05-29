@@ -930,7 +930,7 @@ function drawMap() {
       mapCtx.font = `400 ${labelSize}px 'Syne',sans-serif`;
       mapCtx.fillStyle = C.bLbl;
       mapCtx.textAlign = 'center'; mapCtx.textBaseline = 'top';
-      if (!(mW < 500 && r < 20)) {
+      if (!(mW < 500 && r < 20 && b.group === 'low')) {
         const lineH = Math.max(9, Math.round(12 * rScale));
         b.label.split('\n').forEach((ln, li) => mapCtx.fillText(ln, bx, by + r + 4 + li * lineH));
       }
