@@ -843,6 +843,7 @@ function drawMap() {
   const pad = { t:44, r:28, b:52, l:52 };
   const pw = mW - pad.l - pad.r;
   const ph = mH - pad.t - pad.b;
+  const rScale = Math.min(1, mW / 780);
   const tx = (x) => pad.l + x * pw;
   const ty = (y) => pad.t + y * ph;
 
@@ -892,7 +893,7 @@ function drawMap() {
   MAP_BUBBLES.forEach((b, i) => {
     const s = bScales[i];
     if (s <= 0) return;
-    const bx = tx(b.cx), by = ty(b.cy), r = b.r * s;
+    const bx = tx(b.cx), by = ty(b.cy), r = b.r * s * rScale;
 
     if (b.group === 'strong') {
       // Glow halo
