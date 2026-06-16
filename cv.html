@@ -148,7 +148,7 @@
     .entry { margin-bottom: 36px; }
     .entry:last-child { margin-bottom: 0; }
     .entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 1px; }
-    .entry-org { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+    .entry-org { font-size: 12px; font-weight: 500; letter-spacing: 0.01em; text-transform: none; color: var(--text-muted); }
     .entry-period { font-size: 11px; color: var(--text-faint); white-space: nowrap; flex-shrink: 0; font-variant-numeric: tabular-nums; }
     .entry-role { font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.2; color: var(--text); margin-bottom: 4px; }
     .entry-role em { font-style: italic; color: var(--text-muted); font-size: 16px; }
@@ -214,13 +214,18 @@
       .page { padding: 0 20px 72px; }
       .nav-inner, footer { padding-left: 20px; padding-right: 20px; }
       .hero-strip { grid-template-columns: 1fr; gap: 24px; }
+      .hero-name { font-size: clamp(32px, 9vw, 56px); }
       .hero-meta { align-items: flex-start; }
+      .status-pill { max-width: 100%; white-space: normal; }
       .body-grid { grid-template-columns: 1fr; }
       .section-label-col { padding: 28px 0 8px; border-bottom: none; }
       .section-body { padding: 0 0 28px; border-left: none; }
+      .entry-top { flex-wrap: wrap; gap: 2px; }
+      .entry-period { width: 100%; }
       .skill-row { flex-direction: column; gap: 8px; }
       .skill-cat { min-width: unset; padding-top: 0; }
       .nav-links a:not(.active) { display: none; }
+      .dl-bar { flex-direction: column; align-items: flex-start; gap: 14px; }
     }
 
     @media print {
@@ -245,10 +250,11 @@
       .section-label-col { padding: 12px 10px 12px 0 !important; border-bottom: 0.5px solid #eee !important; }
       .section-label { font-size: 8px !important; color: #aaa !important; letter-spacing: 0.14em !important; position: static !important; }
       .section-body { padding: 12px 0 12px 14px !important; border-bottom: 0.5px solid #eee !important; border-left: 0.5px solid #eee !important; }
-      .entry { margin-bottom: 10px !important; }
+      .entry { margin-bottom: 10px !important; page-break-inside: avoid !important; }
+      .status-pill { white-space: normal !important; }
       .entry + .entry { padding-top: 10px !important; border-top: 0.5px solid #eee !important; }
       .entry-top { margin-bottom: 0 !important; }
-      .entry-org { font-size: 8px !important; color: #aaa !important; letter-spacing: 0.1em !important; }
+      .entry-org { font-size: 8.5px !important; color: #666 !important; letter-spacing: 0.01em !important; text-transform: none !important; font-weight: 500 !important; }
       .entry-period { font-size: 8px !important; color: #aaa !important; }
       .entry-role { font-size: 13px !important; line-height: 1.2 !important; color: #111 !important; margin-bottom: 1px !important; }
       .entry-role em { font-size: 10px !important; color: #777 !important; }
@@ -305,7 +311,7 @@
     <div class="hero-meta">
       <div class="hero-meta-item"><a href="mailto:karissatly@gmail.com">karissatly@gmail.com</a></div>
       <div class="hero-meta-item">London, UK</div>
-      <div class="hero-meta-item">Right to work: student visa (part-time)</div>
+      <div class="hero-meta-item">Right to work: student visa</div>
       <div class="status-pill">
         <span class="status-dot"></span>
         Incoming Product Management Intern · JPMorgan Chase · Summer 2026
@@ -367,7 +373,8 @@
         <div class="entry-role">Marketing Intern → Community Manager</div>
         <div class="entry-where">Remote</div>
         <ul class="bullets">
-          <li>Analysed community engagement data and optimised content strategy to improve audience experience and retention</li>
+          <li>Created visual content for social channels using Photoshop and Canva, building a consistent aesthetic across platforms</li>
+          <li>Planned and scheduled content calendar; tracked engagement data to refine posting strategy and improve audience retention</li>
         </ul>
       </div>
     </div>
