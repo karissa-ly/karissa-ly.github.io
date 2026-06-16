@@ -291,7 +291,10 @@
       .phase-strip { grid-template-columns: 1fr 1fr; }
       .reflection-grid { grid-template-columns: 1fr; }
       .diagram-wrap {
-        padding: 8px 8px 0 8px;
+        padding: 4px;
+      }
+      .diagram-crop {
+        overflow: hidden;
       }
       .diagram-wrap img {
         width: 100%;
@@ -299,6 +302,8 @@
         display: block;
         image-orientation: none;
       }
+      .diagram-dd img { margin-bottom: -4.6%; }
+      .diagram-uf img { margin-bottom: -5.7%; }
     }
   </style>
 </head>
@@ -353,8 +358,10 @@
           <p>Existing tools address parts of this. Dovetail structures qualitative data, Miro supports collaboration, UX Pilot accelerates output. None maintain continuity across the full workflow. The insights exist. The connections don't.</p>
         </div>
 
-        <div class="diagram-wrap reveal" style="margin-top:24px;">
-          <img src="membrane-doublediamond.png" alt="Double diamond process diagram mapping Membrane against competitors showing coverage gaps" />
+        <div class="diagram-wrap diagram-dd reveal" style="margin-top:24px;">
+          <div class="diagram-crop">
+            <img src="membrane-doublediamond.png" alt="Double diamond process diagram mapping Membrane against competitors showing coverage gaps" />
+          </div>
           <div class="diagram-caption">Membrane spans the full double diamond. Competitors cover partial phases — none maintain continuity across all four.</div>
         </div>
       </div>
@@ -371,8 +378,10 @@
           <p>Membrane is intentionally constraint-based rather than generative. It doesn't suggest designs — it flags unaddressed nodes and prompts consideration of alternatives before converging. The goal is to slow premature closure, not automate creativity.</p>
         </div>
 
-        <div class="diagram-wrap reveal" style="margin-top:20px;">
-          <img src="membrane-userflow.png" alt="User-Membrane flow diagram across discover, define, develop, deliver phases" />
+        <div class="diagram-wrap diagram-uf reveal" style="margin-top:20px;">
+          <div class="diagram-crop">
+            <img src="membrane-userflow.png" alt="User-Membrane flow diagram across discover, define, develop, deliver phases" />
+          </div>
           <div class="diagram-caption">The user-Membrane flow. Human validation is required before nodes enter the knowledge base — AI structures, humans decide.</div>
         </div>
 
