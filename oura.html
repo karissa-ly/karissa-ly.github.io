@@ -394,17 +394,6 @@
           <p>The data covers a stretch of time that included leaving a four-year job, travelling, and starting a master's programme in the UK.</p>
           <p>I chose to work with raw physiological signals, not Oura's composite readiness scores. <strong>HRV (heart rate variability)</strong> is the primary recovery proxy throughout: a direct signal, not a derived metric.</p>
         </div>
-        <div class="pull-quote">
-          <p>"My body was keeping score before I was. The question this project is really asking is whether making that score visible actually tells me anything I couldn't have figured out on my own."</p>
-        </div>
-        <div class="tag-row">
-          <span class="cs-tag blue">Observable Plot</span>
-          <span class="cs-tag blue">JavaScript</span>
-          <span class="cs-tag muted">Oura API</span>
-          <span class="cs-tag muted">Apple Health</span>
-          <span class="cs-tag muted">Self-tracking</span>
-          <span class="cs-tag blue">Data visualisation</span>
-        </div>
       </div>
     </section>
 
@@ -481,7 +470,7 @@
         <div class="section-num reveal" style="margin-bottom:16px;">04 — The visualisations</div>
         <h2 class="section-heading reveal">What it<br><em>looks like</em></h2>
         <div class="section-body reveal" style="margin-bottom:32px;">
-          <p>Five visualisations across three research threads.</p>
+          <p>Four visualisations across two research threads.</p>
         </div>
 
         <div class="viz-block reveal-item">
@@ -490,17 +479,7 @@
           </div>
           <div class="viz-caption">
             <div class="viz-caption-label">Visualisation 01 — Life phases ridge plot</div>
-            <div class="viz-caption-text">HRV distributions across eight life phases, stacked chronologically. Each curve shows the full distribution of nightly HRV, not just the average, but how consistent or variable recovery was within that period. Selectable via an interactive slider.</div>
-          </div>
-        </div>
-
-        <div class="viz-block reveal-item">
-          <div class="viz-img-wrap">
-            <img src="viz-stresshrv.png" alt="Line chart showing HRV trajectories before and after stress events" />
-          </div>
-          <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 02 — HRV around stress events</div>
-            <div class="viz-caption-text">Each line traces HRV from three days before to two days after a logged stress event. Orange: HRV already falling before the event. Lilac: rising. A "show crying" toggle overlays emotional tags, a design choice that felt important to include honestly.</div>
+            <div class="viz-caption-text">HRV distributions across eight life phases, stacked chronologically. Each curve shows the full distribution of nightly HRV, not just the average, but how consistent or variable recovery was within that period. In the interactive notebook, a slider lets you isolate individual life phases for closer inspection.</div>
           </div>
         </div>
 
@@ -509,7 +488,7 @@
             <img src="viz-scatterplot.png" alt="Scatterplot of daily training load vs next-day HRV with quadrant labels" />
           </div>
           <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 03 — Training load vs next-day HRV</div>
+            <div class="viz-caption-label">Visualisation 02 — Training load vs next-day HRV</div>
             <div class="viz-caption-text">The scatter is the finding: no clear relationship between how much I trained and how recovered I felt the next morning. The quadrant labels make the null result legible rather than confusing. A null result honestly visualised is still a result.</div>
           </div>
         </div>
@@ -519,7 +498,7 @@
             <img src="viz-cycleheatmap.png" alt="Heatmap showing HRV deviation from cycle average across 14 months" />
           </div>
           <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 04 — HRV vs cycle average heatmap</div>
+            <div class="viz-caption-label">Visualisation 03 — HRV vs cycle average heatmap</div>
             <div class="viz-caption-text">Each cell is one day of a menstrual cycle, coloured by HRV deviation from that cycle's average. Purple = above average recovery; orange = below. Red outlines mark the first 7 days. The handwritten, crayon-textured aesthetic was deliberate. Clinical polish felt wrong for this data.</div>
           </div>
         </div>
@@ -529,7 +508,7 @@
             <img src="viz-beeswarm.png" alt="Beeswarm plot comparing HRV during period vs rest of cycle" />
           </div>
           <div class="viz-caption">
-            <div class="viz-caption-label">Visualisation 05 — Period vs rest of cycle beeswarm</div>
+            <div class="viz-caption-label">Visualisation 04 — Period vs rest of cycle beeswarm</div>
             <div class="viz-caption-text">Each dot is a single night's HRV reading, coloured by whether I was active or resting. Recovery during menstruation is more consistent (a narrower range, fewer extremes) but not meaningfully lower. Active and rest days show no clear separation in either phase.</div>
           </div>
         </div>
@@ -560,7 +539,7 @@
           </div>
           <div class="reflection-card reveal-item">
             <div class="reflection-label changed">What I'd change</div>
-            <div class="reflection-text">Road cycling and mountain biking were both logged as "cycling" in Apple Health despite very different recovery costs. A rolling 7-day load average would be a stronger variable than single-day duration. I'd also log stress events more rigorously from the start. A planned v2 will introduce multivariate regression across cumulative load, cycle phase, and life context, and revisit whether the pre-stress window holds up under more rigorous analysis.</div>
+            <div class="reflection-text">A rolling 7-day load average would be a stronger variable than single-day duration. A planned v2 will introduce multivariate regression across cumulative load, cycle phase, and life context.</div>
           </div>
           <div class="reflection-card reveal-item">
             <div class="reflection-label pink">What I learned</div>
