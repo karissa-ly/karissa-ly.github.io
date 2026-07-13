@@ -492,7 +492,7 @@
 <header class="case-hero">
   <div class="case-type">AI Segmentation · Consumer Insights</div>
   <h1 class="case-title">Signals at Scale:<br><em>Japan's Hydration Clusters</em></h1>
-  <p class="case-intro">This project is a representative example of the consumer research work I led at Quilt.AI, where I spent four years running AI-powered cultural research for global brands. The client, a major sports nutrition brand, needed to understand the Japanese hydration market beyond demographic targeting. This is one of 50+ projects I delivered there, shared here in anonymised form in line with NDA obligations.
+  <p class="case-intro">This project is a representative example of the consumer research work I led at Quilt.AI, where I spent four years running AI-powered cultural research for global brands. The client, a major beverage brand, needed to understand the Japanese hydration market beyond demographic targeting. This is one of 50+ projects I delivered there, shared here in anonymised form in line with NDA obligations.
   </p>
   <div class="case-meta">
     <div class="meta-block">
@@ -501,7 +501,7 @@
     </div>
     <div class="meta-block">
       <div class="meta-label">Tool</div>
-      <div class="meta-value">Quilt.AI · ML segmentation</div>
+      <div class="meta-value">Google AdWords / Google Search Insights · Meta Audience Insights</div>
     </div>
     <div class="meta-block">
       <div class="meta-label">Market</div>
@@ -543,7 +543,7 @@
       <h2 class="section-heading">Two brands, one market,<br><em>one hard question</em></h2>
       <div class="section-body">
         <p>A global beverage brand held two distinct hydration products in Japan: one built around athletic performance, the other around natural refreshment. Both had category presence. The question was whether they were reaching the right people, and whether they were inadvertently competing for the same ones.</p>
-        <p>The brief: map the hydration consumer landscape at scale, identify segment fit for each product, and deliver targeting recommendations specific enough to act on. <strong>Not a market overview. Actual strategic direction.</strong></p>
+        <p>The brief: map the hydration consumer landscape at scale, identify segment fit for the performance-led product, and deliver targeting recommendations specific enough to act on. <strong>Not a market overview. Actual strategic direction.</strong></p>
       </div>
       <div class="tag-row">
         <span class="cs-tag orange">Consumer segmentation</span>
@@ -707,7 +707,7 @@
         </div>
         <div class="rc">
           <div class="rc-label changed">What I'd do differently</div>
-          <div class="rc-text">The alignment scoring is values-based, not purchase-intent-based. A stronger output would validate segment alignment against sales data or brand tracker scores, giving confidence that recommended priorities are reachable, not just theoretically well-fit. I'd also push harder for quant sizing to validate segment estimates.</div>
+          <div class="rc-text">The alignment scoring is values-based, not purchase-intent-based. A stronger output would validate segment alignment against sales data or brand tracker scores, giving confidence that recommended priorities are reachable, not just theoretically well-fit. I'd also push harder for quant sizing to validate segment estimates. The mapping also excludes practical factors like convenience and price, so in practice some consumers likely buy either product interchangeably based on those rather than sitting cleanly within one segment.</div>
         </div>
         <div class="rc">
           <div class="rc-label learned">What I learned</div>
@@ -856,21 +856,6 @@ function drawMap() {
   mapCtx.clearRect(0, 0, mW, mH);
   mapCtx.fillStyle = C.bg; mapCtx.fillRect(0, 0, mW, mH);
 
-  // Quadrant label text (very faint)
-  const qSize = Math.max(7, Math.round(10 * rScale));
-  mapCtx.font = `600 ${qSize}px 'Syne',sans-serif`;
-  mapCtx.fillStyle = C.qLbl;
-  const qlabels = [
-    [0.02, 0.04, 'left',  'top',    'Wellness · Future'],
-    [0.98, 0.04, 'right', 'top',    'Performance · Future'],
-    [0.02, 0.96, 'left',  'bottom', 'Wellness · Now'],
-    [0.98, 0.96, 'right', 'bottom', 'Performance · Now'],
-  ];
-  qlabels.forEach(([x, y, ta, tb, txt]) => {
-    mapCtx.textAlign = ta; mapCtx.textBaseline = tb;
-    mapCtx.fillText(txt, tx(x), ty(y));
-  });
-
   // Crosshair dashes
   mapCtx.strokeStyle = C.axis; mapCtx.lineWidth = 0.8;
   mapCtx.setLineDash([3,6]);
@@ -893,7 +878,7 @@ function drawMap() {
   mapCtx.translate(16, ty(0.5));
   mapCtx.rotate(-Math.PI / 2);
   mapCtx.textAlign = 'center'; mapCtx.textBaseline = 'middle';
-  mapCtx.fillText('Now  ↕  Future', 0, 0);
+  mapCtx.fillText('Now → Future', 0, 0);
   mapCtx.restore();
 
   // Draw bubbles
